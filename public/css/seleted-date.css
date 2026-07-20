@@ -1,0 +1,37 @@
+/* Selected date (clicked) */
+.fc-daygrid-day.selected-date {
+    background-color: rgba(108, 117, 125, 0.25) !important;
+    border: 2px solid #6c757d !important;
+    border-radius: 6px;
+}
+
+/* Saved dates (green background) */
+.fc-bg-event {
+    opacity: 0.35 !important;
+}
+
+/* Legend base */
+.legend-box {
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+    border-radius: 4px;
+}
+
+/* 🟢 Open (saved from DB) */
+.legend-open {
+    background-color: #198754;
+    opacity: 0.6;
+}
+
+/* ⚪ Selected (clicked) */
+.legend-selected {
+    background-color: rgba(108, 117, 125, 0.3);
+    border: 2px solid #6c757d;
+}
+
+/* 🔒 Disabled */
+.legend-disabled {
+    background-color: #dee2e6;
+    border: 1px dashed #6c757d;
+}

@@ -1,0 +1,84 @@
+/* BASE REPORT STYLE */
+.report-container {
+font-size: 12px;
+padding: 5px;
+margin: 0;
+}
+
+/* HEADER (TIGHT SPACING) */
+.report-container h4 {
+margin: 0;
+padding: 0;
+line-height: 1.1;
+}
+
+.report-container small {
+display: block;
+margin: 2px 0 0 0;
+padding: 0;
+line-height: 1;
+}
+
+/* TABLE CLEANUP */
+.table th,
+.table td {
+vertical-align: middle;
+padding: 6px;
+}
+
+/* MOBILE RESPONSIVE */
+@media (max-width: 576px) {
+.report-container {
+font-size: 11px;
+}
+
+.report-container h4 {
+    font-size: 14px;
+}
+
+table {
+    font-size: 11px;
+}
+
+
+}
+
+/* PRINT ONLY REPORT */
+@media print {
+html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+body * {
+    visibility: hidden;
+}
+
+#printArea,
+#printArea * {
+    visibility: visible;
+}
+
+#printArea {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.no-print {
+    display: none !important;
+}
+
+/* REMOVE EXTRA SPACING IN PRINT */
+.report-container {
+    padding: 0;
+}
+
+}
+
+/* PAGE SETUP */
+@page {
+size: A4;
+margin: 0.2in;
+}

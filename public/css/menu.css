@@ -1,0 +1,12 @@
+td:last-child {
+    width: 60px;
+    white-space: nowrap;
+}
+
+.table-responsive {
+    overflow: visible !important;
+}
+
+.dropdown-menu {
+    z-index: 9999;
+}
