@@ -31,19 +31,26 @@ Route::group(['middleware' => ['auth', 'IfIMSUsers']], function () {
         ->name('applicants.dashboard'); // ✅ FIXED
 
     Route::prefix('/applicants')->name('applicants.accounts.')->group(function () {
-        Route::get('/view', [ApplicantsController::class, 'viewAccounts'])->name('viewAccount');
-        Route::get('/update-accounts', [ApplicantsController::class, 'updateAccounts'])->name('updateAccount');
-        Route::put('/updated-accounts', [ApplicantsController::class, 'updatedAccounts'])->name('updatedAccount');
+        Route::get('/view', [ApplicantsController::class, 'viewAccounts'])
+            ->name('viewAccount');
+        Route::get('/update-accounts', [ApplicantsController::class, 'updateAccounts'])
+            ->name('updateAccount');
+        Route::put('/updated-accounts', [ApplicantsController::class, 'updatedAccounts'])
+            ->name('updatedAccount');
     });
 
     Route::prefix('/applicants-wallet')->name('applicants.wallet.')->group(function () {
-        Route::get('/view', [ApplicantsController::class, 'viewWallet'])->name('viewWallet');
-        Route::get('/interest', [ApplicantsController::class, 'viewInterest'])->name('viewInterest');
-        Route::get('/loans', [ApplicantsController::class, 'userLoans'])->name('loans');
+        Route::get('/view', [ApplicantsController::class, 'viewWallet'])
+            ->name('viewWallet');
+        Route::get('/interest', [ApplicantsController::class, 'viewInterest'])
+            ->name('viewInterest');
+        Route::get('/loans', [ApplicantsController::class, 'userLoans'])
+            ->name('loans');
     });
 
     Route::prefix('/transactions')->name('applicants.transactions.')->group(function () {
-        Route::get('/view', [ApplicantsController::class, 'viewTransactions'])->name('viewTransactions');
+        Route::get('/view', [ApplicantsController::class, 'viewTransactions'])
+            ->name('viewTransactions');
     });
 
     Route::prefix('/notifications')->name('users.notifications.')->group(function () {

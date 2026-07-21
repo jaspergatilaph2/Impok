@@ -349,43 +349,37 @@
 
                                                 <tbody>
 
-                                                    @if($transactions->count() > 0)
+                                                    @php $hasCashIn = false; @endphp
 
                                                     @foreach($transactions as $tx)
-                                                    @php
-                                                    // ✅ Determine type label
-                                                    if ($tx->type === 'cash_in' || $tx->type === 'interest') {
-                                                    $typeLabel = 'Deposit';
-                                                    $typeColor = 'success';
-                                                    } else {
-                                                    $typeLabel = 'Withdraw';
-                                                    $typeColor = 'danger';
-                                                    }
-                                                    @endphp
+
+                                                    @if($tx->type === 'cash_in')
+                                                    @php $hasCashIn = true; @endphp
 
                                                     <tr>
-                                                        <!-- ✅ DATE -->
+                                                        <!-- DATE -->
                                                         <td>
                                                             {{ \Carbon\Carbon::parse($tx->transaction_date)->format('M d, Y') }}
                                                         </td>
 
-                                                        <!-- ✅ TYPE -->
+                                                        <!-- TYPE -->
                                                         <td class="text-center">
-                                                            <span class="fw-semibold text-{{ $typeColor }}">
-                                                                {{ $typeLabel }}
+                                                            <span class="fw-semibold text-success">
+                                                                Deposit
                                                             </span>
                                                         </td>
                                                     </tr>
+
+                                                    @endif
+
                                                     @endforeach
 
-                                                    @else
-
+                                                    @if(!$hasCashIn)
                                                     <tr>
                                                         <td colspan="2" class="text-center text-muted">
-                                                            No transaction history found
+                                                            No deposit history found
                                                         </td>
                                                     </tr>
-
                                                     @endif
 
                                                 </tbody>

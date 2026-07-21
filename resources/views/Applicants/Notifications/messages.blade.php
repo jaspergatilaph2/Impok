@@ -315,64 +315,85 @@
                         <div class="card shadow-sm">
                             <div class="card-body">
 
+                                <h6 class="mb-3">Recent Messages</h6>
+
                                 <ul class="list-group list-group-flush">
 
-                                    <!-- Wallet Balance -->
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <strong>Wallet Balance</strong><br>
-                                            <small class="text-muted">Your available funds</small>
+                                    @forelse($messages ?? [] as $msg)
+
+                                    <li class="list-group-item d-flex justify-content-between align-items-start 
+    {{ $msg->deleted_at ? 'text-muted text-decoration-line-through' : '' }}"
+                                        style="cursor:pointer;"
+
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#messageModal"
+
+                                        data-title="{{ $msg->title }}"
+                                        data-message="{{ $msg->message }}"
+                                        data-status="{{ !$msg->is_read ? 'Unread' : 'Read' }}"
+                                        data-broadcast="{{ is_null($msg->receiver_id) ? 'Yes' : 'No' }}">
+
+                                        <div class="me-2">
+
+                                            <strong>{{ $msg->title ?? 'No Title' }}</strong><br>
+
+                                            <small class="text-muted">
+                                                {{ \Illuminate\Support\Str::limit($msg->message, 60) }}
+                                            </small><br>
+
+                                            @if(is_null($msg->receiver_id))
+                                            <small class="text-primary">(Broadcast)</small><br>
+                                            @endif
+
+                                            @if($msg->deleted_at)
+                                            <small class="text-secondary">Deleted</small><br>
+                                            @endif
+
                                         </div>
-                                        <span class="fw-bold text-success">
-                                            ₱ 0.00
-                                        </span>
+
+                                        <div class="text-end">
+                                            @if(!$msg->is_read && !$msg->deleted_at)
+                                            <span class="text-danger small">Unread</span>
+                                            @else
+                                            <span class="text-success small">Read</span>
+                                            @endif
+                                        </div>
+
                                     </li>
 
-                                    <!-- Transactions -->
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <strong>Total Transactions</strong><br>
-                                            <small class="text-muted">All time records</small>
-                                        </div>
-                                        <span class="fw-bold text-primary">
-                                            0
-                                        </span>
+                                    @empty
+                                    <li class="list-group-item text-center text-muted">
+                                        No messages available
                                     </li>
-
-                                    <!-- Next Impoks -->
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <strong>Next Impoks Date</strong><br>
-                                            <small class="text-muted">Upcoming schedule</small>
-                                        </div>
-                                        <span class="fw-bold text-warning">
-                                            --/--/----
-                                        </span>
-                                    </li>
-
-                                    <!-- Completed -->
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <strong>Completed Transactions</strong><br>
-                                            <small class="text-muted">Successful records</small>
-                                        </div>
-                                        <span class="fw-bold text-success">
-                                            0
-                                        </span>
-                                    </li>
-
-                                    <!-- Loans -->
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <strong>Loans</strong><br>
-                                            <small class="text-muted">Loan transactions</small>
-                                        </div>
-                                        <span class="fw-bold text-danger">
-                                            ₱ 0.00
-                                        </span>
-                                    </li>
+                                    @endforelse
 
                                 </ul>
+
+                                <div class="modal fade" id="messageModal" tabindex="-1">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="modalTitle">Message Title</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+
+                                            <div class="modal-body">
+
+                                                <p id="modalMessage">Full message content here...</p>
+
+                                                <hr>
+
+                                                <small>
+                                                    <strong>Status:</strong> <span id="modalStatus"></span><br>
+                                                    <strong>Broadcast:</strong> <span id="modalBroadcast"></span>
+                                                </small>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
 
                             </div>
                         </div>

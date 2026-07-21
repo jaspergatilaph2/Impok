@@ -164,54 +164,88 @@
           <ul class="navbar-nav flex-row align-items-center ms-auto">
             <!-- Place this tag where you want the button to render. -->
 
-            <!-- 🔔 MESSAGE / INBOX ICON -->
+            <!--MESSAGE / INBOX ICON -->
             <li class="nav-item dropdown me-3">
 
               <a class="nav-link dropdown-toggle hide-arrow" href="#" role="button" data-bs-toggle="dropdown">
-
                 <span class="position-relative">
                   <i class="bx bx-message-dots bx-sm"></i>
 
-                  <!-- green online / new message indicator -->
-                  <span class="position-absolute top-0 start-100 translate-middle p-1 bg-success rounded-circle"></span>
+                  {{-- unread COUNT --}}
+                  @if(isset($unreadCount) && $unreadCount > 0)
+                  <span class="position-absolute top-0 start-100 translate-middle"
+                    style="
+            background: #ff4d4f;
+            color: #fff;
+            padding: 1px 6px;
+            border-radius: 12px;
+            font-size: 11px;
+          ">
+                    {{ $unreadCount > 99 ? '99+' : $unreadCount }}
+                  </span>
+                  @endif
                 </span>
-
               </a>
 
-              <!-- DROPDOWN MENU -->
-              <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+              <ul class="dropdown-menu dropdown-menu-end shadow-sm" style="width: 300px;">
 
-                <li>
-                  <h6 class="dropdown-header">Messages</h6>
+                <li class="d-flex justify-content-between align-items-center px-3">
+                  <h6 class="dropdown-header mb-0">Messages</h6>
+
+                  @if(isset($unreadCount) && $unreadCount > 0)
+                  <small class="text-danger ms-2">
+                    ({{ $unreadCount }} new)
+                  </small>
+                  @endif
                 </li>
 
+                {{-- ✅ LOOP --}}
+                @forelse($messages ?? [] as $msg)
                 <li>
-                  <a class="dropdown-item" href="#">
-                    <i class="bx bx-user me-2"></i>
-                    New message from Admin
+                  <a class="dropdown-item d-flex flex-column 
+                    {{ $msg->deleted_at ? 'text-muted text-decoration-line-through' : '' }}" href="#">
+
+                    {{-- Title --}}
+                    <span class="fw-semibold">
+                      {{ $msg->title ?? 'No Title' }}
+                    </span>
+
+                    {{-- Message --}}
+                    <small>
+                      {{ \Illuminate\Support\Str::limit($msg->message, 40) }}
+                    </small>
+
+                    {{-- Broadcast --}}
+                    @if(is_null($msg->receiver_id))
+                    <small class="text-primary">(Broadcast)</small>
+                    @endif
+
+                    {{-- Unread --}}
+                    @if(!$msg->is_read && !$msg->deleted_at)
+                    <small class="text-danger">Unread</small>
+                    @endif
+
+                    {{-- ✅ Deleted label --}}
+                    @if($msg->deleted_at)
+                    <small class="text-secondary">Deleted</small>
+                    @endif
+
                   </a>
                 </li>
-
+                @empty
                 <li>
-                  <a class="dropdown-item" href="#">
-                    <i class="bx bx-support me-2"></i>
-                    Support reply available
-                  </a>
+                  <span class="dropdown-item text-muted text-center">
+                    No messages found
+                  </span>
                 </li>
-
-                <li>
-                  <a class="dropdown-item" href="#">
-                    <i class="bx bx-bell me-2"></i>
-                    System notification
-                  </a>
-                </li>
+                @endforelse
 
                 <li>
                   <hr class="dropdown-divider">
                 </li>
 
                 <li>
-                  <a class="dropdown-item text-primary" href="">
+                  <a class="dropdown-item text-primary text-center" href="{{ route('users.notifications.viewMessages') }}">
                     View all messages
                   </a>
                 </li>

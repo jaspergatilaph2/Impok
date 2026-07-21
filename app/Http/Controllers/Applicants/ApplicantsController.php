@@ -12,6 +12,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
 use App\Models\ProfileInformation;
 use App\Models\Wallet;
+use App\Models\Messages;
 
 class ApplicantsController extends Controller
 {
@@ -43,6 +44,25 @@ class ApplicantsController extends Controller
             ->orderBy('date', 'asc')
             ->first();
 
+        $messages = Messages::where(function ($query) use ($accounts) {
+            $query->where('receiver_id', $accounts->id)
+                ->orWhereNull('receiver_id');
+        })
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get();
+
+        // $messages = Messages::withTrashed()->latest()->get();
+
+        // dd($messages);
+
+        $unreadCount = Messages::where(function ($query) use ($accounts) {
+            $query->where('receiver_id', $accounts->id) // ✅ FIXED
+                ->orWhereNull('receiver_id');
+        })
+            ->where('is_read', false)
+            ->count();
+
         return view('Applicants.Dashboard.index', [
             'accounts' => $accounts,
             'walletBalance' => $walletBalance,
@@ -50,7 +70,9 @@ class ApplicantsController extends Controller
             'ActiveTabMenu' => 'dashboard',
             'SubActiveTab' => 'dashboard',
             'nextdate' => $nextDate ? Carbon::parse($nextDate->date)->format('F d, Y') : null,
-            'totalAmount' => $totalAmount
+            'totalAmount' => $totalAmount,
+            'messages' => $messages,
+            'unreadCount' => $unreadCount
         ]);
     }
 
@@ -87,7 +109,7 @@ class ApplicantsController extends Controller
     {
         $account = auth()->user();
 
-        // ✅ VALIDATION (PREVENT DUPLICATES)
+        // VALIDATION (PREVENT DUPLICATES)
         $request->validate([
             'name' => [
                 'required',
@@ -112,7 +134,7 @@ class ApplicantsController extends Controller
             'phone.unique' => 'This phone number is already used.',
         ]);
 
-        // ✅ OPTIONAL: FULL NAME (FIRST + LAST) DUPLICATE CHECK
+        // OPTIONAL: FULL NAME (FIRST + LAST) DUPLICATE CHECK
         $exists = DB::table('profile_information')
             ->where('first_name', $request->first_name)
             ->where('last_name', $request->last_name)
@@ -125,7 +147,7 @@ class ApplicantsController extends Controller
             ])->withInput();
         }
 
-        // ✅ UPDATE AVATAR
+        //UPDATE AVATAR
         if ($request->hasFile('avatar')) {
 
             if ($account->avatar && Storage::disk('public')->exists($account->avatar)) {
@@ -136,7 +158,7 @@ class ApplicantsController extends Controller
             $account->avatar = $path;
         }
 
-        // ✅ UPDATE USER
+        //UPDATE USER
         $account->name = $request->name;
         $account->email = $request->email;
         $account->save();
@@ -262,9 +284,17 @@ class ApplicantsController extends Controller
     {
         $user = auth()->user();
 
+        Messages::where('receiver_id', auth()->id())
+            ->where('is_read', false)
+            ->update(['is_read' => true]);
+
+        $messages = Messages::where('receiver_id', auth()->id())
+            ->latest()
+            ->get();
+
         return view(
             'Applicants.Notifications.messages',
-            compact('user'),
+            compact('user', 'messages'),
             [
                 'ActiveTabMenu' => 'View',
                 'SubActiveTab' => 'messages'

@@ -157,6 +157,7 @@
     <script src="{{ asset('js/admin-search.js') }}"></script>
     <script src="{{ asset('js/admin-inbox.js') }}"></script>
     <script src="{{ asset('js/users-saveAsPdf.js') }}"></script>
+    <script src="{{ asset('js/user-messages.js') }}"></script>
 </body>
 
 </html>
