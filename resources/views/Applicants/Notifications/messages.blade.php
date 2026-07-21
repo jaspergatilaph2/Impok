@@ -322,37 +322,37 @@
                                     @forelse($messages ?? [] as $msg)
 
                                     <li class="list-group-item d-flex justify-content-between align-items-start 
-    {{ $msg->deleted_at ? 'text-muted text-decoration-line-through' : '' }}"
+    {{ optional($msg)->deleted_at ? 'text-muted text-decoration-line-through' : '' }}"
                                         style="cursor:pointer;"
 
                                         data-bs-toggle="modal"
                                         data-bs-target="#messageModal"
 
-                                        data-title="{{ $msg->title }}"
-                                        data-message="{{ $msg->message }}"
-                                        data-status="{{ !$msg->is_read ? 'Unread' : 'Read' }}"
-                                        data-broadcast="{{ is_null($msg->receiver_id) ? 'Yes' : 'No' }}">
+                                        data-title="{{ optional($msg)->title }}"
+                                        data-message="{{ optional($msg)->message }}"
+                                        data-status="{{ !(optional($msg)->is_read ?? false) ? 'Unread' : 'Read' }}"
+                                        data-broadcast="{{ is_null(optional($msg)->receiver_id) ? 'Yes' : 'No' }}">
 
                                         <div class="me-2">
 
-                                            <strong>{{ $msg->title ?? 'No Title' }}</strong><br>
+                                            <strong>{{ optional($msg)->title ?? 'No Title' }}</strong><br>
 
                                             <small class="text-muted">
-                                                {{ \Illuminate\Support\Str::limit($msg->message, 60) }}
+                                                {{ \Illuminate\Support\Str::limit(optional($msg)->message, 60) }}
                                             </small><br>
 
-                                            @if(is_null($msg->receiver_id))
+                                            @if(is_null(optional($msg)->receiver_id))
                                             <small class="text-primary">(Broadcast)</small><br>
                                             @endif
 
-                                            @if($msg->deleted_at)
+                                            @if(optional($msg)->deleted_at)
                                             <small class="text-secondary">Deleted</small><br>
                                             @endif
 
                                         </div>
 
                                         <div class="text-end">
-                                            @if(!$msg->is_read && !$msg->deleted_at)
+                                            @if(!(optional($msg)->is_read ?? false) && !(optional($msg)->deleted_at ?? false))
                                             <span class="text-danger small">Unread</span>
                                             @else
                                             <span class="text-success small">Read</span>
