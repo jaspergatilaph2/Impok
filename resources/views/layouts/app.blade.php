@@ -75,6 +75,7 @@
     <link rel="stylesheet" href="{{ asset('css/hpver.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/seleted-date.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/menu.css') }}">
+    <link rel="stylesheet" href="{{ asset('sneat/vendor/css/pages/page-misc.css') }}">
 </head>
 
 <body>
@@ -161,6 +162,7 @@
     <script src="{{ asset('js/user-transactions.js') }}"></script>
     <script src="{{ asset('js/user-interest.js') }}"></script>
     <script src="{{ asset('js/users-loans.js') }}"></script>
+    <script src="{{ asset('sneat/js/main.js') }}"></script>
 </body>
 
 </html>

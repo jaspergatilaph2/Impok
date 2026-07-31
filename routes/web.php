@@ -78,6 +78,11 @@ Route::group(['middleware' => ['auth', 'IfIMSUsers']], function () {
         Route::get('/view-notif', [ApplicantsController::class, 'ViewNotif'])
             ->name('viewMessages');
     });
+
+    Route::prefix('/under-maintenance')->name('users.under-maintenance.')->group(function () {
+        Route::get('/view-under-maintenance', [ApplicantsController::class, 'UnderMaintenance'])
+            ->name('undermaintenance');
+    });
 });
 
 

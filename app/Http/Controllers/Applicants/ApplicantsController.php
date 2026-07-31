@@ -405,4 +405,11 @@ class ApplicantsController extends Controller
             ]
         );
     }
+
+    public function UnderMaintenance(){
+        $accounts = auth()->user();
+        
+        return view('Applicants.under-maintenance.under-maintenance', 
+        compact('accounts'));
+    }
 }

@@ -302,7 +302,7 @@
                           </a>
                         </li> -->
                 <li>
-                  <a class="dropdown-item" href="">
+                  <a class="dropdown-item" href="{{ route('users.under-maintenance.undermaintenance') }}">
                     <i class="menu-icon tf-icons bx bx-file"></i>
                     <span class="align-middle">Logs</span>
                   </a>
@@ -484,7 +484,7 @@
                       </div>
 
                       <div class="flex-fill">
-                        <a href="" class="btn btn-outline-warning w-100">
+                        <a href="{{ route('users.notifications.viewMessages') }}" class="btn btn-outline-warning w-100">
                           <i class="fa-solid fa-bell me-1"></i> View Notifications
                         </a>
                       </div>
