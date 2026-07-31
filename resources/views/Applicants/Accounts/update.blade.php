@@ -31,10 +31,19 @@
                 </li>
 
                 <li class="menu-item">
-                    <a href="" class="menu-link">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon fa-solid fa-bell"></i>
-                        <div data-i18n="Analytics">Notification</div>
+                        <div data-i18n="Layouts">Notifications</div>
                     </a>
+
+                    <ul class="menu-sub">
+                        <li class="menu-item">
+                            <a href="{{ route('users.notifications.viewMessages') }}" class="menu-link">
+                                <div data-i18n="Without navbar">Messages</div>
+                            </a>
+                        </li>
+
+                    </ul>
                 </li>
 
                 <!-- Layouts -->
@@ -49,6 +58,18 @@
                         <li class="menu-item">
                             <a href="{{ route('applicants.wallet.viewWallet') }}" class="menu-link">
                                 <div data-i18n="Without navbar">Balance Money</div>
+                            </a>
+                        </li>
+
+                        <li class="menu-item">
+                            <a href="{{ route('applicants.wallet.viewInterest') }}" class="menu-link">
+                                <div data-i18n="Without navbar">Interest</div>
+                            </a>
+                        </li>
+
+                        <li class="menu-item">
+                            <a href="{{ route('applicants.wallet.loans') }}" class="menu-link">
+                                <div data-i18n="Without navbar">Loans</div>
                             </a>
                         </li>
 
@@ -145,50 +166,84 @@
                         <li class="nav-item dropdown me-3">
 
                             <a class="nav-link dropdown-toggle hide-arrow" href="#" role="button" data-bs-toggle="dropdown">
-
                                 <span class="position-relative">
                                     <i class="bx bx-message-dots bx-sm"></i>
 
-                                    <!-- green online / new message indicator -->
-                                    <span class="position-absolute top-0 start-100 translate-middle p-1 bg-success rounded-circle"></span>
+                                    {{-- unread COUNT --}}
+                                    @if(isset($unreadCount) && $unreadCount > 0)
+                                    <span class="position-absolute top-0 start-100 translate-middle"
+                                        style="
+            background: #ff4d4f;
+            color: #fff;
+            padding: 1px 6px;
+            border-radius: 12px;
+            font-size: 11px;
+          ">
+                                        {{ $unreadCount > 99 ? '99+' : $unreadCount }}
+                                    </span>
+                                    @endif
                                 </span>
-
                             </a>
 
-                            <!-- DROPDOWN MENU -->
-                            <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                            <ul class="dropdown-menu dropdown-menu-end shadow-sm" style="width: 300px;">
 
-                                <li>
-                                    <h6 class="dropdown-header">Messages</h6>
+                                <li class="d-flex justify-content-between align-items-center px-3">
+                                    <h6 class="dropdown-header mb-0">Messages</h6>
+
+                                    @if(isset($unreadCount) && $unreadCount > 0)
+                                    <small class="text-danger ms-2">
+                                        ({{ $unreadCount }} new)
+                                    </small>
+                                    @endif
                                 </li>
 
+                                {{-- ✅ LOOP --}}
+                                @forelse($messages ?? [] as $msg)
                                 <li>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="bx bx-user me-2"></i>
-                                        New message from Admin
+                                    <a class="dropdown-item d-flex flex-column 
+                    {{ $msg->deleted_at ? 'text-muted text-decoration-line-through' : '' }}" href="#">
+
+                                        {{-- Title --}}
+                                        <span class="fw-semibold">
+                                            {{ $msg->title ?? 'No Title' }}
+                                        </span>
+
+                                        {{-- Message --}}
+                                        <small>
+                                            {{ \Illuminate\Support\Str::limit($msg->message, 40) }}
+                                        </small>
+
+                                        {{-- Broadcast --}}
+                                        @if(is_null($msg->receiver_id))
+                                        <small class="text-primary">(Broadcast)</small>
+                                        @endif
+
+                                        {{-- Unread --}}
+                                        @if(!$msg->is_read && !$msg->deleted_at)
+                                        <small class="text-danger">Unread</small>
+                                        @endif
+
+                                        {{-- ✅ Deleted label --}}
+                                        @if($msg->deleted_at)
+                                        <small class="text-secondary">Deleted</small>
+                                        @endif
+
                                     </a>
                                 </li>
-
+                                @empty
                                 <li>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="bx bx-support me-2"></i>
-                                        Support reply available
-                                    </a>
+                                    <span class="dropdown-item text-muted text-center">
+                                        No messages found
+                                    </span>
                                 </li>
-
-                                <li>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="bx bx-bell me-2"></i>
-                                        System notification
-                                    </a>
-                                </li>
+                                @endforelse
 
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
 
                                 <li>
-                                    <a class="dropdown-item text-primary" href="">
+                                    <a class="dropdown-item text-primary text-center" href="{{ route('users.notifications.viewMessages') }}">
                                         View all messages
                                     </a>
                                 </li>
@@ -381,16 +436,12 @@
                                         </div>
 
                                         <!-- PROFILE INFO -->
-                                        @php
-                                        $profile = Auth::user()->profile;
-                                        @endphp
-
                                         <div class="mb-3">
                                             <label class="form-label">First Name</label>
                                             <input type="text"
                                                 class="form-control"
                                                 name="first_name"
-                                                value="{{ old('first_name', $profile->first_name ?? '') }}">
+                                                value="{{ old('first_name', optional($profile)->first_name) }}">
                                         </div>
 
                                         <div class="mb-3">
@@ -398,7 +449,7 @@
                                             <input type="text"
                                                 class="form-control"
                                                 name="last_name"
-                                                value="{{ old('last_name', $profile->last_name ?? '') }}">
+                                                value="{{ old('last_name', optional($profile)->last_name) }}">
                                         </div>
 
                                         <div class="mb-3">
@@ -406,7 +457,7 @@
                                             <input type="text"
                                                 class="form-control"
                                                 name="phone"
-                                                value="{{ old('phone', $profile->phone ?? '') }}">
+                                                value="{{ old('phone', optional($profile)->phone) }}">
                                         </div>
 
                                         <div class="mb-3">
@@ -414,7 +465,7 @@
                                             <input type="date"
                                                 class="form-control"
                                                 name="birthdate"
-                                                value="{{ old('birthdate', $profile->birthdate ?? '') }}">
+                                                value="{{ old('birthdate', optional($profile)->birthdate) }}">
                                         </div>
 
                                         <div class="mb-3">
@@ -422,9 +473,8 @@
                                             <input type="text"
                                                 class="form-control"
                                                 name="address"
-                                                value="{{ old('address', $profile->address ?? '') }}">
+                                                value="{{ old('address', optional($profile)->address) }}">
                                         </div>
-
                                         <hr>
 
 
@@ -444,12 +494,14 @@
 
             <!-- Footer Section -->
             <footer class="content-footer footer bg-footer-theme mt-4">
-                <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column text-center text-md-start">
+                <div
+                    class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column text-center text-md-start">
                     <div class="mb-2 mb-md-0">
-                        © <script>
+                        ©
+                        <script>
                             document.write(new Date().getFullYear());
                         </script>,
-                        <span class="fw-bold text-primary">Building Permit Management System</span>
+                        <span class="fw-bold text-primary">Impoks Management System</span>
                     </div>
                     <div>
                         <a href="#" class="footer-link me-3">Documentation</a>

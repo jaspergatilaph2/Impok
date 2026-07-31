@@ -31,10 +31,19 @@
                 </li>
 
                 <li class="menu-item">
-                    <a href="" class="menu-link">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon fa-solid fa-bell"></i>
-                        <div data-i18n="Analytics">Notification</div>
+                        <div data-i18n="Layouts">Notifications</div>
                     </a>
+
+                    <ul class="menu-sub">
+                        <li class="menu-item">
+                            <a href="{{ route('users.notifications.viewMessages') }}" class="menu-link">
+                                <div data-i18n="Without navbar">Messages</div>
+                            </a>
+                        </li>
+
+                    </ul>
                 </li>
 
                 <!-- Layouts -->
@@ -152,54 +161,88 @@
                     <ul class="navbar-nav flex-row align-items-center ms-auto">
                         <!-- Place this tag where you want the button to render. -->
 
-                        <!-- 🔔 MESSAGE / INBOX ICON -->
+                        <!--MESSAGE / INBOX ICON -->
                         <li class="nav-item dropdown me-3">
 
                             <a class="nav-link dropdown-toggle hide-arrow" href="#" role="button" data-bs-toggle="dropdown">
-
                                 <span class="position-relative">
                                     <i class="bx bx-message-dots bx-sm"></i>
 
-                                    <!-- green online / new message indicator -->
-                                    <span class="position-absolute top-0 start-100 translate-middle p-1 bg-success rounded-circle"></span>
+                                    {{-- unread COUNT --}}
+                                    @if(isset($unreadCount) && $unreadCount > 0)
+                                    <span class="position-absolute top-0 start-100 translate-middle"
+                                        style="
+            background: #ff4d4f;
+            color: #fff;
+            padding: 1px 6px;
+            border-radius: 12px;
+            font-size: 11px;
+          ">
+                                        {{ $unreadCount > 99 ? '99+' : $unreadCount }}
+                                    </span>
+                                    @endif
                                 </span>
-
                             </a>
 
-                            <!-- DROPDOWN MENU -->
-                            <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                            <ul class="dropdown-menu dropdown-menu-end shadow-sm" style="width: 300px;">
 
-                                <li>
-                                    <h6 class="dropdown-header">Messages</h6>
+                                <li class="d-flex justify-content-between align-items-center px-3">
+                                    <h6 class="dropdown-header mb-0">Messages</h6>
+
+                                    @if(isset($unreadCount) && $unreadCount > 0)
+                                    <small class="text-danger ms-2">
+                                        ({{ $unreadCount }} new)
+                                    </small>
+                                    @endif
                                 </li>
 
+                                {{-- ✅ LOOP --}}
+                                @forelse($messages ?? [] as $msg)
                                 <li>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="bx bx-user me-2"></i>
-                                        New message from Admin
+                                    <a class="dropdown-item d-flex flex-column 
+                    {{ $msg->deleted_at ? 'text-muted text-decoration-line-through' : '' }}" href="#">
+
+                                        {{-- Title --}}
+                                        <span class="fw-semibold">
+                                            {{ $msg->title ?? 'No Title' }}
+                                        </span>
+
+                                        {{-- Message --}}
+                                        <small>
+                                            {{ \Illuminate\Support\Str::limit($msg->message, 40) }}
+                                        </small>
+
+                                        {{-- Broadcast --}}
+                                        @if(is_null($msg->receiver_id))
+                                        <small class="text-primary">(Broadcast)</small>
+                                        @endif
+
+                                        {{-- Unread --}}
+                                        @if(!$msg->is_read && !$msg->deleted_at)
+                                        <small class="text-danger">Unread</small>
+                                        @endif
+
+                                        {{-- ✅ Deleted label --}}
+                                        @if($msg->deleted_at)
+                                        <small class="text-secondary">Deleted</small>
+                                        @endif
+
                                     </a>
                                 </li>
-
+                                @empty
                                 <li>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="bx bx-support me-2"></i>
-                                        Support reply available
-                                    </a>
+                                    <span class="dropdown-item text-muted text-center">
+                                        No messages found
+                                    </span>
                                 </li>
-
-                                <li>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="bx bx-bell me-2"></i>
-                                        System notification
-                                    </a>
-                                </li>
+                                @endforelse
 
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
 
                                 <li>
-                                    <a class="dropdown-item text-primary" href="">
+                                    <a class="dropdown-item text-primary text-center" href="{{ route('users.notifications.viewMessages') }}">
                                         View all messages
                                     </a>
                                 </li>
@@ -337,13 +380,21 @@
 
                                     <!-- PRINT BUTTON -->
                                     <div class="mb-3 text-end no-print">
-                                        <button onclick="printTable()" class="btn btn-primary btn-sm">
+                                        <button onclick="printTable()" class="btn btn-primary btn-sm me-2">
                                             <i class="bx bx-printer"></i> Print Report
+                                        </button>
+
+                                        <button onclick="downloadPDF()" class="btn btn-danger btn-sm">
+                                            <i class="bx bx-download"></i> Save as PDF
                                         </button>
                                     </div>
 
+                                    <input type="hidden" id="userId" value="{{ str_pad(auth()->user()->id, 3, '0', STR_PAD_LEFT) }}">
+
                                     <!-- REPORT AREA -->
                                     <div id="printArea" class="report-container">
+
+
 
                                         <!-- HEADER -->
                                         <div class="text-center mb-2">
@@ -415,7 +466,7 @@
                                         <!-- TOTAL -->
                                         <div class="text-end mt-3">
                                             <h6 class="fw-bold">
-                                                Total Balance: ₱ {{ number_format($runningBalance ?? 0, 2) }}
+                                                Total Balance: ₱ {{ number_format($balance ?? 0, 2) }}
                                             </h6>
                                         </div>
 

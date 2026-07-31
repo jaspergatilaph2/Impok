@@ -164,61 +164,8 @@
                     <ul class="navbar-nav flex-row align-items-center ms-auto">
                         <!-- Place this tag where you want the button to render. -->
 
-                        <!-- 🔔 MESSAGE / INBOX ICON -->
-                        <li class="nav-item dropdown me-3">
-
-                            <a class="nav-link dropdown-toggle hide-arrow" href="#" role="button" data-bs-toggle="dropdown">
-
-                                <span class="position-relative">
-                                    <i class="bx bx-message-dots bx-sm"></i>
-
-                                    <!-- green online / new message indicator -->
-                                    <span class="position-absolute top-0 start-100 translate-middle p-1 bg-success rounded-circle"></span>
-                                </span>
-
-                            </a>
-
-                            <!-- DROPDOWN MENU -->
-                            <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-
-                                <li>
-                                    <h6 class="dropdown-header">Messages</h6>
-                                </li>
-
-                                <li>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="bx bx-user me-2"></i>
-                                        New message from Admin
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="bx bx-support me-2"></i>
-                                        Support reply available
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="bx bx-bell me-2"></i>
-                                        System notification
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-
-                                <li>
-                                    <a class="dropdown-item text-primary" href="">
-                                        View all messages
-                                    </a>
-                                </li>
-
-                            </ul>
-                        </li>
-
+                       
+                    
                         <!-- User -->
                         <li class="nav-item navbar-dropdown dropdown-user dropdown">
                             <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">

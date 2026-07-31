@@ -81,9 +81,24 @@ class ApplicantsController extends Controller
     {
         $accounts = User::with('profile_information')->find(auth()->id());
 
+        $unreadCount = Messages::where(function ($query) use ($accounts) {
+            $query->where('receiver_id', $accounts->id) // ✅ FIXED
+                ->orWhereNull('receiver_id');
+        })
+            ->where('is_read', false)
+            ->count();
+
+        $messages = Messages::where(function ($query) use ($accounts) {
+            $query->where('receiver_id', $accounts->id)
+                ->orWhereNull('receiver_id');
+        })
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get();
+
         return view(
             'Applicants.Accounts.view',
-            compact('accounts'),
+            compact('accounts', 'unreadCount', 'messages'),
             [
                 'ActiveTabMenu' => 'account',
                 'SubActiveTab' => 'view'
@@ -95,9 +110,28 @@ class ApplicantsController extends Controller
     public function updateAccounts()
     {
         $accounts = auth()->user();
+
+        $unreadCount = Messages::where(function ($query) use ($accounts) {
+            $query->where('receiver_id', $accounts->id) // ✅ FIXED
+                ->orWhereNull('receiver_id');
+        })
+            ->where('is_read', false)
+            ->count();
+
+        $profile = $accounts->profileInformation;
+
+        $messages = Messages::where(function ($query) use ($accounts) {
+            $query->where('receiver_id', $accounts->id)
+                ->orWhereNull('receiver_id');
+        })
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get();
+
+
         return view(
             'Applicants.Accounts.update',
-            compact('accounts'),
+            compact('accounts', 'unreadCount', 'messages', 'profile'),
             [
                 'ActiveTabMenu' => 'account',
                 'SubActiveTab' => 'update'
@@ -147,7 +181,7 @@ class ApplicantsController extends Controller
             ])->withInput();
         }
 
-        //UPDATE AVATAR
+        // UPDATE AVATAR
         if ($request->hasFile('avatar')) {
 
             if ($account->avatar && Storage::disk('public')->exists($account->avatar)) {
@@ -158,12 +192,12 @@ class ApplicantsController extends Controller
             $account->avatar = $path;
         }
 
-        //UPDATE USER
+        // UPDATE USER
         $account->name = $request->name;
         $account->email = $request->email;
         $account->save();
 
-        // ✅ UPDATE PROFILE
+        // UPDATE PROFILE
         $account->profile_information()->updateOrCreate(
             ['user_id' => $account->id],
             [
@@ -197,12 +231,27 @@ class ApplicantsController extends Controller
             } elseif ($tx->type === 'cash_out') {
                 $balance -= $tx->amount;
             }
-            // ❌ interest is ignored
+            //    interest is ignored
         }
+
+        $unreadCount = Messages::where(function ($query) use ($user) {
+            $query->where('receiver_id', $user->id) // ✅ FIXED
+                ->orWhereNull('receiver_id');
+        })
+            ->where('is_read', false)
+            ->count();
+
+        $messages = Messages::where(function ($query) use ($user) {
+            $query->where('receiver_id', $user->id)
+                ->orWhereNull('receiver_id');
+        })
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get();
 
         return view(
             'Applicants.Wallet.balance-money',
-            compact('transactions', 'balance'),
+            compact('transactions', 'balance', 'messages', 'unreadCount'),
             [
                 'ActiveTabMenu' => 'wallet',
                 'SubActiveTab' => 'view'
@@ -220,6 +269,22 @@ class ApplicantsController extends Controller
             ->get();
         $balance = 0;
 
+        $unreadCount = Messages::where(function ($query) use ($user) {
+            $query->where('receiver_id', $user->id) // ✅ FIXED
+                ->orWhereNull('receiver_id');
+        })
+            ->where('is_read', false)
+            ->count();
+
+        $messages = Messages::where(function ($query) use ($user) {
+            $query->where('receiver_id', $user->id)
+                ->orWhereNull('receiver_id');
+        })
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get();
+
+
         foreach ($transactions as $tx) {
             if ($tx->type === 'cash_in' || $tx->type === 'interest') {
                 $balance += $tx->amount;
@@ -230,7 +295,12 @@ class ApplicantsController extends Controller
 
         return view(
             'Applicants.Transaction.history',
-            compact('transactions', 'balance'),
+            compact(
+                'transactions',
+                'balance',
+                'unreadCount',
+                'messages'
+            ),
             [
                 'ActiveTabMenu' => 'transactions',
                 'SubActiveTab' => 'view'
@@ -255,12 +325,30 @@ class ApplicantsController extends Controller
 
         $balance = $interestTransactions->sum('amount');
 
+
+        $unreadCount = Messages::where(function ($query) use ($userId) {
+            $query->where('receiver_id', $userId)
+                ->orWhereNull('receiver_id');
+        })
+            ->where('is_read', false)
+            ->count();
+
+        $messages = Messages::where(function ($query) use ($userId) {
+            $query->where('receiver_id', $userId)
+                ->orWhereNull('receiver_id');
+        })
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get();
+
         return view('Applicants.wallet.interest', [
             'transactions' => $interestTransactions,
             'balance' => $balance,
             'hasCashIn' => $hasCashIn, // 🔥 IMPORTANT
             'ActiveTabMenu' => 'wallet',
-            'SubActiveTab' => 'interest'
+            'SubActiveTab' => 'interest',
+            'messages' => $messages,
+            'unreadCount' => $unreadCount
         ]);
     }
 
@@ -270,9 +358,25 @@ class ApplicantsController extends Controller
         $loanTransaction = Loan::where('user_id', $user->id)
             ->orderBy('transaction_date', 'desc')
             ->get();
+
+        $unreadCount = Messages::where(function ($query) use ($user) {
+            $query->where('receiver_id', $user->id) // ✅ FIXED
+                ->orWhereNull('receiver_id');
+        })
+            ->where('is_read', false)
+            ->count();
+
+        $messages = Messages::where(function ($query) use ($user) {
+            $query->where('receiver_id', $user->id)
+                ->orWhereNull('receiver_id');
+        })
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get();
+
         return view(
             'Applicants.wallet.loans',
-            compact('user', 'loanTransaction'),
+            compact('user', 'loanTransaction', 'messages', 'unreadCount'),
             [
                 'ActiveTabMenu' => 'view',
                 'SubActiveTab' => 'loans'

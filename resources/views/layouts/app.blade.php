@@ -158,6 +158,9 @@
     <script src="{{ asset('js/admin-inbox.js') }}"></script>
     <script src="{{ asset('js/users-saveAsPdf.js') }}"></script>
     <script src="{{ asset('js/user-messages.js') }}"></script>
+    <script src="{{ asset('js/user-transactions.js') }}"></script>
+    <script src="{{ asset('js/user-interest.js') }}"></script>
+    <script src="{{ asset('js/users-loans.js') }}"></script>
 </body>
 
 </html>

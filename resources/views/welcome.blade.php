@@ -121,7 +121,7 @@
                     <div class="loc-icon">🕐</div>
                     <div>
                         <p class="loc-label">Office Hours</p>
-                        <p class="loc-value">Monday – Friday<br>8:00 AM – 5:00 PM</p>
+                        <p class="loc-value">Sunday<br>1:00 PM – 5:00 PM</p>
                     </div>
                 </div>
                 <div class="loc-item">

@@ -17,12 +17,33 @@ use App\Http\Controllers\Applicants\ApplicantsController;
 */
 
 Route::get('/', function () {
+    if (auth()->check()) {
+        return redirect('/home');
+    }
     return view('welcome');
 });
 
 Auth::routes();
 
-//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', function () {
+    $user = auth()->user();
+
+    if (!$user) {
+        return redirect('/login');
+    }
+
+    switch (strtolower($user->role)) {
+        case 'admin':
+        case 'staff':
+            return redirect()->route('Admin.dashboard');
+
+        case 'user':
+            return redirect()->route('applicants.dashboard');
+
+        default:
+            return redirect('/login');
+    }
+})->middleware('auth');
 
 // Applicants Routes
 Route::group(['middleware' => ['auth', 'IfIMSUsers']], function () {
