@@ -163,6 +163,7 @@
     <script src="{{ asset('js/user-interest.js') }}"></script>
     <script src="{{ asset('js/users-loans.js') }}"></script>
     <script src="{{ asset('sneat/js/main.js') }}"></script>
+    <script src="{{ asset('js/admin-save-pdf.js') }}"></script>
 </body>
 
 </html>

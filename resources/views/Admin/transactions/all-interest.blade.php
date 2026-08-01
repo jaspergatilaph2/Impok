@@ -322,8 +322,12 @@
 
                                     <!-- PRINT BUTTON -->
                                     <div class="d-flex justify-content-end mb-3 no-print">
-                                        <button onclick="printTable()" class="btn btn-primary">
+                                        <button onclick="printTable()" class="btn btn-primary me-1">
                                             <i class="bx bx-printer"></i> Print
+                                        </button>
+
+                                        <button onclick="downloadPDF()" class="btn btn-danger me-1">
+                                            <i class="bx bx-download"></i> Download PDF
                                         </button>
                                     </div>
 
