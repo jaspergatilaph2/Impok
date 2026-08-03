@@ -114,6 +114,8 @@ Route::group(['middleware' => ['auth', 'IfIMSAdmin']], function () {
             ->name('viewAllBalance');
         Route::get('/all-interest', [AdminController::class, 'adminViewInterest'])
             ->name('adminViewInterest');
+        Route::get('/all-loans', [AdminController::class, 'ViewAllLoans'])
+            ->name('viewAllLoans');
     });
 
     Route::prefix('/accounts')->name('users.accounts.')->group(function () {

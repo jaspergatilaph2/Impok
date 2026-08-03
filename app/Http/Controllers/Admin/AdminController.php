@@ -34,9 +34,18 @@ class AdminController extends Controller
 
         $adminwalletTransactions = Wallet::whereNotNull('transaction_date')->count();
 
-        // ✅ FIXED: Get ALL approved loans (not just admin)
+        // FIXED: Get ALL approved loans (not just admin)
         $TotalLoans = Loan::where('status', 'approved')
             ->count();
+
+        $nextDate = DB::table('open_transaction_dates')
+            ->where('date', '>=', Carbon::today())
+            ->orderBy('date', 'asc')
+            ->first();
+
+        $loanSum = Loan::whereHas('user', function ($query) {
+            $query->where('role', 'user');
+        })->sum('amount');
 
         return view(
             'Admin.Dashboard.index',
@@ -45,7 +54,9 @@ class AdminController extends Controller
                 'userCounts',
                 'totalBalance',
                 'adminwalletTransactions',
-                'TotalLoans'
+                'TotalLoans',
+                'nextDate',
+                'loanSum'
             )
         );
     }
@@ -132,7 +143,7 @@ class AdminController extends Controller
                 ]);
             }
 
-           
+
             $balance = Wallet::where('user_id', $request->user_id)->sum('amount');
 
             return response()->json([
@@ -182,7 +193,7 @@ class AdminController extends Controller
             ->orderBy('name', 'ASC')
             ->paginate(10);
 
-        // ✅ COMPUTE BALANCE PER USER (EXCLUDE INTEREST)
+        // COMPUTE BALANCE PER USER (EXCLUDE INTEREST)
         $users->getCollection()->transform(function ($user) {
             $user->balance = $user->wallet->reduce(function ($carry, $item) {
                 return ($item->type === 'cash_in')
@@ -266,16 +277,16 @@ class AdminController extends Controller
 
         foreach ($dates as $date) {
             $events[] = [
-                'id' => $date->id, // ✅ important
+                'id' => $date->id, // important
                 'title' => 'Open',
                 'start' => $date->date,
-                'end' => $date->date, // ✅ important for background events
+                'end' => $date->date, // important for background events
                 'display' => 'background',
-                'backgroundColor' => '#198754', // ✅ Bootstrap green
+                'backgroundColor' => '#198754', //Bootstrap green
                 'borderColor' => '#198754',
-                'allDay' => true, // ✅ REQUIRED
+                'allDay' => true, //REQUIRED
                 'extendedProps' => [
-                    'type' => 'saved' // ✅ used in JS checking
+                    'type' => 'saved' // used in JS checking
                 ],
             ];
         }
@@ -292,7 +303,7 @@ class AdminController extends Controller
             ->orderBy('name', 'ASC')
             ->paginate(10);
 
-        // ✅ COMPUTE BALANCE PER USER (EXCLUDE INTEREST)
+        // COMPUTE BALANCE PER USER (EXCLUDE INTEREST)
         $users->getCollection()->transform(function ($user) {
             $user->balance = $user->wallet->reduce(function ($carry, $item) {
                 return ($item->type === 'interest')
@@ -325,18 +336,18 @@ class AdminController extends Controller
     {
         $user = auth()->user();
 
-        // ✅ Validation
+        // Validation
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'avatar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
-        // ✅ Update basic info
+        // Update basic info
         $user->name = $request->name;
         $user->email = $request->email;
 
-        // ✅ Handle avatar upload
+        // Handle avatar upload
         if ($request->hasFile('avatar')) {
 
             // delete old avatar (optional)
@@ -358,7 +369,7 @@ class AdminController extends Controller
     public function viewLoans()
     {
         $users = User::with('profile_information')
-            ->where('role', 'user') // ✅ only normal users
+            ->where('role', 'user') // only normal users
             ->get();
 
         return view('Admin.wallet.loans', compact('users'), [
@@ -375,7 +386,7 @@ class AdminController extends Controller
             'transaction_date' => 'required|date',
         ]);
 
-        // ✅ Create Loan
+        // Create Loan
         $loan = Loan::create([
             'user_id' => $request->user_id,
             'type' => 'loan',
@@ -385,7 +396,7 @@ class AdminController extends Controller
             'status' => 'approved'
         ]);
 
-        // ✅ Calculate total loans (NEW BALANCE)
+        // Calculate total loans (NEW BALANCE)
         $newBalance = Loan::where('user_id', $request->user_id)->sum('amount');
 
         return response()->json([
@@ -476,6 +487,31 @@ class AdminController extends Controller
             [
                 'ActiveTabMenu' => 'View',
                 'SubActiveTab' => 'Trash-bin'
+            ]
+        );
+    }
+
+    public function ViewAllLoans()
+    {
+        $accounts = auth()->user();
+
+        $users = User::with('loans')
+            ->where('role', 'user')
+            ->orderBy('name', 'ASC')
+            ->paginate(10);
+
+        //COMPUTE TOTAL LOANS PER USER
+        $users->getCollection()->transform(function ($user) {
+            $user->total_loans = $user->loans->sum('amount');
+            return $user;
+        });
+
+        return view(
+            'Admin.transactions.all-loans',
+            compact('accounts', 'users'),
+            [
+                'ActiveTabMenu' => 'View',
+                'SubActiveTab' => 'loans'
             ]
         );
     }

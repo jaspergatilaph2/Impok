@@ -106,7 +106,7 @@
                     </a>
 
                     <ul class="menu-sub">
-                        <li class="menu-item">
+                        <li class="menu-item ">
                             <a href="{{ route('users.transactions.viewAllBalance') }}" class="menu-link">
                                 <div data-i18n="Without navbar">All balance transactions</div>
                             </a>
@@ -115,6 +115,12 @@
                         <li class="menu-item">
                             <a href="{{ route('users.transactions.adminViewInterest') }}" class="menu-link">
                                 <div data-i18n="Without navbar">All interest transactions</div>
+                            </a>
+                        </li>
+
+                        <li class="menu-item">
+                            <a href="{{ route('users.transactions.viewAllLoans') }}" class="menu-link">
+                                <div data-i18n="Without navbar">All loans transactions</div>
                             </a>
                         </li>
 

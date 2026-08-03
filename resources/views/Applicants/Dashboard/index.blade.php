@@ -199,7 +199,7 @@
                   @endif
                 </li>
 
-                {{-- ✅ LOOP --}}
+                {{-- LOOP --}}
                 @forelse($messages ?? [] as $msg)
                 <li>
                   <a class="dropdown-item d-flex flex-column 
@@ -225,7 +225,7 @@
                     <small class="text-danger">Unread</small>
                     @endif
 
-                    {{-- ✅ Deleted label --}}
+                    {{-- Deleted label --}}
                     @if($msg->deleted_at)
                     <small class="text-secondary">Deleted</small>
                     @endif

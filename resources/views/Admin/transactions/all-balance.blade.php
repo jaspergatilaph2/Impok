@@ -119,6 +119,12 @@
                             </a>
                         </li>
 
+                        <li class="menu-item">
+                            <a href="{{ route('users.transactions.viewAllLoans') }}" class="menu-link">
+                                <div data-i18n="Without navbar">All loans transactions</div>
+                            </a>
+                        </li>
+
                         <li class="menu-item ">
                             <a href="{{ route('admin.calendar.viewCalendar') }}" class="menu-link">
                                 <div data-i18n="Without navbar">Date Of Transactions</div>
@@ -139,12 +145,12 @@
                     </a>
                     <ul class="menu-sub">
                         <li class="menu-item">
-                            <a href="" class="menu-link">
+                            <a href="{{ route('users.accounts.viewAccounts') }}" class="menu-link">
                                 <div data-i18n="Account">Account</div>
                             </a>
                         </li>
                         <li class="menu-item">
-                            <a href="" class="menu-link">
+                            <a href="{{ route('users.accounts.updateAccounts') }}" class="menu-link">
                                 <div data-i18n="Notifications">Update Account</div>
                             </a>
                         </li>
@@ -320,8 +326,12 @@
 
                                     <!-- PRINT BUTTON -->
                                     <div class="d-flex justify-content-end mb-3 no-print">
-                                        <button onclick="printTable()" class="btn btn-primary">
+                                        <button onclick="printTable()" class="btn btn-primary me-1">
                                             <i class="bx bx-printer"></i> Print
+                                        </button>
+
+                                        <button onclick="BalanacedownloadPDF()" class="btn btn-danger me-1">
+                                            <i class="bx bx-download"></i> Download PDF
                                         </button>
                                     </div>
 

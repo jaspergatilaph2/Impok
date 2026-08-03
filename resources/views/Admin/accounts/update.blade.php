@@ -118,6 +118,12 @@
                         </li>
 
                         <li class="menu-item">
+                            <a href="{{ route('users.transactions.viewAllLoans') }}" class="menu-link">
+                                <div data-i18n="Without navbar">All loans transactions</div>
+                            </a>
+                        </li>
+
+                        <li class="menu-item">
                             <a href="{{ route('admin.calendar.viewCalendar') }}" class="menu-link">
                                 <div data-i18n="Without navbar">Date Of Transactions</div>
                             </a>
@@ -376,12 +382,14 @@
 
             <!-- Footer Section -->
             <footer class="content-footer footer bg-footer-theme mt-4">
-                <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column text-center text-md-start">
+                <div
+                    class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column text-center text-md-start">
                     <div class="mb-2 mb-md-0">
-                        © <script>
+                        ©
+                        <script>
                             document.write(new Date().getFullYear());
                         </script>,
-                        <span class="fw-bold text-primary">Building Permit Management System</span>
+                        <span class="fw-bold text-primary">Impoks Management System</span>
                     </div>
                     <div>
                         <a href="#" class="footer-link me-3">Documentation</a>

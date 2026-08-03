@@ -98,6 +98,8 @@
                             </a>
                         </li>
 
+                        
+
                         <li class="menu-item">
                             <a href="{{ route('users.wallet.viewLoans') }}" class="menu-link">
                                 <div data-i18n="Without navbar">View loan transaction</div>
@@ -123,6 +125,12 @@
                         <li class="menu-item">
                             <a href="{{ route('users.transactions.adminViewInterest') }}" class="menu-link">
                                 <div data-i18n="Without navbar">All interest transactions</div>
+                            </a>
+                        </li>
+
+                        <li class="menu-item">
+                            <a href="{{ route('users.transactions.viewAllLoans') }}" class="menu-link">
+                                <div data-i18n="Without navbar">All loans transactions</div>
                             </a>
                         </li>
 

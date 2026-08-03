@@ -127,6 +127,12 @@
                         </li>
 
                         <li class="menu-item">
+                            <a href="{{ route('users.transactions.viewAllLoans')  }}" class="menu-link">
+                                <div data-i18n="Without navbar">All loans transactions</div>
+                            </a>
+                        </li>
+
+                        <li class="menu-item">
                             <a href="{{ route('admin.calendar.viewCalendar') }}" class="menu-link">
                                 <div data-i18n="Without navbar">Date Of Transactions</div>
                             </a>
@@ -363,32 +369,42 @@
                             </div>
 
                             <!-- COMPLETED TRANSACTIONS -->
-                            <!-- <div class="col-12 col-md-4 col-lg-3">
+                            <div class="col-12 col-md-4 col-lg-3">
                                 <div class="card shadow-sm border-0 h-100">
                                     <div class="card-body text-center">
-                                        <div class="mb-3 text-success">
-                                            <i class="fa-solid fa-circle-check fs-1"></i>
+                                        <div class="mb-3 text-info">
+                                            <i class="fa-solid fa-calendar fs-1"></i>
                                         </div>
-                                        <h6 class="text-muted">Completed</h6>
-                                        <h2 class="fw-bold">0</h2>
-                                        <small class="text-muted">Successful transactions</small>
+                                        <h6 class="text-muted">Next Impok Date</h6>
+                                        <h2 class="fw-bold">
+                                            @if(!empty($nextDate))
+                                            {{ \Carbon\Carbon::parse($nextDate->date)->format('F d, Y') }}
+                                            @else
+                                            No date has been updated
+                                            @endif
+                                        </h2>
+                                        <small class="text-muted">Reminder the next impok date</small>
                                     </div>
                                 </div>
-                            </div> -->
+                            </div>
 
                             <!-- FAILED TRANSACTIONS -->
-                            <!-- <div class="col-12 col-md-4 col-lg-3">
+                            <div class="col-12 col-md-4 col-lg-3">
                                 <div class="card shadow-sm border-0 h-100">
                                     <div class="card-body text-center">
                                         <div class="mb-3 text-danger">
-                                            <i class="fa-solid fa-triangle-exclamation fs-1"></i>
+                                            <i class="fa-solid fa-money-bill fs-1"></i>
                                         </div>
-                                        <h6 class="text-muted">Failed</h6>
-                                        <h2 class="fw-bold">0</h2>
-                                        <small class="text-muted">Declined transactions</small>
+                                        <h6 class="text-muted">Total Loans</h6>
+
+                                        <h2 class="fw-bold">
+                                            ₱{{ number_format($loanSum ?? 0) }}
+                                        </h2>
+
+                                        <small class="text-muted">Overall Loans</small>
                                     </div>
                                 </div>
-                            </div> -->
+                            </div>
 
                         </div>
 
@@ -406,28 +422,42 @@
 
                                             <!-- MANAGE USERS -->
                                             <div class="flex-fill">
-                                                <a href="" class="btn btn-primary w-100">
+                                                <a href="{{ route('users.list.viewUsers') }}" class="btn btn-primary w-100">
                                                     <i class="fa-solid fa-users me-1"></i> Manage Users
                                                 </a>
                                             </div>
 
-                                            <!-- BALANCE MANAGEMENT -->
-                                            <div class="flex-fill">
-                                                <a href="" class="btn btn-success w-100">
-                                                    <i class="fa-solid fa-wallet me-1"></i> Manage Balance
-                                                </a>
-                                            </div>
+                                            <!-- TRANSACTIONS DROPDOWN -->
+                                            <div class="flex-fill dropdown">
+                                                <button class="btn btn-info dropdown-toggle w-100"
+                                                    type="button"
+                                                    data-bs-toggle="dropdown"
+                                                    aria-expanded="false">
+                                                    <i class="fa-solid fa-wallet me-1"></i> Manage Transactions
+                                                </button>
 
-                                            <!-- TRANSACTIONS -->
-                                            <div class="flex-fill">
-                                                <a href="" class="btn btn-outline-primary w-100">
-                                                    <i class="fa-solid fa-receipt me-1"></i> Transactions
-                                                </a>
+                                                <ul class="dropdown-menu w-100">
+                                                    <li>
+                                                        <a class="dropdown-item" href="{{ route('users.transactions.viewAllBalance') }}">
+                                                            <i class="fa-solid fa-wallet me-1"></i> Manage Balance
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item" href="{{ route('users.transactions.adminViewInterest') }}">
+                                                            <i class="fa-solid fa-percent me-1"></i> Manage Interest
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item" href="{{ route('users.transactions.viewAllLoans') }}">
+                                                            <i class="fa-solid fa-receipt me-1"></i> Manage Loans
+                                                        </a>
+                                                    </li>
+                                                </ul>
                                             </div>
 
                                             <!-- NOTIFICATIONS -->
                                             <div class="flex-fill">
-                                                <a href="" class="btn btn-outline-warning w-100">
+                                                <a href="{{ route('users.messages.usersinbox') }}" class="btn btn-outline-warning w-100">
                                                     <i class="fa-solid fa-bell me-1"></i> Notifications
                                                 </a>
                                             </div>

@@ -76,6 +76,7 @@
     <link rel="stylesheet" href="{{ asset('css/seleted-date.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/menu.css') }}">
     <link rel="stylesheet" href="{{ asset('sneat/vendor/css/pages/page-misc.css') }}">
+    <link rel="stylesheet" href="{{ asset('sneat/vendor/css/pages/page-auth.css')}}">
 </head>
 
 <body>
@@ -164,6 +165,8 @@
     <script src="{{ asset('js/users-loans.js') }}"></script>
     <script src="{{ asset('sneat/js/main.js') }}"></script>
     <script src="{{ asset('js/admin-save-pdf.js') }}"></script>
+    <script src="{{asset('js/admin-bal-save.js')}}"></script>
+    <script src="{{ asset('js/admin-all-loans.js') }}"></script>
 </body>
 
 </html>

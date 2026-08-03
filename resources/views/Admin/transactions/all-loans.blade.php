@@ -30,6 +30,31 @@
                     </a>
                 </li>
 
+                <li class="menu-item">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon fa-solid fa-envelope"></i>
+                        <div data-i18n="Layouts">Messages</div>
+                    </a>
+
+                    <ul class="menu-sub">
+
+                        <li class="menu-item">
+                            <a href="{{ route('users.messages.newmassage') }}" class="menu-link">
+                                <div data-i18n="Without navbar">New Messages</div>
+                            </a>
+                        </li>
+
+
+
+                        <li class="menu-item">
+                            <a href="{{ route('users.messages.usersinbox') }}" class="menu-link">
+                                <div data-i18n="Without navbar">Inbox</div>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+
                 <!-- Layouts -->
                 <li class="menu-item">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -67,6 +92,12 @@
                                 <div data-i18n="Without navbar">View cash in transactions</div>
                             </a>
                         </li>
+
+                        <li class="menu-item">
+                            <a href="{{ route('users.wallet.viewLoans') }}" class="menu-link">
+                                <div data-i18n="Without navbar">View loan transaction</div>
+                            </a>
+                        </li>
                     </ul>
 
                 </li>
@@ -90,17 +121,17 @@
                             </a>
                         </li>
 
-                        <li class="menu-item">
+                         <li class="menu-item {{ $SubActiveTab === 'loans' ? 'active' : '' }}">
                             <a href="{{ route('users.transactions.viewAllLoans') }}" class="menu-link">
                                 <div data-i18n="Without navbar">All loans transactions</div>
                             </a>
                         </li>
 
-                        <li class="menu-item {{ $SubActiveTab === 'calendar' ? 'active' : '' }}">
+                        <li class="menu-item">
                             <a href="{{ route('admin.calendar.viewCalendar') }}" class="menu-link">
                                 <div data-i18n="Without navbar">Date Of Transactions</div>
                             </a>
-                        </li>
+                        </li>s
                     </ul>
 
                 </li>
@@ -260,67 +291,129 @@
                 <!-- Content -->
 
                 <div class="container-xxl flex-grow-1 container-p-y">
-
-                    <h4 class="fw-bold py-3 mb-4">
-                        <span class="text-muted fw-light">Wallet Management /</span> Calendar Transactions
+                    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light"> Wallet Management /</span>Show User Balance
                     </h4>
 
-                    <div class="card">
-                        <div class="card-body">
-                            <div id="alertBox"></div>
-                            <div id="calendar"></div>
-                            <div class="d-flex align-items-center gap-3 mb-3 flex-wrap">
+                    <div class="row">
+                        <div class="col-md-12">
 
-                                <div class="d-flex align-items-center gap-2">
-                                    <span class="legend-box legend-open"></span>
-                                    <small>Open (Saved)</small>
+                            <!-- NAV -->
+                            <ul class="nav nav-pills flex-column flex-md-row mb-3">
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="javascript:void(0);">
+                                        <i class="bx bx-group me-1"></i> Loans Report
+                                    </a>
+                                </li>
+                            </ul>
+
+                            <!-- CARD -->
+                            <div class="card mb-4">
+                                <h5 class="card-header">User List</h5>
+                                <hr class="my-0" />
+
+                                <div class="card-body">
+
+                                    <h5 class="mb-3 fw-bold">Users Loans Balance</h5>
+
+                                    <!-- SEARCH -->
+                                    <div class="mb-3">
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <i class="bx bx-search"></i>
+                                            </span>
+                                            <input type="text" id="userSearch" class="form-control"
+                                                placeholder="Search user by name or email...">
+                                        </div>
+                                    </div>
+
+                                    <!-- PRINT BUTTON -->
+                                    <div class="d-flex justify-content-end mb-3 no-print">
+                                        <button onclick="printTable()" class="btn btn-primary me-1">
+                                            <i class="bx bx-printer"></i> Print
+                                        </button>
+
+                                        <button onclick="AllLoansdownloadPDF()" class="btn btn-danger me-1">
+                                            <i class="bx bx-download"></i> Download PDF
+                                        </button>
+                                    </div>
+
+                                    <!-- PRINT AREA -->
+                                    <div id="printArea">
+
+                                        <!-- OPTIONAL TITLE FOR PRINT -->
+                                        <h5 class="text-center mb-3">Users Loans Balance Report</h5>
+
+                                        <div class="table-responsive">
+                                            <table class="table table-hover align-middle">
+
+                                                <thead>
+                                                    <tr>
+                                                        <th>Profile</th>
+                                                        <th>User Name</th>
+                                                        <th>First Name</th>
+                                                        <th>Last Name</th>
+                                                        <th>Email</th>
+                                                        <th>Amount</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>
+                                                    @forelse($users as $user)
+                                                    <tr>
+
+                                                        <!-- PROFILE -->
+                                                        <td>
+                                                            <img src="{{ $user->profile_information && $user->profile_information->profile_picture
+                            ? asset('storage/' . $user->profile_information->profile_picture)
+                            : ($user->avatar
+                                ? asset('storage/' . $user->avatar)
+                                : asset('sneat/img/avatars/1.png')) }}"
+                                                                width="45"
+                                                                height="45"
+                                                                class="rounded-circle">
+                                                        </td>
+
+                                                        <!-- USER DATA -->
+                                                        <td>{{ $user->name }}</td>
+
+                                                        <td>{{ $user->profile_information->first_name ?? 'N/A' }}</td>
+
+                                                        <td>{{ $user->profile_information->last_name ?? 'N/A' }}</td>
+
+                                                        <td>{{ $user->email }}</td>
+
+                                                        <!-- BALANCE -->
+                                                        <td>₱ {{ number_format($user->total_loans, 2) }}</td>
+
+                                                    </tr>
+
+                                                    @empty
+                                                    <tr>
+                                                        <td colspan="6" class="text-center text-muted">
+                                                            No users found
+                                                        </td>
+                                                    </tr>
+                                                    @endforelse
+                                                </tbody>
+
+                                            </table>
+                                        </div>
+
+                                    </div>
+
+
+                                    <!-- ✅ PAGINATION -->
+                                    <div class="mt-3 d-flex justify-content-end">
+                                        {{ $users->links() }}
+                                    </div>
                                 </div>
-
-                                <div class="d-flex align-items-center gap-2">
-                                    <span class="legend-box legend-selected"></span>
-                                    <small>Selected</small>
-                                </div>
-
-                                <div class="d-flex align-items-center gap-2">
-                                    <span class="legend-box legend-disabled"></span>
-                                    <small>Disabled / Already Open</small>
-                                </div>
-
                             </div>
-                        </div>
-                    </div>
 
+                        </div>
+
+                    </div>
                 </div>
 
-                <!-- ✅ MODAL -->
-                <div class="modal fade" id="openDateModal" tabindex="-1">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-
-                            <div class="modal-header">
-                                <h5 class="modal-title">Confirm Transaction Date</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-
-                            <div class="modal-body">
-                                <p id="selectedDateText"></p>
-                                <input type="hidden" id="selectedDate">
-                            </div>
-
-                            <div class="modal-footer">
-                                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-
-                                <!-- ✅ IMPORTANT: data-url -->
-                                <button id="confirmOpenDate"
-                                    class="btn btn-success"
-                                    data-url="{{ route('admin.calendar.storeCalendar') }}">
-                                    Confirm
-                                </button>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
 
 
 

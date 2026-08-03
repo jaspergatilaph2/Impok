@@ -112,6 +112,25 @@
                                 <div data-i18n="Without navbar">All balance transactions</div>
                             </a>
                         </li>
+
+                        <li class="menu-item">
+                            <a href="{{ route('users.transactions.adminViewInterest') }}" class="menu-link">
+                                <div data-i18n="Without navbar">All interest transactions</div>
+                            </a>
+                        </li>
+
+                        <li class="menu-item">
+                            <a href="{{ route('users.transactions.viewAllLoans')  }}" class="menu-link">
+                                <div data-i18n="Without navbar">All loans transactions</div>
+                            </a>
+                        </li>
+
+                        <li class="menu-item">
+                            <a href="{{ route('admin.calendar.viewCalendar') }}" class="menu-link">
+                                <div data-i18n="Without navbar">Date Of Transactions</div>
+                            </a>
+                        </li>
+
                     </ul>
 
                 </li>
@@ -127,12 +146,12 @@
                     </a>
                     <ul class="menu-sub">
                         <li class="menu-item">
-                            <a href="" class="menu-link">
+                            <a href="{{ route('users.accounts.viewAccounts') }}" class="menu-link">
                                 <div data-i18n="Account">Account</div>
                             </a>
                         </li>
                         <li class="menu-item">
-                            <a href="" class="menu-link">
+                            <a href="{{ route('users.accounts.updateAccounts')  }}" class="menu-link">
                                 <div data-i18n="Notifications">Update Account</div>
                             </a>
                         </li>

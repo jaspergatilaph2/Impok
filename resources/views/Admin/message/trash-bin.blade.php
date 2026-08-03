@@ -45,7 +45,7 @@
                             </a>
                         </li>
 
-                        <li class="menu-item {{ $SubActiveTab === 'Inbox' ? 'active' : '' }}">
+                        <li class="menu-item ">
                             <a href="{{ route('users.messages.usersinbox') }}" class="menu-link">
                                 <div data-i18n="Without navbar">Inbox</div>
                             </a>
@@ -123,6 +123,12 @@
                         <li class="menu-item">
                             <a href="{{ route('users.transactions.adminViewInterest') }}" class="menu-link">
                                 <div data-i18n="Without navbar">All interest transactions</div>
+                            </a>
+                        </li>
+
+                        <li class="menu-item">
+                            <a href="{{ route('users.transactions.viewAllLoans') }}" class="menu-link">
+                                <div data-i18n="Without navbar">All loans transactions</div>
                             </a>
                         </li>
 
