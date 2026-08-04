@@ -31,14 +31,14 @@
                     </a>
                 </li>
 
-                <li class="menu-item {{ $ActiveTabMenu === 'View' ? 'active' : '' }}">
+                <li class="menu-item">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon fa-solid fa-bell"></i>
                         <div data-i18n="Layouts">Notifications</div>
                     </a>
 
                     <ul class="menu-sub">
-                        <li class="menu-item {{ $SubActiveTab === 'messages' ? 'active' : '' }}">
+                        <li class="menu-item">
                             <a href="{{ route('users.notifications.viewMessages') }}" class="menu-link">
                                 <div data-i18n="Without navbar">Messages</div>
                             </a>
@@ -100,27 +100,31 @@
                 <li class="menu-header small text-uppercase">
                     <span class="menu-header-text">Accounts</span>
                 </li>
-                <li class="menu-item">
+                <li class="menu-item {{ $ActiveTabMenu === 'settings' ? 'active' : '' }}">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon fa-solid fa-user"></i>
                         <div data-i18n="Account Settings">Account Settings</div>
                     </a>
+
                     <ul class="menu-sub">
                         <li class="menu-item">
                             <a href="{{ route('applicants.accounts.viewAccount') }}" class="menu-link">
                                 <div data-i18n="Account">Account</div>
                             </a>
                         </li>
+
                         <li class="menu-item">
                             <a href="{{route('applicants.accounts.updateAccount')}}" class="menu-link">
                                 <div data-i18n="Notifications">Update Account</div>
                             </a>
                         </li>
-                        <li class="menu-item">
-                            <a href="{{route('applicants.settings.viewSettings')}}" class="menu-link">
-                                <div data-i18n="Settings">Settings</div>
+
+                        <li class="menu-item {{ $SubActiveTab === 'view' ? 'active' : '' }}">
+                            <a href="" class="menu-link">
+                                <div data-i18n="Notifications">Settings</div>
                             </a>
                         </li>
+
                     </ul>
                 </li>
 
@@ -169,7 +173,94 @@
                     <ul class="navbar-nav flex-row align-items-center ms-auto">
                         <!-- Place this tag where you want the button to render. -->
 
+                        <!--MESSAGE / INBOX ICON -->
+                        <li class="nav-item dropdown me-3">
 
+                            <a class="nav-link dropdown-toggle hide-arrow" href="#" role="button" data-bs-toggle="dropdown">
+                                <span class="position-relative">
+                                    <i class="bx bx-message-dots bx-sm"></i>
+
+                                    {{-- unread COUNT --}}
+                                    @if(isset($unreadCount) && $unreadCount > 0)
+                                    <span class="position-absolute top-0 start-100 translate-middle"
+                                        style="
+            background: #ff4d4f;
+            color: #fff;
+            padding: 1px 6px;
+            border-radius: 12px;
+            font-size: 11px;
+          ">
+                                        {{ $unreadCount > 99 ? '99+' : $unreadCount }}
+                                    </span>
+                                    @endif
+                                </span>
+                            </a>
+
+                            <ul class="dropdown-menu dropdown-menu-end shadow-sm" style="width: 300px;">
+
+                                <li class="d-flex justify-content-between align-items-center px-3">
+                                    <h6 class="dropdown-header mb-0">Messages</h6>
+
+                                    @if(isset($unreadCount) && $unreadCount > 0)
+                                    <small class="text-danger ms-2">
+                                        ({{ $unreadCount }} new)
+                                    </small>
+                                    @endif
+                                </li>
+
+                                {{-- LOOP --}}
+                                @forelse($messages ?? [] as $msg)
+                                <li>
+                                    <a class="dropdown-item d-flex flex-column 
+                    {{ $msg->deleted_at ? 'text-muted text-decoration-line-through' : '' }}" href="#">
+
+                                        {{-- Title --}}
+                                        <span class="fw-semibold">
+                                            {{ $msg->title ?? 'No Title' }}
+                                        </span>
+
+                                        {{-- Message --}}
+                                        <small>
+                                            {{ \Illuminate\Support\Str::limit($msg->message, 40) }}
+                                        </small>
+
+                                        {{-- Broadcast --}}
+                                        @if(is_null($msg->receiver_id))
+                                        <small class="text-primary">(Broadcast)</small>
+                                        @endif
+
+                                        {{-- Unread --}}
+                                        @if(!$msg->is_read && !$msg->deleted_at)
+                                        <small class="text-danger">Unread</small>
+                                        @endif
+
+                                        {{-- Deleted label --}}
+                                        @if($msg->deleted_at)
+                                        <small class="text-secondary">Deleted</small>
+                                        @endif
+
+                                    </a>
+                                </li>
+                                @empty
+                                <li>
+                                    <span class="dropdown-item text-muted text-center">
+                                        No messages found
+                                    </span>
+                                </li>
+                                @endforelse
+
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+
+                                <li>
+                                    <a class="dropdown-item text-primary text-center" href="{{ route('users.notifications.viewMessages') }}">
+                                        View all messages
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </li>
 
                         <!-- User -->
                         <li class="nav-item navbar-dropdown dropdown-user dropdown">
@@ -208,7 +299,7 @@
                                     <div class="dropdown-divider"></div>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" href="">
+                                    <a class="dropdown-item" href="{{ route('applicants.accounts.viewAccount') }}">
                                         <i class="bx bx-user me-2"></i>
                                         <span class="align-middle">My Profile</span>
                                     </a>
@@ -220,7 +311,7 @@
                           </a>
                         </li> -->
                                 <li>
-                                    <a class="dropdown-item" href="">
+                                    <a class="dropdown-item" href="{{ route('users.under-maintenance.undermaintenance') }}">
                                         <i class="menu-icon tf-icons bx bx-file"></i>
                                         <span class="align-middle">Logs</span>
                                     </a>
@@ -254,93 +345,156 @@
                 <div class="container-xxl flex-grow-1 container-p-y">
                     <div class="container">
 
-                        <!-- HEADER -->
-                        <h3 class="mb-4 fw-bold text-primary text-center text-md-start">
-                            <i class="fa-solid fa-comments me-2"></i> Messages
-                        </h3>
+                        <!-- Header -->
+                        <h3 class="mb-4 fw-bold text-primary">Account Settings</h3>
+                        <p class="text-muted">Manage your preferences and account options.</p>
 
-                        <p class="text-muted text-center text-md-start">
-                            Your recent activity and updates.
-                        </p>
-
-                        <!-- MESSAGE LIST -->
-                        <div class="card shadow-sm">
+                        <div class="card shadow-sm border-0">
                             <div class="card-body">
 
-                                <h6 class="mb-3">Recent Messages</h6>
+                                <!-- Profile Section -->
+                                <h5 class="fw-bold mb-3">Profile Settings</h5>
 
-                                <ul class="list-group list-group-flush">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div>
+                                        <h6 class="mb-0">Edit Profile</h6>
+                                        <small class="text-muted">Update your personal information</small>
+                                    </div>
+                                    <a href="" class="btn btn-sm btn-primary">
+                                        Edit
+                                    </a>
+                                </div>
 
-                                    @forelse($messages ?? [] as $msg)
+                                <hr>
 
-                                    <li class="list-group-item d-flex justify-content-between align-items-start 
-    {{ optional($msg)->deleted_at ? 'text-muted text-decoration-line-through' : '' }}"
-                                        style="cursor:pointer;"
+                                <!-- Security Section -->
+                                <h5 class="fw-bold mb-3">Security</h5>
 
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#messageModal"
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div>
+                                        <h6 class="mb-0">Change Password</h6>
+                                        <small class="text-muted">Keep your account secure</small>
+                                    </div>
+                                    <button class="btn btn-sm btn-outline-danger">Update</button>
+                                </div>
 
-                                        data-title="{{ optional($msg)->title }}"
-                                        data-message="{{ optional($msg)->message }}"
-                                        data-status="{{ !(optional($msg)->is_read ?? false) ? 'Unread' : 'Read' }}"
-                                        data-broadcast="{{ is_null(optional($msg)->receiver_id) ? 'Yes' : 'No' }}">
+                                <hr>
 
-                                        <div class="me-2">
+                                <!-- Notifications Section -->
+                                <h5 class="fw-bold mb-3">Notifications</h5>
 
-                                            <strong>{{ optional($msg)->title ?? 'No Title' }}</strong><br>
+                                <!-- Email Notification -->
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div>
+                                        <h6 class="mb-0">Email Notifications</h6>
+                                        <small class="text-muted">Receive updates via email</small>
+                                    </div>
 
-                                            <small class="text-muted">
-                                                {{ \Illuminate\Support\Str::limit(optional($msg)->message, 60) }}
-                                            </small><br>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="emailNotif" checked>
+                                    </div>
+                                </div>
 
-                                            @if(is_null(optional($msg)->receiver_id))
-                                            <small class="text-primary">(Broadcast)</small><br>
-                                            @endif
+                                <!-- SMS Notification -->
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div>
+                                        <h6 class="mb-0">SMS Notifications</h6>
+                                        <small class="text-muted">Get alerts via SMS</small>
+                                    </div>
 
-                                            @if(optional($msg)->deleted_at)
-                                            <small class="text-secondary">Deleted</small><br>
-                                            @endif
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="smsNotif">
+                                    </div>
+                                </div>
 
-                                        </div>
+                                <!-- App Notification -->
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div>
+                                        <h6 class="mb-0">App Notifications</h6>
+                                        <small class="text-muted">Enable in-app alerts</small>
+                                    </div>
 
-                                        <div class="text-end">
-                                            @if(!(optional($msg)->is_read ?? false) && !(optional($msg)->deleted_at ?? false))
-                                            <span class="text-danger small">Unread</span>
-                                            @else
-                                            <span class="text-success small">Read</span>
-                                            @endif
-                                        </div>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="appNotif" checked>
+                                    </div>
+                                </div>
 
-                                    </li>
+                                <hr>
 
-                                    @empty
-                                    <li class="list-group-item text-center text-muted">
-                                        No messages available
-                                    </li>
-                                    @endforelse
+                                <!-- Wallet Section -->
+                                <h5 class="fw-bold mb-3">Wallet Settings</h5>
 
-                                </ul>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div>
+                                        <h6 class="mb-0">View Wallet</h6>
+                                        <small class="text-muted">Check your balance and activity</small>
+                                    </div>
+                                    <a href="" class="btn btn-sm btn-success">
+                                        Open
+                                    </a>
+                                </div>
 
-                                <div class="modal fade" id="messageModal" tabindex="-1">
+                                <!-- Auto Interest Toggle -->
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div>
+                                        <h6 class="mb-0">Auto Interest Update</h6>
+                                        <small class="text-muted">Automatically update interest</small>
+                                    </div>
+
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="autoInterest" checked>
+                                    </div>
+                                </div>
+
+
+                                <hr>
+
+                                <h5 class="fw-bold mb-3">Dark Mode Settings</h5>
+                                <!-- Dark Mode -->
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div>
+                                        <h6 class="mb-0">Dark Mode</h6>
+                                        <small class="text-muted">Switch to dark theme</small>
+                                    </div>
+
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="darkModeToggle">
+                                    </div>
+                                </div>
+
+                                <hr>
+
+                                <h5 class="fw-bold mb-3">About Sections</h5>
+                                <!-- Dark Mode -->
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div>
+                                        <h6 class="mb-0">About</h6>
+                                        <small class="text-muted">Learn more about this application</small>
+                                    </div>
+
+                                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#aboutModal">
+                                        View
+                                    </button>
+                                </div>
+
+                                <!-- About Modal -->
+                                <div class="modal fade" id="aboutModal" tabindex="-1">
                                     <div class="modal-dialog modal-dialog-centered">
                                         <div class="modal-content">
 
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="modalTitle">Message Title</h5>
+                                                <h5 class="modal-title">About This App</h5>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                             </div>
 
                                             <div class="modal-body">
+                                                <p><strong>Application Name:</strong> Impoks Management System</p>
+                                                <p><strong>Version:</strong> 1.0.0</p>
+                                                <p><strong>Description:</strong> This system helps users manage their accounts, wallets, and notifications efficiently.</p>
+                                            </div>
 
-                                                <p id="modalMessage">Full message content here...</p>
-
-                                                <hr>
-
-                                                <small>
-                                                    <strong>Status:</strong> <span id="modalStatus"></span><br>
-                                                    <strong>Broadcast:</strong> <span id="modalBroadcast"></span>
-                                                </small>
-
+                                            <div class="modal-footer">
+                                                <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                             </div>
 
                                         </div>
@@ -349,44 +503,6 @@
 
                             </div>
                         </div>
-
-                        <!-- QUICK ACTIONS -->
-                        <!-- <div class="card shadow-sm mt-4">
-                            <div class="card-body">
-                                <h5 class="fw-bold mb-3">
-                                    <i class="fa-solid fa-bolt text-success me-2"></i> Quick Actions
-                                </h5>
-
-                                <div class="list-group">
-
-                                    <a href="#" class="list-group-item list-group-item-action">
-                                        <i class="fa-solid fa-clock-rotate-left me-2 text-primary"></i>
-                                        View Transactions
-                                    </a>
-
-                                    <a href="#" class="list-group-item list-group-item-action">
-                                        <i class="fa-solid fa-wallet me-2 text-success"></i>
-                                        Wallet Balance
-                                    </a>
-
-                                    <a href="#" class="list-group-item list-group-item-action">
-                                        <i class="fa-solid fa-chart-line me-2 text-warning"></i>
-                                        Interest
-                                    </a>
-
-                                    <a href="#" class="list-group-item list-group-item-action">
-                                        <i class="fa-solid fa-file-invoice-dollar me-2 text-danger"></i>
-                                        Loans
-                                    </a>
-
-                                    <a href="#" class="list-group-item list-group-item-action">
-                                        <i class="fa-solid fa-bell me-2 text-info"></i>
-                                        Notifications
-                                    </a>
-
-                                </div>
-                            </div>
-                        </div> -->
 
                     </div>
                 </div>

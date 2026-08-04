@@ -105,17 +105,26 @@
             <i class="menu-icon fa-solid fa-user"></i>
             <div data-i18n="Account Settings">Account Settings</div>
           </a>
+
           <ul class="menu-sub">
             <li class="menu-item">
               <a href="{{ route('applicants.accounts.viewAccount') }}" class="menu-link">
                 <div data-i18n="Account">Account</div>
               </a>
             </li>
+
             <li class="menu-item">
               <a href="{{route('applicants.accounts.updateAccount')}}" class="menu-link">
                 <div data-i18n="Notifications">Update Account</div>
               </a>
             </li>
+
+            <li class="menu-item">
+              <a href="{{ route('applicants.settings.viewSettings') }}" class="menu-link">
+                <div data-i18n="Notifications">Settings</div>
+              </a>
+            </li>
+
           </ul>
         </li>
 

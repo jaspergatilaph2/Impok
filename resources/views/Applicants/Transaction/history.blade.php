@@ -113,6 +113,12 @@
                                 <div data-i18n="Notifications">Update Account</div>
                             </a>
                         </li>
+
+                        <li class="menu-item">
+                            <a href="{{ route('applicants.settings.viewSettings') }}" class="menu-link">
+                                <div data-i18n="Settings">Settings</div>
+                            </a>
+                        </li>
                     </ul>
                 </li>
 

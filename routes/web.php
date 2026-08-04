@@ -60,6 +60,11 @@ Route::group(['middleware' => ['auth', 'IfIMSUsers']], function () {
             ->name('updatedAccount');
     });
 
+    Route::prefix('/applicans-settings')->name('applicants.settings.')->group(function () {
+        Route::get('/view', [ApplicantsController::class, 'viewSettings'])
+            ->name('viewSettings');
+    });
+
     Route::prefix('/applicants-wallet')->name('applicants.wallet.')->group(function () {
         Route::get('/view', [ApplicantsController::class, 'viewWallet'])
             ->name('viewWallet');

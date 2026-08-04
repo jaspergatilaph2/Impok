@@ -412,4 +412,18 @@ class ApplicantsController extends Controller
         return view('Applicants.under-maintenance.under-maintenance', 
         compact('accounts'));
     }
+
+    public function viewSettings()
+    {
+        $accounts = auth()->user();
+
+        return view(
+            'Applicants.Settings.settings',
+            compact('accounts'),
+            [
+                'ActiveTabMenu' => 'settings',
+                'SubActiveTab' => 'view'
+            ]
+        );
+    }
 }
