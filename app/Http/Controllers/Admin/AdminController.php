@@ -117,7 +117,7 @@ class AdminController extends Controller
                 ->where('type', 'cash_in')
                 ->exists();
 
-            $interestRate = 0.02;
+            $interestRate = 0.5;
 
             $interest = 0;
 
@@ -139,7 +139,7 @@ class AdminController extends Controller
                     'type' => 'interest',
                     'amount' => $interest,
                     'transaction_date' => $request->transaction_date,
-                    'note' => 'Interest earned (2%)'
+                    'note' => 'Interest earned (5%)'
                 ]);
             }
 

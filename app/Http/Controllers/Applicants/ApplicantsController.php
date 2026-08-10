@@ -20,15 +20,13 @@ class ApplicantsController extends Controller
     {
         $accounts = auth()->user();
         $walletBalance = Wallet::where('user_id', $accounts->id)
-            ->orderBy('transaction_date', 'desc')
             ->get()
             ->sum(function ($tx) {
-                if ($tx->type === 'cash_in' || $tx->type === 'interest') {
-                    return $tx->amount;
-                } elseif ($tx->type === 'cash_out') {
-                    return -$tx->amount;
-                }
-                return 0;
+                return match ($tx->type) {
+                    'cash_in' => $tx->amount,
+                    'cash_out' => -$tx->amount,
+                    default => 0,
+                };
             });
 
         $totalAmount = Loan::where('user_id', $accounts->id)
@@ -57,7 +55,7 @@ class ApplicantsController extends Controller
         // dd($messages);
 
         $unreadCount = Messages::where(function ($query) use ($accounts) {
-            $query->where('receiver_id', $accounts->id) // ✅ FIXED
+            $query->where('receiver_id', $accounts->id) //FIXED
                 ->orWhereNull('receiver_id');
         })
             ->where('is_read', false)
@@ -112,7 +110,7 @@ class ApplicantsController extends Controller
         $accounts = auth()->user();
 
         $unreadCount = Messages::where(function ($query) use ($accounts) {
-            $query->where('receiver_id', $accounts->id) // ✅ FIXED
+            $query->where('receiver_id', $accounts->id) //FIXED
                 ->orWhereNull('receiver_id');
         })
             ->where('is_read', false)
@@ -235,7 +233,7 @@ class ApplicantsController extends Controller
         }
 
         $unreadCount = Messages::where(function ($query) use ($user) {
-            $query->where('receiver_id', $user->id) // ✅ FIXED
+            $query->where('receiver_id', $user->id) // FIXED
                 ->orWhereNull('receiver_id');
         })
             ->where('is_read', false)
@@ -270,7 +268,7 @@ class ApplicantsController extends Controller
         $balance = 0;
 
         $unreadCount = Messages::where(function ($query) use ($user) {
-            $query->where('receiver_id', $user->id) // ✅ FIXED
+            $query->where('receiver_id', $user->id) //FIXED
                 ->orWhereNull('receiver_id');
         })
             ->where('is_read', false)
@@ -344,7 +342,7 @@ class ApplicantsController extends Controller
         return view('Applicants.wallet.interest', [
             'transactions' => $interestTransactions,
             'balance' => $balance,
-            'hasCashIn' => $hasCashIn, // 🔥 IMPORTANT
+            'hasCashIn' => $hasCashIn, // IMPORTANT
             'ActiveTabMenu' => 'wallet',
             'SubActiveTab' => 'interest',
             'messages' => $messages,
@@ -360,7 +358,7 @@ class ApplicantsController extends Controller
             ->get();
 
         $unreadCount = Messages::where(function ($query) use ($user) {
-            $query->where('receiver_id', $user->id) // ✅ FIXED
+            $query->where('receiver_id', $user->id) //FIXED
                 ->orWhereNull('receiver_id');
         })
             ->where('is_read', false)
@@ -406,11 +404,14 @@ class ApplicantsController extends Controller
         );
     }
 
-    public function UnderMaintenance(){
+    public function UnderMaintenance()
+    {
         $accounts = auth()->user();
-        
-        return view('Applicants.under-maintenance.under-maintenance', 
-        compact('accounts'));
+
+        return view(
+            'Applicants.under-maintenance.under-maintenance',
+            compact('accounts')
+        );
     }
 
     public function viewSettings()

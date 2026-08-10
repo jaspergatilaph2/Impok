@@ -1,4 +1,4 @@
-document.getElementById('userSearch').addEventListener('keyup', function () {
+document.getElementById('userSearchId').addEventListener('keyup', function () {
     let value = this.value.toLowerCase().trim();
     let rows = document.querySelectorAll('table tbody tr');
 

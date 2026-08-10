@@ -46,7 +46,7 @@
                     </ul>
                 </li>
 
-                <!-- Layouts -->
+                <!-- Wallet -->
                 <li class="menu-item">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon fa-solid fa-wallet"></i>
@@ -61,8 +61,22 @@
                             </a>
                         </li>
 
+                        <li class="menu-item">
+                            <a href="{{ route('applicants.wallet.viewInterest') }}" class="menu-link">
+                                <div data-i18n="Without navbar">Interest</div>
+                            </a>
+                        </li>
+
+                        <li class="menu-item">
+                            <a href="{{ route('applicants.wallet.loans') }}" class="menu-link">
+                                <div data-i18n="Without navbar">Loans</div>
+                            </a>
+                        </li>
+
                     </ul>
                 </li>
+
+                <!-- Transactions -->
                 <li class="menu-item">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon fa-solid fa-file"></i>

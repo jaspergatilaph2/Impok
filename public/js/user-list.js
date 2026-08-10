@@ -1,4 +1,4 @@
-document.getElementById('userSearch').addEventListener('keyup', function () {
+document.getElementById('AdminUserSearchInput').addEventListener('keyup', function () {
     let value = this.value.toLowerCase();
     let rows = document.querySelectorAll('#userTable tbody tr');
 

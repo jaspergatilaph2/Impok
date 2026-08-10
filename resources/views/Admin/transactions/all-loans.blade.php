@@ -121,7 +121,7 @@
                             </a>
                         </li>
 
-                         <li class="menu-item {{ $SubActiveTab === 'loans' ? 'active' : '' }}">
+                        <li class="menu-item {{ $SubActiveTab === 'loans' ? 'active' : '' }}">
                             <a href="{{ route('users.transactions.viewAllLoans') }}" class="menu-link">
                                 <div data-i18n="Without navbar">All loans transactions</div>
                             </a>
@@ -321,7 +321,7 @@
                                             <span class="input-group-text">
                                                 <i class="bx bx-search"></i>
                                             </span>
-                                            <input type="text" id="userSearch" class="form-control"
+                                            <input type="text" id="userAdminSearch" class="form-control"
                                                 placeholder="Search user by name or email...">
                                         </div>
                                     </div>
@@ -364,29 +364,34 @@
                                                         <!-- PROFILE -->
                                                         <td>
                                                             <img src="{{ $user->profile_information && $user->profile_information->profile_picture
-                            ? asset('storage/' . $user->profile_information->profile_picture)
-                            : ($user->avatar
-                                ? asset('storage/' . $user->avatar)
-                                : asset('sneat/img/avatars/1.png')) }}"
+                ? asset('storage/' . $user->profile_information->profile_picture)
+                : ($user->avatar
+                    ? asset('storage/' . $user->avatar)
+                    : asset('sneat/img/avatars/1.png')) }}"
                                                                 width="45"
                                                                 height="45"
                                                                 class="rounded-circle">
                                                         </td>
 
                                                         <!-- USER DATA -->
-                                                        <td>{{ $user->name }}</td>
+                                                        <td class="user-name">{{ $user->name }}</td>
 
-                                                        <td>{{ $user->profile_information->first_name ?? 'N/A' }}</td>
+                                                        <td class="user-first">
+                                                            {{ $user->profile_information->first_name ?? 'N/A' }}
+                                                        </td>
 
-                                                        <td>{{ $user->profile_information->last_name ?? 'N/A' }}</td>
+                                                        <td class="user-last">
+                                                            {{ $user->profile_information->last_name ?? 'N/A' }}
+                                                        </td>
 
-                                                        <td>{{ $user->email }}</td>
+                                                        <td class="user-email">{{ $user->email }}</td>
 
-                                                        <!-- BALANCE -->
-                                                        <td>₱ {{ number_format($user->total_loans, 2) }}</td>
+                                                        <!-- LOAN BALANCE -->
+                                                        <td>
+                                                            ₱ {{ number_format($user->total_loans ?? 0) }}
+                                                        </td>
 
                                                     </tr>
-
                                                     @empty
                                                     <tr>
                                                         <td colspan="6" class="text-center text-muted">

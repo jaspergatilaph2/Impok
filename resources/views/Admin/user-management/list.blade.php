@@ -321,7 +321,7 @@
                                                 <i class="bx bx-search"></i>
                                             </span>
                                             <input type="text"
-                                                id="userSearch"
+                                                id="AdminUserSearchInput"
                                                 class="form-control"
                                                 placeholder="Search user by name or email...">
                                         </div>
@@ -362,10 +362,10 @@
                                                     </td>
 
                                                     <!-- NAME -->
-                                                    <td>{{ $user->name }}</td>
+                                                    <td class="user-name">{{ $user->name }}</td>
 
                                                     <!-- EMAIL -->
-                                                    <td>{{ $user->email }}</td>
+                                                   <td class="user-email">{{ $user->email }}</td>
 
                                                     <!-- ROLE -->
                                                     <td>{{ $user->role }}</td>
