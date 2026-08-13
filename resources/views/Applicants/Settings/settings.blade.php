@@ -138,7 +138,7 @@
                     </a>
                     <ul class="menu-sub">
                         <li class="menu-item">
-                            <a href="" class="menu-link">
+                            <a href="{{ route('applicants.logs.viewLogs')}}" class="menu-link">
                                 <div data-i18n="Under Maintenance">Logs</div>
                             </a>
                         </li>
@@ -304,14 +304,14 @@
                                         <span class="align-middle">My Profile</span>
                                     </a>
                                 </li>
-                                <!-- <li>
-                          <a class="dropdown-item" href="">
-                            <i class="bx bx-cog me-2"></i>
-                            <span class="align-middle">Settings</span>
-                          </a>
-                        </li> -->
                                 <li>
-                                    <a class="dropdown-item" href="{{ route('users.under-maintenance.undermaintenance') }}">
+                                    <a class="dropdown-item" href="{{ route('applicants.settings.viewSettings') }}">
+                                        <i class="bx bx-cog me-2"></i>
+                                        <span class="align-middle">Settings</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('applicants.logs.viewLogs') }}">
                                         <i class="menu-icon tf-icons bx bx-file"></i>
                                         <span class="align-middle">Logs</span>
                                     </a>
@@ -360,7 +360,7 @@
                                         <h6 class="mb-0">Edit Profile</h6>
                                         <small class="text-muted">Update your personal information</small>
                                     </div>
-                                    <a href="" class="btn btn-sm btn-primary">
+                                    <a href="{{ route('applicants.accounts.updateAccount')}}" class="btn btn-sm btn-primary">
                                         Edit
                                     </a>
                                 </div>
@@ -370,12 +370,168 @@
                                 <!-- Security Section -->
                                 <h5 class="fw-bold mb-3">Security</h5>
 
+                                @if(session('success'))
+                                <div class="alert alert-success alert-dismissible fade show">
+                                    {{ session('success') }}
+
+                                    <button type="button"
+                                        class="btn-close"
+                                        data-bs-dismiss="alert">
+                                    </button>
+                                </div>
+                                @endif
+
                                 <div class="d-flex justify-content-between align-items-center mb-3">
+
+
+
                                     <div>
                                         <h6 class="mb-0">Change Password</h6>
                                         <small class="text-muted">Keep your account secure</small>
                                     </div>
-                                    <button class="btn btn-sm btn-outline-danger">Update</button>
+
+                                    <button
+                                        type="button"
+                                        class="btn btn-sm btn-outline-danger"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#changePasswordModal">
+                                        Update
+                                    </button>
+                                </div>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="changePasswordModal" tabindex="-1"
+                                    aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+
+                                    @if(session('success'))
+                                    <div class="alert alert-success alert-dismissible fade show">
+                                        {{ session('success') }}
+
+                                        <button type="button"
+                                            class="btn-close"
+                                            data-bs-dismiss="alert">
+                                        </button>
+                                    </div>
+                                    @endif
+
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="changePasswordModalLabel">
+                                                    Change Password
+                                                </h5>
+
+                                                <button type="button"
+                                                    class="btn-close"
+                                                    data-bs-dismiss="modal">
+                                                </button>
+                                            </div>
+
+                                            <form action="{{ route('applicants.settings.passwordUpdate') }}"
+                                                method="POST">
+
+                                                @csrf
+                                                @method('PUT')
+
+                                                <div class="modal-body">
+
+                                                    @if($errors->any())
+                                                    <div class="alert alert-danger">
+                                                        <ul class="mb-0">
+                                                            @foreach($errors->all() as $error)
+                                                            <li>{{ $error }}</li>
+                                                            @endforeach
+                                                        </ul>
+                                                    </div>
+                                                    @endif
+
+
+                                                    {{-- Current Password --}}
+                                                    <div class="mb-3">
+                                                        <label class="form-label">
+                                                            Current Password
+                                                        </label>
+
+                                                        <div class="input-group">
+                                                            <input type="password"
+                                                                name="current_password"
+                                                                id="current_password"
+                                                                class="form-control"
+                                                                required>
+
+                                                            <button type="button"
+                                                                class="btn btn-outline-secondary"
+                                                                onclick="togglePassword('current_password', this)">
+                                                                <i class="fa-solid fa-eye"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+
+
+                                                    {{-- New Password --}}
+                                                    <div class="mb-3">
+                                                        <label class="form-label">
+                                                            New Password
+                                                        </label>
+
+                                                        <div class="input-group">
+                                                            <input type="password"
+                                                                name="password"
+                                                                id="password"
+                                                                class="form-control"
+                                                                required>
+
+                                                            <button type="button"
+                                                                class="btn btn-outline-secondary"
+                                                                onclick="togglePassword('password', this)">
+                                                                <i class="fa-solid fa-eye"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+
+
+                                                    {{-- Confirm New Password --}}
+                                                    <div class="mb-3">
+                                                        <label class="form-label">
+                                                            Confirm New Password
+                                                        </label>
+
+                                                        <div class="input-group">
+                                                            <input type="password"
+                                                                name="password_confirmation"
+                                                                id="password_confirmation"
+                                                                class="form-control"
+                                                                required>
+
+                                                            <button type="button"
+                                                                class="btn btn-outline-secondary"
+                                                                onclick="togglePassword('password_confirmation', this)">
+                                                                <i class="fa-solid fa-eye"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+
+                                                <div class="modal-footer">
+                                                    <button type="button"
+                                                        class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">
+                                                        Cancel
+                                                    </button>
+
+                                                    <button type="submit"
+                                                        class="btn btn-danger">
+                                                        Update Password
+                                                    </button>
+                                                </div>
+
+                                            </form>
+
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <hr>

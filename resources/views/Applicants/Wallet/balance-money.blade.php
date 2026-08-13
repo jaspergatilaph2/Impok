@@ -132,7 +132,7 @@
                     </a>
                     <ul class="menu-sub">
                         <li class="menu-item">
-                            <a href="" class="menu-link">
+                            <a href="{{ route('applicants.logs.viewLogs')}}" class="menu-link">
                                 <div data-i18n="Under Maintenance">Logs</div>
                             </a>
                         </li>
@@ -201,7 +201,7 @@
                                     @endif
                                 </li>
 
-                                {{-- ✅ LOOP --}}
+                                {{-- LOOP --}}
                                 @forelse($messages ?? [] as $msg)
                                 <li>
                                     <a class="dropdown-item d-flex flex-column 
@@ -227,7 +227,7 @@
                                         <small class="text-danger">Unread</small>
                                         @endif
 
-                                        {{-- ✅ Deleted label --}}
+                                        {{-- Deleted label --}}
                                         @if($msg->deleted_at)
                                         <small class="text-secondary">Deleted</small>
                                         @endif
@@ -292,19 +292,19 @@
                                     <div class="dropdown-divider"></div>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" href="">
+                                    <a class="dropdown-item" href="{{ route('applicants.accounts.viewAccount')}}">
                                         <i class="bx bx-user me-2"></i>
                                         <span class="align-middle">My Profile</span>
                                     </a>
                                 </li>
-                                <!-- <li>
-                              <a class="dropdown-item" href="">
-                                <i class="bx bx-cog me-2"></i>
-                                <span class="align-middle">Settings</span>
-                              </a>
-                            </li> -->
                                 <li>
-                                    <a class="dropdown-item" href="">
+                                    <a class="dropdown-item" href="{{ route('applicants.settings.viewSettings')}}">
+                                        <i class="bx bx-cog me-2"></i>
+                                        <span class="align-middle">Settings</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('applicants.logs.viewLogs')}}">
                                         <i class="menu-icon tf-icons bx bx-file"></i>
                                         <span class="align-middle">Logs</span>
                                     </a>

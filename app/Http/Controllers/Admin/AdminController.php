@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\AdminLogs;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -93,6 +94,8 @@ class AdminController extends Controller
         );
     }
 
+    // Cash In Functionality
+    // Added logs history for admin actions
     public function cashIn(Request $request)
     {
         try {
@@ -143,8 +146,16 @@ class AdminController extends Controller
                 ]);
             }
 
-
             $balance = Wallet::where('user_id', $request->user_id)->sum('amount');
+
+            // ADMIN ACTIVITY LOG: CASH IN PROCESSED
+            AdminLogs::create([
+                'admin_id' => auth()->id(),
+                'description' => 'Processed cash-in of ₱' . number_format($request->amount, 2) .
+                    ' for user #' . $request->user_id .
+                    ($interest > 0 ? ' (interest earned: ₱' . number_format($interest, 2) . ')' : ' (no interest, first deposit)') .
+                    '.',
+            ]);
 
             return response()->json([
                 'success' => true,
@@ -247,6 +258,8 @@ class AdminController extends Controller
         );
     }
 
+    // Store the open transaction date in the database
+    // Added logs history for admin actions
     public function storeCalendar(Request $request)
     {
         $request->validate([
@@ -264,6 +277,12 @@ class AdminController extends Controller
             'date' => $request->date,
             'created_at' => now(),
             'updated_at' => now(),
+        ]);
+
+        // ADMIN ACTIVITY LOG: TRANSACTION DATE OPENED
+        AdminLogs::create([
+            'admin_id' => auth()->id(),
+            'description' => 'Opened transaction date: ' . $request->date . '.',
         ]);
 
         return response()->json(['success' => true, 'message' => 'Transaction date opened successfully.']);
@@ -332,36 +351,50 @@ class AdminController extends Controller
         ]);
     }
 
+    // Store the updated account information in the database
+    // Added logs history for admin actions
     public function updatedAccounts(Request $request)
     {
         $user = auth()->user();
 
-        // Validation
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'avatar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
-        // Update basic info
+        $nameChanged = $user->name !== $request->name;
+        $emailChanged = $user->email !== $request->email;
+
         $user->name = $request->name;
         $user->email = $request->email;
 
-        // Handle avatar upload
         if ($request->hasFile('avatar')) {
-
-            // delete old avatar (optional)
             if ($user->avatar && Storage::exists('public/' . $user->avatar)) {
                 Storage::delete('public/' . $user->avatar);
             }
 
-            // store new avatar
             $path = $request->file('avatar')->store('avatars', 'public');
-
             $user->avatar = $path;
+
+            AdminLogs::create([
+                'admin_id' => $user->id,
+                'description' => 'Admin updated profile avatar.',
+            ]);
         }
 
         $user->save();
+
+        if ($nameChanged || $emailChanged) {
+            AdminLogs::create([
+                'admin_id' => $user->id,
+                'description' => 'Admin updated account details (' .
+                    collect([
+                        $nameChanged ? 'name' : null,
+                        $emailChanged ? 'email' : null,
+                    ])->filter()->implode(', ') . ').',
+            ]);
+        }
 
         return back()->with('success', 'Profile updated successfully!');
     }
@@ -398,6 +431,15 @@ class AdminController extends Controller
 
         // Calculate total loans (NEW BALANCE)
         $newBalance = Loan::where('user_id', $request->user_id)->sum('amount');
+
+        // ADMIN ACTIVITY LOG: LOAN APPROVED
+        $borrower = \App\Models\User::find($request->user_id);
+
+        AdminLogs::create([
+            'admin_id' => auth()->id(),
+            'description' => 'Approved loan of ₱' . number_format($request->amount, 2) .
+                ' for ' . ($borrower->name ?? 'Unknown User') . '.',
+        ]);
 
         return response()->json([
             'success' => true,
@@ -438,6 +480,8 @@ class AdminController extends Controller
         );
     }
 
+    // Store the new message in the database
+    // Added logs history for admin actions
     public function messages(Request $request)
     {
         $request->validate([
@@ -456,6 +500,12 @@ class AdminController extends Controller
                 'title' => $request->title,
                 'message' => $request->message,
             ]);
+
+            // ADMIN ACTIVITY LOG: BROADCAST MESSAGE SENT
+            AdminLogs::create([
+                'admin_id' => $senderId,
+                'description' => 'Sent broadcast message to all users: "' . $request->title . '".',
+            ]);
         } else {
 
             // SEND TO ONE USER
@@ -464,6 +514,14 @@ class AdminController extends Controller
                 'receiver_id' => $request->user_id,
                 'title' => $request->title,
                 'message' => $request->message,
+            ]);
+
+            // ADMIN ACTIVITY LOG: DIRECT MESSAGE SENT
+            $receiver = \App\Models\User::find($request->user_id);
+
+            AdminLogs::create([
+                'admin_id' => $senderId,
+                'description' => 'Sent message to ' . ($receiver->name ?? 'Unknown User') . ': "' . $request->title . '".',
             ]);
         }
 
@@ -514,5 +572,22 @@ class AdminController extends Controller
                 'SubActiveTab' => 'loans'
             ]
         );
+    }
+
+
+    public function viewLogs()
+    {
+        $account = auth()->user();
+
+        $logs = AdminLogs::with('admin')
+            ->latest()
+            ->paginate(10);
+
+        return view('Admin.logs.logs', [
+            'accounts' => $account,
+            'logs' => $logs,
+            'ActiveTabMenu' => 'View',
+            'SubActiveTab' => 'logs',
+        ]);
     }
 }

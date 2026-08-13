@@ -167,7 +167,7 @@
                     </a>
                     <ul class="menu-sub">
                         <li class="menu-item">
-                            <a href="" class="menu-link">
+                            <a href="{{ route('admin.logs.viewLogs')}}" class="menu-link">
                                 <div data-i18n="Under Maintenance">Logs</div>
                             </a>
                         </li>
@@ -322,8 +322,6 @@
                                             <input type="text" id="userSearch" class="form-control"
                                                 placeholder="Search user by name or email...">
                                         </div>
-
-
                                     </div>
 
                                     <div class="table-responsive">
@@ -355,11 +353,13 @@
                                                             class="rounded-circle">
                                                     </td>
 
-                                                    <td>{{ $user->name }}</td>
-                                                    <td>{{ $user->email }}</td>
+                                                    <!-- FIXED (IMPORTANT FOR SEARCH) -->
+                                                    <td class="user-name">{{ $user->name }}</td>
+                                                    <td class="user-email">{{ $user->email }}</td>
+
                                                     <td>{{ $user->role }}</td>
 
-                                                    <!-- CASH IN BUTTON -->
+                                                    <!-- ACTION -->
                                                     <td>
                                                         <button class="btn btn-sm btn-success"
                                                             data-bs-toggle="modal"
@@ -370,12 +370,11 @@
 
                                                 </tr>
 
-                                                <!-- CASH IN MODAL -->
+                                                <!-- MODAL (UNCHANGED) -->
                                                 <div class="modal fade" id="cashInModal{{ $user->id }}" tabindex="-1">
                                                     <div class="modal-dialog modal-dialog-centered">
                                                         <div class="modal-content shadow border-0">
 
-                                                            <!-- HEADER -->
                                                             <div class="modal-header bg-success text-white">
                                                                 <h5 class="modal-title">
                                                                     <i class="bx bx-wallet me-2"></i> Loans Transaction
@@ -388,19 +387,16 @@
 
                                                                 <div class="modal-body">
 
-                                                                    <!-- ✅ ALERT -->
                                                                     <div id="alertBox{{ $user->id }}"></div>
 
-                                                                    <!-- USER ID -->
                                                                     <input type="hidden" name="user_id" value="{{ $user->id }}">
 
-                                                                    <!-- USER INFO -->
                                                                     <div class="text-center mb-3">
                                                                         <img src="{{ $user->profile_information && $user->profile_information->profile_picture
-                        ? asset('storage/' . $user->profile_information->profile_picture)
-                        : ($user->avatar
-                            ? asset('storage/' . $user->avatar)
-                            : asset('sneat/img/avatars/1.png')) }}"
+                                                ? asset('storage/' . $user->profile_information->profile_picture)
+                                                : ($user->avatar
+                                                    ? asset('storage/' . $user->avatar)
+                                                    : asset('sneat/img/avatars/1.png')) }}"
                                                                             class="rounded-circle mb-2"
                                                                             width="70"
                                                                             height="70">
@@ -411,9 +407,6 @@
 
                                                                     <hr>
 
-
-
-                                                                    <!-- TYPE -->
                                                                     <div class="mb-3">
                                                                         <label class="form-label">Transaction Type</label>
                                                                         <select name="type" class="form-select" required>
@@ -426,35 +419,24 @@
                                                                         <label class="form-label">Amount</label>
                                                                         <div class="input-group">
                                                                             <span class="input-group-text">₱</span>
-                                                                            <input type="number"
-                                                                                name="amount"
-                                                                                step="0.01"
-                                                                                class="form-control"
-                                                                                required>
+                                                                            <input type="number" name="amount" step="0.01" class="form-control" required>
                                                                         </div>
                                                                     </div>
 
                                                                     <div class="mb-3">
                                                                         <label class="form-label">Transaction Date</label>
-                                                                        <input type="date"
-                                                                            name="transaction_date"
+                                                                        <input type="date" name="transaction_date"
                                                                             id="transaction_date_{{ $user->id }}"
-                                                                            class="form-control"
-                                                                            required>
+                                                                            class="form-control" required>
                                                                     </div>
 
-                                                                    <!-- NOTE -->
                                                                     <div class="mb-2">
                                                                         <label class="form-label">Note</label>
-                                                                        <input type="text"
-                                                                            name="note"
-                                                                            class="form-control"
-                                                                            placeholder="Optional">
+                                                                        <input type="text" name="note" class="form-control" placeholder="Optional">
                                                                     </div>
 
                                                                 </div>
 
-                                                                <!-- FOOTER -->
                                                                 <div class="modal-footer">
                                                                     <button type="button" class="btn btn-secondary"
                                                                         data-bs-dismiss="modal">Cancel</button>
@@ -468,9 +450,7 @@
 
                                                         </div>
                                                     </div>
-
                                                 </div>
-
 
                                                 @empty
                                                 <tr>

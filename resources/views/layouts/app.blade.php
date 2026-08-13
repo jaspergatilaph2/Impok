@@ -165,8 +165,11 @@
     <script src="{{ asset('js/users-loans.js') }}"></script>
     <script src="{{ asset('sneat/js/main.js') }}"></script>
     <script src="{{ asset('js/admin-save-pdf.js') }}"></script>
-    <script src="{{asset('js/admin-bal-save.js')}}"></script>
+    <script src="{{ asset('js/admin-bal-save.js')}}"></script>
     <script src="{{ asset('js/admin-all-loans.js') }}"></script>
+    <script src="{{ asset('js/admin/user-bal-search.js') }}"></script>
+    <script src="{{ asset('js/admin/user-loan-search.js') }}"></script>
+    <script src="{{ asset('js/user-new-pass.js')}}"></script>
 </body>
 
 </html>

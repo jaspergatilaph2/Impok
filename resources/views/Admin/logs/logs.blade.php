@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+
 <div class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
         <!-- Menu -->
@@ -44,11 +45,15 @@
                             </a>
                         </li>
 
-
-
                         <li class="menu-item">
                             <a href="{{ route('users.messages.usersinbox') }}" class="menu-link">
                                 <div data-i18n="Without navbar">Inbox</div>
+                            </a>
+                        </li>
+
+                        <li class="menu-item">
+                            <a href="{{ route('users.messages.trashbin') }}" class="menu-link">
+                                <div data-i18n="Without navbar">Trash</div>
                             </a>
                         </li>
 
@@ -70,11 +75,11 @@
                             </a>
                         </li>
 
-
-
                     </ul>
                 </li>
-                <li class="menu-item ">
+
+
+                <li class="menu-item">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon fa-solid fa-wallet"></i>
                         <div data-i18n="Layouts">Wallet Management</div>
@@ -87,7 +92,7 @@
                             </a>
                         </li>
 
-                        <li class="menu-item ">
+                        <li class="menu-item">
                             <a href="{{ route('users.wallet.viewAmount') }}" class="menu-link">
                                 <div data-i18n="Without navbar">View cash in transactions</div>
                             </a>
@@ -102,27 +107,27 @@
 
                 </li>
 
-                <li class="menu-item {{ $ActiveTabMenu === 'View' ? 'active' : '' }}">
+                <li class="menu-item">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon fa-solid fa-cash-register"></i>
                         <div data-i18n="Layouts">Transactions</div>
                     </a>
 
                     <ul class="menu-sub">
-                        <li class="menu-item ">
+                        <li class="menu-item">
                             <a href="{{ route('users.transactions.viewAllBalance') }}" class="menu-link">
                                 <div data-i18n="Without navbar">All balance transactions</div>
                             </a>
                         </li>
 
-                        <li class="menu-item {{ $SubActiveTab === 'interest' ? 'active' : '' }}">
+                        <li class="menu-item">
                             <a href="{{ route('users.transactions.adminViewInterest') }}" class="menu-link">
                                 <div data-i18n="Without navbar">All interest transactions</div>
                             </a>
                         </li>
 
                         <li class="menu-item">
-                            <a href="{{ route('users.transactions.viewAllLoans') }}" class="menu-link">
+                            <a href="{{ route('users.transactions.viewAllLoans')  }}" class="menu-link">
                                 <div data-i18n="Without navbar">All loans transactions</div>
                             </a>
                         </li>
@@ -132,6 +137,7 @@
                                 <div data-i18n="Without navbar">Date Of Transactions</div>
                             </a>
                         </li>
+
                     </ul>
 
                 </li>
@@ -140,7 +146,7 @@
                 <li class="menu-header small text-uppercase">
                     <span class="menu-header-text">Accounts</span>
                 </li>
-                <li class="menu-item ">
+                <li class="menu-item">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon fa-solid fa-user"></i>
                         <div data-i18n="Account Settings">Account Settings</div>
@@ -152,7 +158,7 @@
                             </a>
                         </li>
                         <li class="menu-item">
-                            <a href="{{ route('users.accounts.updateAccounts') }}" class="menu-link">
+                            <a href="{{route('users.accounts.updateAccounts')}}" class="menu-link">
                                 <div data-i18n="Notifications">Update Account</div>
                             </a>
                         </li>
@@ -162,14 +168,14 @@
                 <li class="menu-header small text-uppercase">
                     <span class="menu-header-text">Miscellaneous</span>
                 </li>
-                <li class="menu-item">
+                <li class="menu-item {{ $ActiveTabMenu === 'View' ? 'active' : '' }}">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon tf-icons bx bx-file"></i>
                         <div data-i18n="Misc">Misc</div>
                     </a>
                     <ul class="menu-sub">
-                        <li class="menu-item">
-                            <a href="{{route('admin.logs.viewLogs')}}" class="menu-link">
+                        <li class="menu-item {{ $SubActiveTab === 'logs' ? 'active' : '' }}">
+                            <a href="{{ route('admin.logs.viewLogs') }}" class="menu-link">
                                 <div data-i18n="Under Maintenance">Logs</div>
                             </a>
                         </li>
@@ -246,7 +252,7 @@
                                     <div class="dropdown-divider"></div>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" href="">
+                                    <a class="dropdown-item" href="{{ route('users.accounts.viewAccounts') }}">
                                         <i class="bx bx-user me-2"></i>
                                         <span class="align-middle">My Profile</span>
                                     </a>
@@ -289,140 +295,91 @@
             <!-- Content wrapper -->
             <div class="content-wrapper">
                 <!-- Content -->
-
                 <div class="container-xxl flex-grow-1 container-p-y">
-                    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light"> Wallet Management /</span>Show User Balance
-                    </h4>
-
-                    <div class="row">
-                        <div class="col-md-12">
-
-                            <!-- NAV -->
-                            <ul class="nav nav-pills flex-column flex-md-row mb-3">
-                                <li class="nav-item">
-                                    <a class="nav-link active" href="javascript:void(0);">
-                                        <i class="bx bx-group me-1"></i> Interest Report
-                                    </a>
-                                </li>
-                            </ul>
-
-                            <!-- CARD -->
-                            <div class="card mb-4">
-                                <h5 class="card-header">User List</h5>
-                                <hr class="my-0" />
-
-                                <div class="card-body">
-
-                                    <h5 class="mb-3 fw-bold">Users Interest Balance</h5>
-
-                                    <!-- SEARCH -->
-                                    <div class="mb-3">
-                                        <div class="input-group">
-                                            <span class="input-group-text">
-                                                <i class="bx bx-search"></i>
-                                            </span>
-                                            <input type="text" id="adminSearch" class="form-control"
-                                                placeholder="Search user by name or email...">
-                                        </div>
-                                    </div>
-
-                                    <!-- PRINT BUTTON -->
-                                    <div class="d-flex justify-content-end mb-3 no-print">
-                                        <button onclick="printTable()" class="btn btn-primary me-1">
-                                            <i class="bx bx-printer"></i> Print
-                                        </button>
-
-                                        <button onclick="downloadPDF()" class="btn btn-danger me-1">
-                                            <i class="bx bx-download"></i> Download PDF
-                                        </button>
-                                    </div>
-
-                                    <!-- PRINT AREA -->
-                                    <div id="printArea">
-
-                                        <!-- OPTIONAL TITLE FOR PRINT -->
-                                        <h5 class="text-center mb-3">Users Interest Balance Report</h5>
-
-                                        <div class="table-responsive">
-                                            <table class="table table-hover align-middle">
-
-                                                <thead>
-                                                    <tr>
-                                                        <th>Profile</th>
-                                                        <th>User Name</th>
-                                                        <th>First Name</th>
-                                                        <th>Last Name</th>
-                                                        <th>Email</th>
-                                                        <th>Amount</th>
-                                                    </tr>
-                                                </thead>
-
-                                                <tbody>
-                                                    @forelse($users as $user)
-                                                    <tr>
-
-                                                        <!-- PROFILE -->
-                                                        <td>
-                                                            <img src="{{ $user->profile_information && $user->profile_information->profile_picture
-                ? asset('storage/' . $user->profile_information->profile_picture)
-                : ($user->avatar
-                    ? asset('storage/' . $user->avatar)
-                    : asset('sneat/img/avatars/1.png')) }}"
-                                                                width="45"
-                                                                height="45"
-                                                                class="rounded-circle">
-                                                        </td>
-
-                                                        <!-- USER DATA -->
-                                                        <td class="user-name">{{ $user->name }}</td>
-
-                                                        <td class="user-first">
-                                                            {{ $user->profile_information->first_name ?? 'N/A' }}
-                                                        </td>
-
-                                                        <td class="user-last">
-                                                            {{ $user->profile_information->last_name ?? 'N/A' }}
-                                                        </td>
-
-                                                        <td class="user-email">{{ $user->email }}</td>
-
-                                                        <!-- BALANCE -->
-                                                        <td>
-                                                            ₱ {{ number_format($user->balance ?? 0) }}
-                                                        </td>
-
-                                                    </tr>
-                                                    @empty
-                                                    <tr>
-                                                        <td colspan="6" class="text-center text-muted">
-                                                            No users found
-                                                        </td>
-                                                    </tr>
-                                                    @endforelse
-                                                </tbody>
-
-                                            </table>
-                                        </div>
-
-                                    </div>
-
-
-                                    <!-- ✅ PAGINATION -->
-                                    <div class="mt-3 d-flex justify-content-end">
-                                        {{ $users->links() }}
-                                    </div>
-                                </div>
-                            </div>
-
+                    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Logs /</span>History</h4>
+                    <ul class="nav nav-pills flex-column flex-md-row mb-4">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="javascript:void(0);">
+                                <i class="fa-solid fa-clock-rotate-left"></i> Logs
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">Logs History</h5>
                         </div>
+                        <div class="card-body">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Description</th>
+                                            <th>Date Time</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @php $counter = ($logs->currentPage() - 1) * $logs->perPage() + 1; @endphp
+                                        @forelse($logs as $log)
+                                        <tr>
+                                            <td>{{ $counter++ }}</td>
+                                            <td>{{ $log->description }}</td>
+                                            <td>{{ $log->created_at->setTimezone(config('app.timezone'))->format('Y-m-d h:i A') }}</td>
+                                        </tr>
+                                        @empty
+                                        <tr>
+                                            <td colspan="3" class="text-center text-muted">No logs found.</td>
+                                        </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
 
+                                <div class="d-flex justify-content-center mt-3">
+                                    <nav aria-label="Page navigation">
+                                        <ul class="pagination pagination-m">
+
+                                            {{-- Previous Page Link --}}
+                                            @if ($logs->onFirstPage())
+                                            <li class="page-item disabled">
+                                                <span class="page-link">Previous</span>
+                                            </li>
+                                            @else
+                                            <li class="page-item">
+                                                <a class="page-link" href="{{ $logs->previousPageUrl() }}">Previous</a>
+                                            </li>
+                                            @endif
+
+                                            {{-- Page Number Links --}}
+                                            @foreach ($logs->links()->elements as $element)
+                                            @if (is_array($element))
+                                            @foreach ($element as $page => $url)
+                                            <li class="page-item {{ $logs->currentPage() == $page ? 'active' : '' }}">
+                                                <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                                            </li>
+                                            @endforeach
+                                            @endif
+                                            @endforeach
+
+                                            {{-- Next Page Link --}}
+                                            @if ($logs->hasMorePages())
+                                            <li class="page-item">
+                                                <a class="page-link" href="{{ $logs->nextPageUrl() }}">Next</a>
+                                            </li>
+                                            @else
+                                            <li class="page-item disabled">
+                                                <span class="page-link">Next</span>
+                                            </li>
+                                            @endif
+
+                                        </ul>
+                                    </nav>
+                                </div>
+
+                            </div>
+                        </div>
                     </div>
+
                 </div>
-
-
-
-
-                <!-- / Content -->
 
                 <!-- Footer -->
                 <footer class="content-footer footer bg-footer-theme mt-4">
@@ -446,6 +403,8 @@
 
                 <div class="content-backdrop fade"></div>
             </div>
+
+
             <!-- Content wrapper -->
         </div>
         <!-- / Layout page -->

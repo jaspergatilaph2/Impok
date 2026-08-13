@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+
 <div class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
         <!-- Menu -->
@@ -46,7 +47,7 @@
                     </ul>
                 </li>
 
-                <!-- Wallet -->
+                <!-- Layouts -->
                 <li class="menu-item">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon fa-solid fa-wallet"></i>
@@ -76,10 +77,10 @@
                     </ul>
                 </li>
 
-                <!-- Transactions -->
+
                 <li class="menu-item">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
-                        <i class="menu-icon fa-solid fa-file"></i>
+                        <i class="menu-icon fa-solid fa-clock-rotate-left"></i>
                         <div data-i18n="Layouts">Transactions</div>
                     </a>
 
@@ -99,41 +100,45 @@
                 <li class="menu-header small text-uppercase">
                     <span class="menu-header-text">Accounts</span>
                 </li>
-                <li class="menu-item {{ $ActiveTabMenu === 'account' ? 'active' : '' }}">
+                <li class="menu-item">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon fa-solid fa-user"></i>
                         <div data-i18n="Account Settings">Account Settings</div>
                     </a>
+
                     <ul class="menu-sub">
-                        <li class="menu-item {{ $SubActiveTab === 'view' ? 'active' : '' }}">
+                        <li class="menu-item">
                             <a href="{{ route('applicants.accounts.viewAccount') }}" class="menu-link">
                                 <div data-i18n="Account">Account</div>
                             </a>
                         </li>
+
                         <li class="menu-item">
-                            <a href="{{ route('applicants.accounts.updateAccount') }}" class="menu-link">
+                            <a href="{{route('applicants.accounts.updateAccount')}}" class="menu-link">
                                 <div data-i18n="Notifications">Update Account</div>
                             </a>
                         </li>
+
                         <li class="menu-item">
                             <a href="{{ route('applicants.settings.viewSettings') }}" class="menu-link">
                                 <div data-i18n="Notifications">Settings</div>
                             </a>
                         </li>
+
                     </ul>
                 </li>
 
                 <li class="menu-header small text-uppercase">
                     <span class="menu-header-text">Miscellaneous</span>
                 </li>
-                <li class="menu-item">
+                <li class="menu-item {{ $ActiveTabMenu == 'logs' ? 'active' : '' }}">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon tf-icons bx bx-file"></i>
                         <div data-i18n="Misc">Misc</div>
                     </a>
                     <ul class="menu-sub">
-                        <li class="menu-item">
-                            <a href="{{ route('applicants.logs.viewLogs')}}" class="menu-link">
+                        <li class="menu-item {{ $SubActiveTab == 'view' ? 'active' : '' }}">
+                            <a href="{{ route('applicants.logs.viewLogs') }}" class="menu-link">
                                 <div data-i18n="Under Maintenance">Logs</div>
                             </a>
                         </li>
@@ -168,6 +173,7 @@
                     <ul class="navbar-nav flex-row align-items-center ms-auto">
                         <!-- Place this tag where you want the button to render. -->
 
+                        <!--MESSAGE / INBOX ICON -->
                         <li class="nav-item dropdown me-3">
 
                             <a class="nav-link dropdown-toggle hide-arrow" href="#" role="button" data-bs-toggle="dropdown">
@@ -299,13 +305,13 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" href="{{ route('applicants.settings.viewSettings') }}">
+                                    <a class="dropdown-item" href="{{ route('applicants.settings.viewSettings')}}">
                                         <i class="bx bx-cog me-2"></i>
                                         <span class="align-middle">Settings</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" href="{{ route('applicants.logs.viewLogs') }}">
+                                    <a class="dropdown-item" href="{{ route('applicants.logs.viewLogs')}}">
                                         <i class="menu-icon tf-icons bx bx-file"></i>
                                         <span class="align-middle">Logs</span>
                                     </a>
@@ -336,111 +342,91 @@
             <!-- Content wrapper -->
             <div class="content-wrapper">
                 <!-- Content -->
-
                 <div class="container-xxl flex-grow-1 container-p-y">
-                    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Account Settings /</span>Show Account
-                    </h4>
+                    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Logs /</span>History</h4>
+                    <ul class="nav nav-pills flex-column flex-md-row mb-4">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="javascript:void(0);">
+                                <i class="fa-solid fa-clock-rotate-left"></i> Logs
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">Logs History</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Description</th>
+                                            <th>Date Time</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @php $counter = ($logs->currentPage() - 1) * $logs->perPage() + 1; @endphp
+                                        @forelse($logs as $log)
+                                        <tr>
+                                            <td>{{ $counter++ }}</td>
+                                            <td>{{ $log->description }}</td>
+                                            <td>{{ $log->created_at->setTimezone(config('app.timezone'))->format('Y-m-d h:i A') }}</td>
+                                        </tr>
+                                        @empty
+                                        <tr>
+                                            <td colspan="3" class="text-center text-muted">No logs found.</td>
+                                        </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
 
-                    <div class="row">
-                        <div class="col-md-12">
-                            <ul class="nav nav-pills flex-column flex-md-row mb-3">
-                                <li class="nav-item">
-                                    <a class="nav-link active" href="javascript:void(0);"><i class="bx bx-user me-1"></i> Account</a>
-                                </li>
-                            </ul>
+                                <div class="d-flex justify-content-center mt-3">
+                                    <nav aria-label="Page navigation">
+                                        <ul class="pagination pagination-m">
 
-                            <div class="card mb-4">
-                                <h5 class="card-header">Profile Details</h5>
-                                <hr class="my-0" />
+                                            {{-- Previous Page Link --}}
+                                            @if ($logs->onFirstPage())
+                                            <li class="page-item disabled">
+                                                <span class="page-link">Previous</span>
+                                            </li>
+                                            @else
+                                            <li class="page-item">
+                                                <a class="page-link" href="{{ $logs->previousPageUrl() }}">Previous</a>
+                                            </li>
+                                            @endif
 
-                                <div class="card-body">
-                                    <!-- PROFILE IMAGE -->
-                                    <div class="mb-3">
-                                        <label class="form-label">Profile Picture</label><br>
+                                            {{-- Page Number Links --}}
+                                            @foreach ($logs->links()->elements as $element)
+                                            @if (is_array($element))
+                                            @foreach ($element as $page => $url)
+                                            <li class="page-item {{ $logs->currentPage() == $page ? 'active' : '' }}">
+                                                <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                                            </li>
+                                            @endforeach
+                                            @endif
+                                            @endforeach
 
-                                        <img
-                                            src="{{ optional($accounts->profile)->profile_picture 
-                    ? asset('storage/' . $accounts->profile->profile_picture) 
-                    : ($accounts->avatar 
-                        ? asset('storage/' . $accounts->avatar) 
-                        : asset('sneat/img/avatars/1.png')) }}"
-                                            class="rounded mt-2"
-                                            width="100"
-                                            height="100"
-                                            alt="Profile Picture">
-                                    </div>
+                                            {{-- Next Page Link --}}
+                                            @if ($logs->hasMorePages())
+                                            <li class="page-item">
+                                                <a class="page-link" href="{{ $logs->nextPageUrl() }}">Next</a>
+                                            </li>
+                                            @else
+                                            <li class="page-item disabled">
+                                                <span class="page-link">Next</span>
+                                            </li>
+                                            @endif
 
-                                    <!-- USER BASIC INFO -->
-                                    <div class="row">
-                                        <div class="mb-3 col-md-6">
-                                            <label class="form-label">Name</label>
-                                            <input class="form-control" type="text" value="{{ $accounts->name }}" readonly />
-                                        </div>
-
-                                        <div class="mb-3 col-md-6">
-                                            <label class="form-label">E-mail</label>
-                                            <input class="form-control" type="email" value="{{ $accounts->email }}" readonly />
-                                        </div>
-
-                                        <div class="mb-3 col-md-6">
-                                            <label class="form-label">Role</label>
-                                            <input class="form-control" type="text" value="{{ $accounts->role }}" readonly />
-                                        </div>
-                                    </div>
-
-                                    <hr>
-
-                                    <!-- PROFILE INFO (NEW) -->
-                                    <!-- PROFILE INFORMATION HEADER -->
-                                    <div class="mb-3">
-                                        <h5 class="fw-bold mb-1">Profile Information</h5>
-                                        <small class="text-muted">Complete user profile details</small>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="mb-3 col-md-6">
-                                            <label class="form-label">First Name</label>
-                                            <input class="form-control" type="text"
-                                                value="{{ optional($accounts->profile_information)->first_name ?? 'N/A' }}" readonly />
-                                        </div>
-
-                                        <div class="mb-3 col-md-6">
-                                            <label class="form-label">Last Name</label>
-                                            <input class="form-control" type="text"
-                                                value="{{ optional($accounts->profile_information)->last_name ?? 'N/A' }}" readonly />
-                                        </div>
-
-                                        <div class="mb-3 col-md-6">
-                                            <label class="form-label">Phone</label>
-                                            <input class="form-control" type="text"
-                                                value="{{ optional($accounts->profile_information)->phone ?? 'N/A' }}" readonly />
-                                        </div>
-
-                                        <div class="mb-3 col-md-6">
-                                            <label class="form-label">Birthdate</label>
-                                            <input class="form-control" type="text"
-                                                value="{{ optional($accounts->profile_information)->birthdate ?? 'N/A' }}" readonly />
-                                        </div>
-
-                                        <div class="mb-3 col-md-12">
-                                            <label class="form-label">Address</label>
-                                            <input class="form-control" type="text"
-                                                value="{{ optional($accounts->profile_information)->address ?? 'N/A' }}" readonly />
-                                        </div>
-                                    </div>
-
-
-
+                                        </ul>
+                                    </nav>
                                 </div>
-                            </div>
 
+                            </div>
                         </div>
                     </div>
+
                 </div>
-
-
-
-                <!-- / Content -->
 
                 <!-- Footer -->
                 <footer class="content-footer footer bg-footer-theme mt-4">
@@ -464,6 +450,8 @@
 
                 <div class="content-backdrop fade"></div>
             </div>
+
+
             <!-- Content wrapper -->
         </div>
         <!-- / Layout page -->

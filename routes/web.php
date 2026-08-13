@@ -49,7 +49,7 @@ Route::get('/home', function () {
 Route::group(['middleware' => ['auth', 'IfIMSUsers']], function () {
 
     Route::get('/dashboard', [ApplicantsController::class, 'index'])
-        ->name('applicants.dashboard'); // ✅ FIXED
+        ->name('applicants.dashboard'); 
 
     Route::prefix('/applicants')->name('applicants.accounts.')->group(function () {
         Route::get('/view', [ApplicantsController::class, 'viewAccounts'])
@@ -63,6 +63,8 @@ Route::group(['middleware' => ['auth', 'IfIMSUsers']], function () {
     Route::prefix('/applicans-settings')->name('applicants.settings.')->group(function () {
         Route::get('/view', [ApplicantsController::class, 'viewSettings'])
             ->name('viewSettings');
+        Route::put('/password-update', [ApplicantsController::class, 'updatePassword'])
+            ->name('passwordUpdate');
     });
 
     Route::prefix('/applicants-wallet')->name('applicants.wallet.')->group(function () {
@@ -87,6 +89,11 @@ Route::group(['middleware' => ['auth', 'IfIMSUsers']], function () {
     Route::prefix('/under-maintenance')->name('users.under-maintenance.')->group(function () {
         Route::get('/view-under-maintenance', [ApplicantsController::class, 'UnderMaintenance'])
             ->name('undermaintenance');
+    });
+
+    Route::prefix('/applicants-logs')->name('applicants.logs.')->group(function () {
+        Route::get('/view-logs', [ApplicantsController::class, 'viewLogs'])
+            ->name('viewLogs');
     });
 });
 
@@ -152,5 +159,10 @@ Route::group(['middleware' => ['auth', 'IfIMSAdmin']], function () {
             ->name('trashbin');
         Route::delete('/trash/{id}', [AdminController::class, 'Trashcan'])
             ->name('trashcan');
+    });
+
+    Route::prefix('/admin-logs')->name('admin.logs.')->group(function () {
+        Route::get('/view-logs', [AdminController::class, 'viewLogs'])
+            ->name('viewLogs');
     });
 });
