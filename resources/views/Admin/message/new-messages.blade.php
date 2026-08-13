@@ -254,7 +254,7 @@
                                     <div class="dropdown-divider"></div>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" href="">
+                                    <a class="dropdown-item" href="{{route('users.accounts.viewAccounts')}}">
                                         <i class="bx bx-user me-2"></i>
                                         <span class="align-middle">My Profile</span>
                                     </a>
@@ -266,7 +266,7 @@
                           </a>
                         </li> -->
                                 <li>
-                                    <a class="dropdown-item" href="">
+                                    <a class="dropdown-item" href="{{route('admin.logs.viewLogs')}}">
                                         <i class="menu-icon tf-icons bx bx-file"></i>
                                         <span class="align-middle">Logs</span>
                                     </a>
