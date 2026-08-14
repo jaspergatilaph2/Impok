@@ -49,7 +49,7 @@ Route::get('/home', function () {
 Route::group(['middleware' => ['auth', 'IfIMSUsers']], function () {
 
     Route::get('/dashboard', [ApplicantsController::class, 'index'])
-        ->name('applicants.dashboard'); 
+        ->name('applicants.dashboard');
 
     Route::prefix('/applicants')->name('applicants.accounts.')->group(function () {
         Route::get('/view', [ApplicantsController::class, 'viewAccounts'])
@@ -119,6 +119,10 @@ Route::group(['middleware' => ['auth', 'IfIMSAdmin']], function () {
             ->name('viewLoans');
         Route::post('/get-loans', [AdminController::class, 'getLoans'])
             ->name('getLoans');
+        Route::get('/interest', [AdminController::class, 'viewInterest'])
+            ->name('viewInterest');
+        Route::post('/loans-payment', [AdminController::class, 'loansPayment'])
+            ->name('loansPayment');
     });
 
     Route::prefix('/transactions')->name('users.transactions.')->group(function () {

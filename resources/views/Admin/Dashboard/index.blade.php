@@ -99,6 +99,12 @@
                         </li>
 
                         <li class="menu-item">
+                            <a href="{{ route('users.wallet.viewInterest') }}" class="menu-link">
+                                <div data-i18n="Without navbar">View interest</div>
+                            </a>
+                        </li>
+
+                        <li class="menu-item">
                             <a href="{{ route('users.wallet.viewLoans') }}" class="menu-link">
                                 <div data-i18n="Without navbar">View loan transaction</div>
                             </a>
@@ -399,6 +405,25 @@
 
                                         <h2 class="fw-bold">
                                             ₱{{ number_format($loanSum ?? 0) }}
+                                        </h2>
+
+                                        <small class="text-muted">Overall Loans</small>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!-- Loan Interest -->
+                             <div class="col-12 col-md-4 col-lg-3">
+                                <div class="card shadow-sm border-0 h-100">
+                                    <div class="card-body text-center">
+                                        <div class="mb-3 text-danger">
+                                            <i class="fa-solid fa-money-bill fs-1"></i>
+                                        </div>
+                                        <h6 class="text-muted">Total Loans Interest</h6>
+
+                                        <h2 class="fw-bold">
+                                            ₱ {{ number_format($interestSum ?? 0) }}
                                         </h2>
 
                                         <small class="text-muted">Overall Loans</small>

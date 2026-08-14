@@ -399,6 +399,14 @@
                       @endif
                     </h2>
                     <small class="text-muted">Next Impoks</small>
+
+                    @if(!empty($nextdate))
+                    <div class="mt-2 fw-semibold text-warning"
+                      data-countdown
+                      data-date="{{ \Carbon\Carbon::parse($nextdate)->format('Y-m-d H:i:s') }}">
+                      Calculating...
+                    </div>
+                    @endif
                   </div>
                 </div>
               </div>
@@ -519,9 +527,216 @@
               <span class="fw-bold text-primary">Impoks Management System</span>
             </div>
             <div>
-              <a href="#" class="footer-link me-3">Documentation</a>
-              <a href="#" class="footer-link me-3">Support</a>
-              <a href="#" class="footer-link">Contact</a>
+              <a href="#" class="footer-link me-3" data-bs-toggle="modal" data-bs-target="#documentationModal">
+                Documentation
+              </a>
+
+              <!-- Documentation Modal -->
+              <div class="modal fade" id="documentationModal" tabindex="-1" aria-labelledby="documentationModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                  <div class="modal-content border-0 shadow">
+
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="documentationModalLabel">
+                        Documentation
+                      </h5>
+
+                      <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close">
+                      </button>
+                    </div>
+
+                    <div class="modal-body">
+
+                      <h6 class="fw-bold">Impoks Management System</h6>
+
+                      <p class="text-muted">
+                        Welcome to the Impoks Management System documentation.
+                        This section provides basic information about using the system.
+                      </p>
+
+                      <hr>
+
+                      <h6 class="fw-bold">Getting Started</h6>
+                      <p>
+                        Log in using your registered account credentials to access
+                        the features and services available to you.
+                      </p>
+
+                      <h6 class="fw-bold">Account</h6>
+                      <p>
+                        You can update your profile information, change your password,
+                        and manage your account settings from the Account Settings page.
+                      </p>
+
+                      <h6 class="fw-bold">Application</h6>
+                      <p>
+                        Applicants can view their application information, monitor
+                        application status, and access available system services.
+                      </p>
+
+                    </div>
+
+                    <div class="modal-footer">
+                      <button type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                        Close
+                      </button>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <!-- End of Modal -->
+
+
+              <a href="#" class="footer-link me-3"
+                data-bs-toggle="modal"
+                data-bs-target="#supportModal">
+                Support
+              </a>
+
+              <!-- Modal -->
+
+              <div class="modal fade" id="supportModal" tabindex="-1"
+                aria-labelledby="supportModalLabel" aria-hidden="true">
+
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content border-0 shadow">
+
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="supportModalLabel">
+                        Support
+                      </h5>
+
+                      <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close">
+                      </button>
+                    </div>
+
+                    <div class="modal-body">
+
+                      <p class="text-muted">
+                        Need help? Please contact our support team using
+                        the information below.
+                      </p>
+
+                      <div class="mb-3">
+                        <strong>Email</strong>
+                        <p class="mb-0 text-muted">
+                          jaspergatila2@gmail.com
+                        </p>
+                      </div>
+
+                      <div class="mb-3">
+                        <strong>Phone</strong>
+                        <p class="mb-0 text-muted">
+                          +63 900 000 0000
+                        </p>
+                      </div>
+
+                      <div>
+                        <strong>Support Hours</strong>
+                        <p class="mb-0 text-muted">
+                          Monday – Friday, 8:00 AM – 5:00 PM
+                        </p>
+                      </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                      <button type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                        Close
+                      </button>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <!-- End Of Modal -->
+
+
+              <a href="#" class="footer-link"
+                data-bs-toggle="modal"
+                data-bs-target="#contactModal">
+                Contact
+              </a>
+
+              <!-- Modal -->
+              <div class="modal fade" id="contactModal" tabindex="-1"
+                aria-labelledby="contactModalLabel" aria-hidden="true">
+
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content border-0 shadow">
+
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="contactModalLabel">
+                        Contact Us
+                      </h5>
+
+                      <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close">
+                      </button>
+                    </div>
+
+                    <div class="modal-body">
+
+                      <p class="text-muted">
+                        If you have any questions or concerns, you may
+                        contact us through the information below.
+                      </p>
+
+                      <div class="mb-3">
+                        <strong>Office</strong>
+                        <p class="mb-0 text-muted">
+                          Impoks Management System
+                        </p>
+                      </div>
+
+                      <div class="mb-3">
+                        <strong>Email</strong>
+                        <p class="mb-0 text-muted">
+                          info@example.com
+                        </p>
+                      </div>
+
+                      <div class="mb-3">
+                        <strong>Phone</strong>
+                        <p class="mb-0 text-muted">
+                          +63 900 000 0000
+                        </p>
+                      </div>
+
+                      <div>
+                        <strong>Address</strong>
+                        <p class="mb-0 text-muted">
+                          Philippines
+                        </p>
+                      </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                      <button type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                        Close
+                      </button>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <!-- End Of Modal -->
             </div>
           </div>
         </footer>

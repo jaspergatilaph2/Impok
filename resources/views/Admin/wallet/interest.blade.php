@@ -72,7 +72,7 @@
 
                     </ul>
                 </li>
-                <li class="menu-item {{ $ActiveTabMenu === 'Loans' ? 'active' : '' }}">
+                <li class="menu-item {{ $ActiveTabMenu === 'View' ? 'active' : '' }}">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon fa-solid fa-wallet"></i>
                         <div data-i18n="Layouts">Wallet Management</div>
@@ -91,8 +91,8 @@
                             </a>
                         </li>
 
-                        <li class="menu-item">
-                            <a href="{{ route('users.wallet.viewInterest') }}" class="menu-link">
+                        <li class="menu-item {{ $SubActiveTab === 'interest' ? 'active' : '' }}">
+                            <a href="" class="menu-link">
                                 <div data-i18n="Without navbar">View interest</div>
                             </a>
                         </li>
@@ -295,7 +295,7 @@
                 <!-- Content -->
 
                 <div class="container-xxl flex-grow-1 container-p-y">
-                    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light"> Loans Management /</span>Loans
+                    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light"> Interest Management /</span>Interest
                     </h4>
 
                     <div class="row">
@@ -305,19 +305,52 @@
                             <ul class="nav nav-pills flex-column flex-md-row mb-3">
                                 <li class="nav-item">
                                     <a class="nav-link active" href="javascript:void(0);">
-                                        <i class="bx bx-group me-1"></i> User List Loans
+                                        <i class="bx bx-group me-1"></i> User List Interest
                                     </a>
                                 </li>
                             </ul>
 
                             <!-- CARD -->
                             <div class="card mb-4">
-                                <h5 class="card-header">User List Loans</h5>
+                                <h5 class="card-header">User List Interest</h5>
                                 <hr class="my-0" />
 
                                 <div class="card-body">
 
-                                    <h5 class="mb-3 fw-bold">Users Loans</h5>
+                                    <h5 class="mb-3 fw-bold">Users Interest</h5>
+
+                                    <!-- SUCCESS MESSAGE -->
+                                    @if(session('success'))
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        <i class="bx bx-check-circle me-1"></i>
+                                        {{ session('success') }}
+
+                                        <button type="button"
+                                            class="btn-close"
+                                            data-bs-dismiss="alert"
+                                            aria-label="Close">
+                                        </button>
+                                    </div>
+                                    @endif
+
+                                    <!-- ERROR MESSAGE -->
+                                    @if($errors->any())
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <i class="bx bx-error-circle me-1"></i>
+
+                                        <ul class="mb-0 ps-3">
+                                            @foreach($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+
+                                        <button type="button"
+                                            class="btn-close"
+                                            data-bs-dismiss="alert"
+                                            aria-label="Close">
+                                        </button>
+                                    </div>
+                                    @endif
 
                                     <!-- SEARCH -->
                                     <div class="mb-3">
@@ -331,6 +364,7 @@
                                     </div>
 
                                     <div class="table-responsive">
+
                                         <table class="table table-hover align-middle">
 
                                             <thead>
@@ -350,120 +384,215 @@
                                                     <!-- PROFILE -->
                                                     <td>
                                                         <img src="{{ $user->profile_information && $user->profile_information->profile_picture
-                                ? asset('storage/' . $user->profile_information->profile_picture)
-                                : ($user->avatar
-                                    ? asset('storage/' . $user->avatar)
-                                    : asset('sneat/img/avatars/1.png')) }}"
+                    ? asset('storage/' . $user->profile_information->profile_picture)
+                    : ($user->avatar
+                        ? asset('storage/' . $user->avatar)
+                        : asset('sneat/img/avatars/1.png')) }}"
                                                             width="45"
                                                             height="45"
                                                             class="rounded-circle">
                                                     </td>
 
-                                                    <!-- FIXED (IMPORTANT FOR SEARCH) -->
+                                                    <!-- NAME -->
                                                     <td class="user-name">{{ $user->name }}</td>
+
+                                                    <!-- EMAIL -->
                                                     <td class="user-email">{{ $user->email }}</td>
 
+                                                    <!-- ROLE -->
                                                     <td>{{ $user->role }}</td>
 
                                                     <!-- ACTION -->
                                                     <td>
                                                         <button class="btn btn-sm btn-success"
                                                             data-bs-toggle="modal"
-                                                            data-bs-target="#cashInModal{{ $user->id }}">
-                                                            Loans
+                                                            data-bs-target="#interestModal{{ $user->id }}">
+                                                            Interest
                                                         </button>
                                                     </td>
 
                                                 </tr>
 
-                                                <!-- MODAL (UNCHANGED) -->
-                                                <div class="modal fade" id="cashInModal{{ $user->id }}" tabindex="-1">
+                                                <!-- INTEREST MODAL -->
+                                                <div class="modal fade"
+                                                    id="interestModal{{ $user->id }}"
+                                                    tabindex="-1"
+                                                    aria-hidden="true">
+
                                                     <div class="modal-dialog modal-dialog-centered">
                                                         <div class="modal-content shadow border-0">
 
+                                                            <!-- MODAL HEADER -->
                                                             <div class="modal-header bg-success text-white">
+
                                                                 <h5 class="modal-title">
-                                                                    <i class="bx bx-wallet me-2"></i> Loans Transaction
+                                                                    <i class="bx bx-money me-2"></i>
+                                                                    Interest Transaction
                                                                 </h5>
-                                                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+
+                                                                <button type="button"
+                                                                    class="btn-close btn-close-white"
+                                                                    data-bs-dismiss="modal">
+                                                                </button>
+
                                                             </div>
 
-                                                            <form id="transactionForm{{ $user->id }}" action="{{ route('users.wallet.getLoans') }}" method="POST">
+
+
+                                                            <!-- FORM -->
+                                                            <form id="interestForm{{ $user->id }}"
+                                                                action="{{ route('users.wallet.loansPayment') }}"
+                                                                method="POST">
+
                                                                 @csrf
 
                                                                 <div class="modal-body">
 
-                                                                    <div id="alertBox{{ $user->id }}"></div>
 
-                                                                    <input type="hidden" name="user_id" value="{{ $user->id }}">
 
+
+
+                                                                    <!-- USER ID -->
+                                                                    <input type="hidden"
+                                                                        name="user_id"
+                                                                        value="{{ $user->id }}">
+
+                                                                    <!-- USER INFORMATION -->
                                                                     <div class="text-center mb-3">
+
                                                                         <img src="{{ $user->profile_information && $user->profile_information->profile_picture
-                                                ? asset('storage/' . $user->profile_information->profile_picture)
-                                                : ($user->avatar
-                                                    ? asset('storage/' . $user->avatar)
-                                                    : asset('sneat/img/avatars/1.png')) }}"
+                ? asset('storage/' . $user->profile_information->profile_picture)
+                : ($user->avatar
+                    ? asset('storage/' . $user->avatar)
+                    : asset('sneat/img/avatars/1.png')) }}"
                                                                             class="rounded-circle mb-2"
                                                                             width="70"
                                                                             height="70">
 
-                                                                        <h6 class="mb-0">{{ $user->name }}</h6>
-                                                                        <small class="text-muted">{{ $user->email }}</small>
+                                                                        <h6 class="mb-0">
+                                                                            {{ $user->name }}
+                                                                        </h6>
+
+                                                                        <small class="text-muted">
+                                                                            {{ $user->email }}
+                                                                        </small>
+
                                                                     </div>
 
                                                                     <hr>
 
+                                                                    <!-- TRANSACTION TYPE -->
                                                                     <div class="mb-3">
-                                                                        <label class="form-label">Transaction Type</label>
-                                                                        <select name="type" class="form-select" required>
-                                                                            <option value="">Select Type</option>
-                                                                            <option value="cash_in">Loans</option>
+
+                                                                        <label class="form-label">
+                                                                            Transaction Type
+                                                                        </label>
+
+                                                                        <select name="type"
+                                                                            class="form-select"
+                                                                            required>
+
+                                                                            <option value="">
+                                                                                Select Type
+                                                                            </option>
+
+                                                                            <option value="loan_payment">
+                                                                                Loan Payment
+                                                                            </option>
+
                                                                         </select>
+
                                                                     </div>
 
+                                                                    <!-- PAYMENT AMOUNT -->
                                                                     <div class="mb-3">
-                                                                        <label class="form-label">Amount</label>
+
+                                                                        <label class="form-label">
+                                                                            Payment Amount
+                                                                        </label>
+
                                                                         <div class="input-group">
-                                                                            <span class="input-group-text">₱</span>
-                                                                            <input type="number" name="amount" step="0.01" class="form-control" required>
+
+                                                                            <span class="input-group-text">
+                                                                                ₱
+                                                                            </span>
+
+                                                                            <input type="number"
+                                                                                name="amount"
+                                                                                step="0.01"
+                                                                                min="1"
+                                                                                class="form-control"
+                                                                                placeholder="Enter payment amount"
+                                                                                required>
+
                                                                         </div>
+
                                                                     </div>
 
+                                                                    <!-- TRANSACTION DATE -->
                                                                     <div class="mb-3">
-                                                                        <label class="form-label">Transaction Date</label>
-                                                                        <input type="date" name="transaction_date"
+
+                                                                        <label class="form-label">
+                                                                            Transaction Date
+                                                                        </label>
+
+                                                                        <input type="date"
+                                                                            name="transaction_date"
                                                                             id="transaction_date_{{ $user->id }}"
-                                                                            class="form-control" required>
+                                                                            class="form-control"
+                                                                            value="{{ date('Y-m-d') }}"
+                                                                            required>
+
                                                                     </div>
 
+                                                                    <!-- NOTE -->
                                                                     <div class="mb-2">
-                                                                        <label class="form-label">Note</label>
-                                                                        <input type="text" name="note" class="form-control" placeholder="Optional">
+
+                                                                        <label class="form-label">
+                                                                            Note
+                                                                        </label>
+
+                                                                        <input type="text"
+                                                                            name="note"
+                                                                            class="form-control"
+                                                                            placeholder="Optional">
+
                                                                     </div>
 
                                                                 </div>
 
+                                                                <!-- FOOTER -->
                                                                 <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-secondary"
-                                                                        data-bs-dismiss="modal">Cancel</button>
 
-                                                                    <button type="submit" class="btn btn-success">
-                                                                        Submit Transaction
+                                                                    <button type="button"
+                                                                        class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal">
+                                                                        Cancel
                                                                     </button>
+
+                                                                    <button type="submit"
+                                                                        class="btn btn-success">
+                                                                        Submit Payment
+                                                                    </button>
+
                                                                 </div>
 
                                                             </form>
 
                                                         </div>
                                                     </div>
+
                                                 </div>
 
                                                 @empty
+
                                                 <tr>
-                                                    <td colspan="5" class="text-center text-muted">
+                                                    <td colspan="5"
+                                                        class="text-center text-muted">
                                                         No users found
                                                     </td>
                                                 </tr>
+
                                                 @endforelse
                                             </tbody>
 

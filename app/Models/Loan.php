@@ -15,7 +15,12 @@ class Loan extends Model
         'amount',
         'transaction_date',
         'note',
-        'status'
+        'status',
+        'total_amount',
+        'interest',
+        'paid_interest',
+        'paid_principal',
+        'remaining_interest'
     ];
 
     public function user()
