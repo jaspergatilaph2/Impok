@@ -67,6 +67,12 @@
                             </a>
                         </li>
 
+                        <li class="menu-item ">
+                            <a href="{{ route('applicants.wallet.loanInterest') }}" class="menu-link">
+                                <div data-i18n="Without navbar">Loan Interest</div>
+                            </a>
+                        </li>
+
                         <li class="menu-item">
                             <a href="{{ route('applicants.wallet.loans') }}" class="menu-link">
                                 <div data-i18n="Without navbar">Loans</div>
@@ -299,11 +305,11 @@
                                     </a>
                                 </li>
                                 <li>
-                              <a class="dropdown-item" href="{{route('applicants.settings.viewSettings')}}">
-                                <i class="bx bx-cog me-2"></i>
-                                <span class="align-middle">Settings</span>
-                              </a>
-                            </li>
+                                    <a class="dropdown-item" href="{{route('applicants.settings.viewSettings')}}">
+                                        <i class="bx bx-cog me-2"></i>
+                                        <span class="align-middle">Settings</span>
+                                    </a>
+                                </li>
                                 <li>
                                     <a class="dropdown-item" href="{{ route('applicants.logs.viewLogs')}}">
                                         <i class="menu-icon tf-icons bx bx-file"></i>

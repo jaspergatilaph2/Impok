@@ -62,6 +62,12 @@
                         </li>
 
                         <li class="menu-item">
+                            <a href="{{ route('applicants.wallet.loanInterest') }}" class="menu-link">
+                                <div data-i18n="Without navbar">Loan Interest</div>
+                            </a>
+                        </li>
+
+                        <li class="menu-item">
                             <a href="{{ route('applicants.wallet.viewInterest') }}" class="menu-link">
                                 <div data-i18n="Without navbar">Interest</div>
                             </a>
