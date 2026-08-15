@@ -98,7 +98,11 @@
                             </a>
                         </li>
 
-                        
+                        <li class="menu-item">
+                            <a href="{{ route('users.wallet.viewInterest') }}" class="menu-link">
+                                <div data-i18n="Without navbar">View interest transactions</div>
+                            </a>
+                        </li>
 
                         <li class="menu-item">
                             <a href="{{ route('users.wallet.viewLoans') }}" class="menu-link">

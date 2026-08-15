@@ -70,7 +70,7 @@
 
                         <li class="menu-item">
                             <a href="{{ route('users.wallet.viewInterest') }}" class="menu-link">
-                                <div data-i18n="Without navbar">View interest</div>
+                                <div data-i18n="Without navbar">View interest transactions</div>
                             </a>
                         </li>
 

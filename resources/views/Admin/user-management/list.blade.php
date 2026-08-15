@@ -91,6 +91,12 @@
                         </li>
 
                         <li class="menu-item">
+                            <a href="{{ route('users.wallet.viewInterest') }}" class="menu-link">
+                                <div data-i18n="Without navbar">View interest transactions</div>
+                            </a>
+                        </li>
+
+                        <li class="menu-item">
                             <a href="{{ route('users.wallet.viewLoans') }}" class="menu-link">
                                 <div data-i18n="Without navbar">View loan transaction</div>
                             </a>
@@ -365,7 +371,7 @@
                                                     <td class="user-name">{{ $user->name }}</td>
 
                                                     <!-- EMAIL -->
-                                                   <td class="user-email">{{ $user->email }}</td>
+                                                    <td class="user-email">{{ $user->email }}</td>
 
                                                     <!-- ROLE -->
                                                     <td>{{ $user->role }}</td>

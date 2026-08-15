@@ -92,6 +92,12 @@
                         </li>
 
                         <li class="menu-item">
+                            <a href="{{ route('users.wallet.viewInterest') }}" class="menu-link">
+                                <div data-i18n="Without navbar">View interest transactions</div>
+                            </a>
+                        </li>
+
+                        <li class="menu-item">
                             <a href="{{ route('users.wallet.viewLoans') }}" class="menu-link">
                                 <div data-i18n="Without navbar">View loan transaction</div>
                             </a>
@@ -367,7 +373,84 @@
 
                                             <!-- MODAL (UNCHANGED) -->
                                             <div class="modal fade" id="cashInModal{{ $user->id }}" tabindex="-1">
-                                                <!-- modal content stays same -->
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content shadow border-0">
+
+                                                        <div class="modal-header bg-success text-white">
+                                                            <h5 class="modal-title">
+                                                                <i class="bx bx-wallet me-2"></i> Loans Transaction
+                                                            </h5>
+                                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                                        </div>
+
+                                                        <form id="transactionForm{{ $user->id }}" action="{{ route('users.wallet.cashIn') }}" method="POST">
+                                                            @csrf
+
+                                                            <div class="modal-body">
+
+                                                                <div id="alertBox{{ $user->id }}"></div>
+
+                                                                <input type="hidden" name="user_id" value="{{ $user->id }}">
+
+                                                                <div class="text-center mb-3">
+                                                                    <img src="{{ $user->profile_information && $user->profile_information->profile_picture
+                                                ? asset('storage/' . $user->profile_information->profile_picture)
+                                                : ($user->avatar
+                                                    ? asset('storage/' . $user->avatar)
+                                                    : asset('sneat/img/avatars/1.png')) }}"
+                                                                        class="rounded-circle mb-2"
+                                                                        width="70"
+                                                                        height="70">
+
+                                                                    <h6 class="mb-0">{{ $user->name }}</h6>
+                                                                    <small class="text-muted">{{ $user->email }}</small>
+                                                                </div>
+
+                                                                <hr>
+
+                                                                <div class="mb-3">
+                                                                    <label class="form-label">Transaction Type</label>
+                                                                    <select name="type" class="form-select" required>
+                                                                        <option value="">Select Type</option>
+                                                                        <option value="cash_in">Cash In</option>
+                                                                    </select>
+                                                                </div>
+
+                                                                <div class="mb-3">
+                                                                    <label class="form-label">Amount</label>
+                                                                    <div class="input-group">
+                                                                        <span class="input-group-text">₱</span>
+                                                                        <input type="number" name="amount" step="0.01" class="form-control" required>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="mb-3">
+                                                                    <label class="form-label">Transaction Date</label>
+                                                                    <input type="date" name="transaction_date"
+                                                                        id="transaction_date_{{ $user->id }}"
+                                                                        class="form-control" required>
+                                                                </div>
+
+                                                                <div class="mb-2">
+                                                                    <label class="form-label">Note</label>
+                                                                    <input type="text" name="note" class="form-control" placeholder="Optional">
+                                                                </div>
+
+                                                            </div>
+
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                    data-bs-dismiss="modal">Cancel</button>
+
+                                                                <button type="submit" class="btn btn-success">
+                                                                    Submit Transaction
+                                                                </button>
+                                                            </div>
+
+                                                        </form>
+
+                                                    </div>
+                                                </div>
                                             </div>
 
                                             @empty

@@ -92,7 +92,7 @@
                         </li>
 
                         <li class="menu-item {{ $SubActiveTab === 'interest' ? 'active' : '' }}">
-                            <a href="" class="menu-link">
+                            <a href="{{ route('users.wallet.viewInterest') }}" class="menu-link">
                                 <div data-i18n="Without navbar">View interest</div>
                             </a>
                         </li>
