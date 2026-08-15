@@ -417,8 +417,8 @@
                              <div class="col-12 col-md-4 col-lg-3">
                                 <div class="card shadow-sm border-0 h-100">
                                     <div class="card-body text-center">
-                                        <div class="mb-3 text-danger">
-                                            <i class="fa-solid fa-money-bill fs-1"></i>
+                                        <div class="mb-3 text-dark">
+                                            <i class="fa-solid fa-circle-check fs-1"></i>
                                         </div>
                                         <h6 class="text-muted">Total Loans Interest</h6>
 

@@ -57,6 +57,29 @@ class ApplicantsController extends Controller
 
         // dd($messages);
 
+        $interestTransactions = DB::table('loans')
+            ->where('user_id', $accounts->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $paidAmount = $interestTransactions->sum('paid_amount');
+
+        $totalAmountLoan = DB::table('loans')
+            ->where('user_id', $accounts->id)
+            ->sum('interest');
+
+        $paidAmountLoan = DB::table('loans')
+            ->where('user_id', $accounts->id)
+            ->sum('paid_amount');
+
+        $remainingInterest = DB::table('loans')
+            ->where('user_id', $accounts->id)
+            ->sum('remaining_interest');
+        
+        $paidPrincipal = DB::table('loans')
+            ->where('user_id', $accounts->id)
+            ->sum('paid_principal');
+
         $unreadCount = Messages::where(function ($query) use ($accounts) {
             $query->where('receiver_id', $accounts->id) //FIXED
                 ->orWhereNull('receiver_id');
@@ -73,7 +96,12 @@ class ApplicantsController extends Controller
             'nextdate' => $nextDate ? Carbon::parse($nextDate->date)->format('F d, Y') : null,
             'totalAmount' => $totalAmount,
             'messages' => $messages,
-            'unreadCount' => $unreadCount
+            'unreadCount' => $unreadCount,
+            'paidAmount' => $paidAmount,
+            'totalAmountLoan' => $totalAmountLoan,
+            'paidAmountLoan' => $paidAmountLoan,
+            'remainingInterest' => $remainingInterest,
+            'paidPrincipal' => $paidPrincipal
         ]);
     }
 
@@ -554,7 +582,7 @@ class ApplicantsController extends Controller
             $interestTransactions->sum('interest')
                 - $interestTransactions->sum('paid_amount')
         );
-        
+
         // Unread messages
         $unreadCount = Messages::where(function ($query) use ($userId) {
             $query->where('receiver_id', $userId)

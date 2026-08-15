@@ -393,26 +393,33 @@
               <div class="col-12 col-md-4 col-lg-3">
                 <div class="card shadow-sm border-0 h-100 animate__animated animate__bounceIn hover-card">
                   <div class="card-body text-center">
+
                     <div class="mb-3 text-warning">
                       <i class="fa-solid fa-clock fs-1"></i>
                     </div>
+
                     <h6 class="text-muted">Next Impoks Date</h6>
+
                     <h2 class="fw-bold">
                       @if(!empty($nextdate))
-                      {{ $nextdate }}
+                      {{ \Carbon\Carbon::parse($nextdate)->format('F d, Y') }}
                       @else
                       No date has been updated
                       @endif
                     </h2>
-                    <small class="text-muted">Next Impoks</small>
+
+                    <small class="text-muted">
+                      Next Impoks — Closing Time: 5:00 PM
+                    </small>
 
                     @if(!empty($nextdate))
                     <div class="mt-2 fw-semibold text-warning"
                       data-countdown
-                      data-date="{{ \Carbon\Carbon::parse($nextdate)->format('Y-m-d H:i:s') }}">
+                      data-date="{{ \Carbon\Carbon::parse($nextdate)->format('Y-m-d') }}">
                       Calculating...
                     </div>
                     @endif
+
                   </div>
                 </div>
               </div>
@@ -445,320 +452,397 @@
                 </div>
               </div>
 
-              <!-- Failed / Rejected -->
-              <div class="col-12 col-md-4 col-lg-3">
+              <!-- Total Amount Loan -->
+              @if($paidAmountLoan < $totalAmountLoan)
+                <div class="col-12 col-md-4 col-lg-3">
                 <div class="card shadow-sm border-0 h-100 animate__animated animate__bounceIn hover-card">
                   <div class="card-body text-center">
+
                     <div class="mb-3 text-danger">
                       <i class="fa-solid fa-scale-balanced fs-1"></i>
                     </div>
+
                     <h6 class="text-muted">Loans</h6>
-                    <h2 class="fw-bold">&#8369; {{ number_format($totalAmount) }}</h2>
-                    <small class="text-muted">Loans transactions</small>
-                  </div>
-                </div>
-              </div>
 
-            </div>
+                    <h2 class="fw-bold">
+                      ₱ {{ number_format($totalAmount) }}
+                    </h2>
 
-            <!-- Quick Actions -->
-            <div class="row mt-4">
-              <div class="col-12">
-                <div class="card shadow-sm">
-                  <div class="card-body text-center text-md-start">
-                    <h5 class="fw-bold mb-3">
-                      <i class="fa-solid fa-bolt text-success me-2"></i> Quick Actions
-                    </h5>
-
-                    <div class="d-flex flex-column flex-sm-row gap-2 justify-content-center justify-content-md-start">
-                      <!-- Apply for Permit -->
-                      <div class="flex-fill">
-                        <a href="" class="btn btn-primary w-100">
-                          <i class="fa-solid fa-clock-rotate-left me-1"></i> Transaction
-                        </a>
-                      </div>
-
-                      <!-- My Applications (Dropdown) -->
-                      <div class="dropdown flex-fill dropdown-hover">
-                        <button class="btn btn-outline-primary dropdown-toggle w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                          <i class="menu-icon fa-solid fa-wallet"></i> My Wallet
-                        </button>
-                        <ul class="dropdown-menu w-100">
-
-                          <li>
-                            <a class="dropdown-item" href="{{ route('applicants.wallet.viewWallet') }}">
-                              <i class="menu-icon fa-solid fa-scale-balanced me-1"></i> Balance
-                            </a>
-                          </li>
-
-                          <li>
-                            <a class="dropdown-item" href="{{ route('applicants.wallet.viewInterest') }}">
-                              <i class="menu-icon fa-solid fa-chart-line me-1"></i> Interest
-                            </a>
-                          </li>
-
-                          <li>
-                            <a class="dropdown-item" href="{{ route('applicants.wallet.loans') }}">
-                              <i class="menu-icon fa-solid fa-file-invoice-dollar me-1"></i> Loans
-                            </a>
-                          </li>
-
-                        </ul>
-                      </div>
-
-                      <div class="flex-fill">
-                        <a href="{{ route('users.notifications.viewMessages') }}" class="btn btn-outline-warning w-100">
-                          <i class="fa-solid fa-bell me-1"></i> View Notifications
-                        </a>
-                      </div>
-                    </div>
+                    <small class="text-muted">
+                      Loans transactions
+                    </small>
 
                   </div>
                 </div>
+            </div>
+            @endif
+
+
+            {{-- REMAINING INTEREST CARD --}}
+            @if($remainingInterest > 0)
+            <div class="col-12 col-md-4 col-lg-3">
+              <div class="card shadow-sm border-0 h-100 animate__animated animate__bounceIn hover-card">
+                <div class="card-body text-center">
+
+                  <div class="mb-3 text-warning">
+                    <i class="fa-solid fa-percent fs-1"></i>
+                  </div>
+
+                  <h6 class="text-muted">Remaining Interest</h6>
+
+                  <h2 class="fw-bold text-warning">
+                    ₱ {{ number_format($remainingInterest, 2) }}
+                  </h2>
+
+                  <small class="text-muted">
+                    Interest remaining to be paid
+                  </small>
+
+                </div>
               </div>
             </div>
+            @endif
+
+            <!-- Paid Loan -->
+            <div class="col-12 col-md-4 col-lg-3">
+              <div class="card shadow-sm border-0 h-100 animate__animated animate__bounceIn hover-card">
+                <div class="card-body text-center">
+                  <div class="mb-3 text-info">
+                    <i class="fa-solid fa-hand-holding-dollar fs-1"></i>
+                  </div>
+                  <h6 class="text-muted">Loan Paid Amount</h6>
+                  <h2 class="fw-bold">&#8369; {{ number_format($paidAmount) }}</h2>
+                  <small class="text-muted">Loans transactions</small>
+                </div>
+              </div>
+            </div>
+
+            <!-- Paid Principal -->
+            @if($paidPrincipal > 0)
+            <!-- Paid Principal -->
+            <div class="col-12 col-md-4 col-lg-3">
+              <div class="card shadow-sm border-0 h-100 animate__animated animate__bounceIn hover-card">
+                <div class="card-body text-center">
+
+                  <div class="mb-3 text-success">
+                    <i class="fa-solid fa-hand-holding-dollar fs-1"></i>
+                  </div>
+
+                  <h6 class="text-muted">Loan Paid Principal</h6>
+
+                  <h2 class="fw-bold">
+                    ₱ {{ number_format($paidPrincipal, 2) }}
+                  </h2>
+
+                  <small class="text-muted">
+                    Loans transactions
+                  </small>
+
+                </div>
+              </div>
+            </div>
+            @endif
 
           </div>
+
+          <!-- Quick Actions -->
+          <div class="row mt-4">
+            <div class="col-12">
+              <div class="card shadow-sm">
+                <div class="card-body text-center text-md-start">
+                  <h5 class="fw-bold mb-3">
+                    <i class="fa-solid fa-bolt text-success me-2"></i> Quick Actions
+                  </h5>
+
+                  <div class="d-flex flex-column flex-sm-row gap-2 justify-content-center justify-content-md-start">
+                    <!-- Apply for Permit -->
+                    <div class="flex-fill">
+                      <a href="" class="btn btn-primary w-100">
+                        <i class="fa-solid fa-clock-rotate-left me-1"></i> Transaction
+                      </a>
+                    </div>
+
+                    <!-- My Applications (Dropdown) -->
+                    <div class="dropdown flex-fill dropdown-hover">
+                      <button class="btn btn-outline-primary dropdown-toggle w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="menu-icon fa-solid fa-wallet"></i> My Wallet
+                      </button>
+                      <ul class="dropdown-menu w-100">
+
+                        <li>
+                          <a class="dropdown-item" href="{{ route('applicants.wallet.viewWallet') }}">
+                            <i class="menu-icon fa-solid fa-scale-balanced me-1"></i> Balance
+                          </a>
+                        </li>
+
+                        <li>
+                          <a class="dropdown-item" href="{{ route('applicants.wallet.viewInterest') }}">
+                            <i class="menu-icon fa-solid fa-chart-line me-1"></i> Interest
+                          </a>
+                        </li>
+
+                        <li>
+                          <a class="dropdown-item" href="{{ route('applicants.wallet.loans') }}">
+                            <i class="menu-icon fa-solid fa-file-invoice-dollar me-1"></i> Loans
+                          </a>
+                        </li>
+
+                      </ul>
+                    </div>
+
+                    <div class="flex-fill">
+                      <a href="{{ route('users.notifications.viewMessages') }}" class="btn btn-outline-warning w-100">
+                        <i class="fa-solid fa-bell me-1"></i> View Notifications
+                      </a>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
-
-        <!-- Footer -->
-        <footer class="content-footer footer bg-footer-theme mt-4">
-          <div
-            class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column text-center text-md-start">
-            <div class="mb-2 mb-md-0">
-              ©
-              <script>
-                document.write(new Date().getFullYear());
-              </script>,
-              <span class="fw-bold text-primary">Impoks Management System</span>
-            </div>
-            <div>
-              <a href="#" class="footer-link me-3" data-bs-toggle="modal" data-bs-target="#documentationModal">
-                Documentation
-              </a>
-
-              <!-- Documentation Modal -->
-              <div class="modal fade" id="documentationModal" tabindex="-1" aria-labelledby="documentationModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg modal-dialog-centered">
-                  <div class="modal-content border-0 shadow">
-
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="documentationModalLabel">
-                        Documentation
-                      </h5>
-
-                      <button type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close">
-                      </button>
-                    </div>
-
-                    <div class="modal-body">
-
-                      <h6 class="fw-bold">Impoks Management System</h6>
-
-                      <p class="text-muted">
-                        Welcome to the Impoks Management System documentation.
-                        This section provides basic information about using the system.
-                      </p>
-
-                      <hr>
-
-                      <h6 class="fw-bold">Getting Started</h6>
-                      <p>
-                        Log in using your registered account credentials to access
-                        the features and services available to you.
-                      </p>
-
-                      <h6 class="fw-bold">Account</h6>
-                      <p>
-                        You can update your profile information, change your password,
-                        and manage your account settings from the Account Settings page.
-                      </p>
-
-                      <h6 class="fw-bold">Application</h6>
-                      <p>
-                        Applicants can view their application information, monitor
-                        application status, and access available system services.
-                      </p>
-
-                    </div>
-
-                    <div class="modal-footer">
-                      <button type="button"
-                        class="btn btn-secondary"
-                        data-bs-dismiss="modal">
-                        Close
-                      </button>
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-              <!-- End of Modal -->
-
-
-              <a href="#" class="footer-link me-3"
-                data-bs-toggle="modal"
-                data-bs-target="#supportModal">
-                Support
-              </a>
-
-              <!-- Modal -->
-
-              <div class="modal fade" id="supportModal" tabindex="-1"
-                aria-labelledby="supportModalLabel" aria-hidden="true">
-
-                <div class="modal-dialog modal-dialog-centered">
-                  <div class="modal-content border-0 shadow">
-
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="supportModalLabel">
-                        Support
-                      </h5>
-
-                      <button type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close">
-                      </button>
-                    </div>
-
-                    <div class="modal-body">
-
-                      <p class="text-muted">
-                        Need help? Please contact our support team using
-                        the information below.
-                      </p>
-
-                      <div class="mb-3">
-                        <strong>Email</strong>
-                        <p class="mb-0 text-muted">
-                          jaspergatila2@gmail.com
-                        </p>
-                      </div>
-
-                      <div class="mb-3">
-                        <strong>Phone</strong>
-                        <p class="mb-0 text-muted">
-                          +63 900 000 0000
-                        </p>
-                      </div>
-
-                      <div>
-                        <strong>Support Hours</strong>
-                        <p class="mb-0 text-muted">
-                          Monday – Friday, 8:00 AM – 5:00 PM
-                        </p>
-                      </div>
-
-                    </div>
-
-                    <div class="modal-footer">
-                      <button type="button"
-                        class="btn btn-secondary"
-                        data-bs-dismiss="modal">
-                        Close
-                      </button>
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-              <!-- End Of Modal -->
-
-
-              <a href="#" class="footer-link"
-                data-bs-toggle="modal"
-                data-bs-target="#contactModal">
-                Contact
-              </a>
-
-              <!-- Modal -->
-              <div class="modal fade" id="contactModal" tabindex="-1"
-                aria-labelledby="contactModalLabel" aria-hidden="true">
-
-                <div class="modal-dialog modal-dialog-centered">
-                  <div class="modal-content border-0 shadow">
-
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="contactModalLabel">
-                        Contact Us
-                      </h5>
-
-                      <button type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close">
-                      </button>
-                    </div>
-
-                    <div class="modal-body">
-
-                      <p class="text-muted">
-                        If you have any questions or concerns, you may
-                        contact us through the information below.
-                      </p>
-
-                      <div class="mb-3">
-                        <strong>Office</strong>
-                        <p class="mb-0 text-muted">
-                          Impoks Management System
-                        </p>
-                      </div>
-
-                      <div class="mb-3">
-                        <strong>Email</strong>
-                        <p class="mb-0 text-muted">
-                          info@example.com
-                        </p>
-                      </div>
-
-                      <div class="mb-3">
-                        <strong>Phone</strong>
-                        <p class="mb-0 text-muted">
-                          +63 900 000 0000
-                        </p>
-                      </div>
-
-                      <div>
-                        <strong>Address</strong>
-                        <p class="mb-0 text-muted">
-                          Philippines
-                        </p>
-                      </div>
-
-                    </div>
-
-                    <div class="modal-footer">
-                      <button type="button"
-                        class="btn btn-secondary"
-                        data-bs-dismiss="modal">
-                        Close
-                      </button>
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-              <!-- End Of Modal -->
-            </div>
-          </div>
-        </footer>
-        <!-- / Footer -->
-
-        <div class="content-backdrop fade"></div>
       </div>
 
+      <!-- Footer -->
+      <footer class="content-footer footer bg-footer-theme mt-4">
+        <div
+          class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column text-center text-md-start">
+          <div class="mb-2 mb-md-0">
+            ©
+            <script>
+              document.write(new Date().getFullYear());
+            </script>,
+            <span class="fw-bold text-primary">Impoks Management System</span>
+          </div>
+          <div>
+            <a href="#" class="footer-link me-3" data-bs-toggle="modal" data-bs-target="#documentationModal">
+              Documentation
+            </a>
 
-      <!-- Content wrapper -->
+            <!-- Documentation Modal -->
+            <div class="modal fade" id="documentationModal" tabindex="-1" aria-labelledby="documentationModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content border-0 shadow">
+
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="documentationModalLabel">
+                      Documentation
+                    </h5>
+
+                    <button type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close">
+                    </button>
+                  </div>
+
+                  <div class="modal-body">
+
+                    <h6 class="fw-bold">Impoks Management System</h6>
+
+                    <p class="text-muted">
+                      Welcome to the Impoks Management System documentation.
+                      This section provides basic information about using the system.
+                    </p>
+
+                    <hr>
+
+                    <h6 class="fw-bold">Getting Started</h6>
+                    <p>
+                      Log in using your registered account credentials to access
+                      the features and services available to you.
+                    </p>
+
+                    <h6 class="fw-bold">Account</h6>
+                    <p>
+                      You can update your profile information, change your password,
+                      and manage your account settings from the Account Settings page.
+                    </p>
+
+                    <h6 class="fw-bold">Application</h6>
+                    <p>
+                      Applicants can view their application information, monitor
+                      application status, and access available system services.
+                    </p>
+
+                  </div>
+
+                  <div class="modal-footer">
+                    <button type="button"
+                      class="btn btn-secondary"
+                      data-bs-dismiss="modal">
+                      Close
+                    </button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <!-- End of Modal -->
+
+
+            <a href="#" class="footer-link me-3"
+              data-bs-toggle="modal"
+              data-bs-target="#supportModal">
+              Support
+            </a>
+
+            <!-- Modal -->
+
+            <div class="modal fade" id="supportModal" tabindex="-1"
+              aria-labelledby="supportModalLabel" aria-hidden="true">
+
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow">
+
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="supportModalLabel">
+                      Support
+                    </h5>
+
+                    <button type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close">
+                    </button>
+                  </div>
+
+                  <div class="modal-body">
+
+                    <p class="text-muted">
+                      Need help? Please contact our support team using
+                      the information below.
+                    </p>
+
+                    <div class="mb-3">
+                      <strong>Email</strong>
+                      <p class="mb-0 text-muted">
+                        jaspergatila2@gmail.com
+                      </p>
+                    </div>
+
+                    <div class="mb-3">
+                      <strong>Phone</strong>
+                      <p class="mb-0 text-muted">
+                        +63 900 000 0000
+                      </p>
+                    </div>
+
+                    <div>
+                      <strong>Support Hours</strong>
+                      <p class="mb-0 text-muted">
+                        Monday – Friday, 8:00 AM – 5:00 PM
+                      </p>
+                    </div>
+
+                  </div>
+
+                  <div class="modal-footer">
+                    <button type="button"
+                      class="btn btn-secondary"
+                      data-bs-dismiss="modal">
+                      Close
+                    </button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <!-- End Of Modal -->
+
+
+            <a href="#" class="footer-link"
+              data-bs-toggle="modal"
+              data-bs-target="#contactModal">
+              Contact
+            </a>
+
+            <!-- Modal -->
+            <div class="modal fade" id="contactModal" tabindex="-1"
+              aria-labelledby="contactModalLabel" aria-hidden="true">
+
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow">
+
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="contactModalLabel">
+                      Contact Us
+                    </h5>
+
+                    <button type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close">
+                    </button>
+                  </div>
+
+                  <div class="modal-body">
+
+                    <p class="text-muted">
+                      If you have any questions or concerns, you may
+                      contact us through the information below.
+                    </p>
+
+                    <div class="mb-3">
+                      <strong>Office</strong>
+                      <p class="mb-0 text-muted">
+                        Impoks Management System
+                      </p>
+                    </div>
+
+                    <div class="mb-3">
+                      <strong>Email</strong>
+                      <p class="mb-0 text-muted">
+                        info@example.com
+                      </p>
+                    </div>
+
+                    <div class="mb-3">
+                      <strong>Phone</strong>
+                      <p class="mb-0 text-muted">
+                        +63 900 000 0000
+                      </p>
+                    </div>
+
+                    <div>
+                      <strong>Address</strong>
+                      <p class="mb-0 text-muted">
+                        Philippines
+                      </p>
+                    </div>
+
+                  </div>
+
+                  <div class="modal-footer">
+                    <button type="button"
+                      class="btn btn-secondary"
+                      data-bs-dismiss="modal">
+                      Close
+                    </button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <!-- End Of Modal -->
+          </div>
+        </div>
+      </footer>
+      <!-- / Footer -->
+
+      <div class="content-backdrop fade"></div>
     </div>
-    <!-- / Layout page -->
-  </div>
 
-  <!-- Overlay -->
-  <div class="layout-overlay layout-menu-toggle"></div>
+
+    <!-- Content wrapper -->
+  </div>
+  <!-- / Layout page -->
+</div>
+
+<!-- Overlay -->
+<div class="layout-overlay layout-menu-toggle"></div>
 </div>
 <!-- / Layout wrapper -->
 @endsection
