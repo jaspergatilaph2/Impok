@@ -523,4 +523,68 @@ class ApplicantsController extends Controller
             ->back()
             ->with('success', 'Password updated successfully.');
     }
+
+    public function loanInterest()
+    {
+        $userId = auth()->id();
+
+        // Get the user's loans
+        $interestTransactions = DB::table('loans')
+            ->where('user_id', $userId)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        // Calculate interest
+        $loanInterest = $interestTransactions->sum('interest');
+
+        // Calculate paid interest
+        $paidInterest = $interestTransactions->sum('paid_interest');
+
+        // Calculate remaining interest
+        $remainingInterest = $interestTransactions->sum('remaining_interest');
+
+        $paidAmount = $interestTransactions->sum('paid_amount');
+
+        $paidPrincipal = $interestTransactions->sum('paid_principal');
+
+        $total_amount = $interestTransactions->sum('total_amount');
+
+        $interest = max(
+            0,
+            $interestTransactions->sum('interest')
+                - $interestTransactions->sum('paid_amount')
+        );
+        
+        // Unread messages
+        $unreadCount = Messages::where(function ($query) use ($userId) {
+            $query->where('receiver_id', $userId)
+                ->orWhereNull('receiver_id');
+        })
+            ->where('is_read', false)
+            ->count();
+
+        // Recent messages
+        $messages = Messages::where(function ($query) use ($userId) {
+            $query->where('receiver_id', $userId)
+                ->orWhereNull('receiver_id');
+        })
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get();
+
+        return view('Applicants.Wallet.loan-interest', [
+            'transactions' => $interestTransactions,
+            'loanInterest' => $loanInterest,
+            'paidInterest' => $paidInterest,
+            'remainingInterest' => $remainingInterest,
+            'ActiveTabMenu' => 'wallet',
+            'SubActiveTab' => 'loan-interest',
+            'messages' => $messages,
+            'unreadCount' => $unreadCount,
+            'paidAmount' => $paidAmount,
+            'paidPrincipal' => $paidPrincipal,
+            'total_amount' => $total_amount,
+            'interest' => $interest
+        ]);
+    }
 }

@@ -49,7 +49,7 @@
 
                     </ul>
                 </li>
-                <li class="menu-item ">
+                <li class="menu-item">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon fa-solid fa-wallet"></i>
                         <div data-i18n="Layouts">Wallet Management</div>
@@ -62,9 +62,21 @@
                             </a>
                         </li>
 
-                        <li class="menu-item ">
+                        <li class="menu-item">
                             <a href="{{ route('users.wallet.viewAmount') }}" class="menu-link">
                                 <div data-i18n="Without navbar">View cash in transactions</div>
+                            </a>
+                        </li>
+
+                        <li class="menu-item">
+                            <a href="{{ route('users.wallet.viewInterest') }}" class="menu-link">
+                                <div data-i18n="Without navbar">View interest</div>
+                            </a>
+                        </li>
+
+                        <li class="menu-item">
+                            <a href="{{ route('users.wallet.viewLoans') }}" class="menu-link">
+                                <div data-i18n="Without navbar">View loan transaction</div>
                             </a>
                         </li>
                     </ul>

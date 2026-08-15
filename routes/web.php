@@ -74,6 +74,8 @@ Route::group(['middleware' => ['auth', 'IfIMSUsers']], function () {
             ->name('viewInterest');
         Route::get('/loans', [ApplicantsController::class, 'userLoans'])
             ->name('loans');
+        Route::get('/loan-interest', [ApplicantsController::class, 'loanInterest'])
+            ->name('loanInterest');
     });
 
     Route::prefix('/transactions')->name('applicants.transactions.')->group(function () {
