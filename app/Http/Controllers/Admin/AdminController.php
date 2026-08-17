@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
 use App\Models\Wallet;
 use App\Models\Loan;
 use Carbon\Carbon;
@@ -160,23 +161,44 @@ class AdminController extends Controller
                 ]);
             }
 
-            $balance = Wallet::where('user_id', $request->user_id)->sum('amount');
+            $balance = Wallet::where('user_id', $request->user_id)
+                ->sum('amount');
 
-            // ADMIN ACTIVITY LOG: CASH IN PROCESSED
+            /*
+        |--------------------------------------------------------------------------
+        | Get User
+        |--------------------------------------------------------------------------
+        */
+            $user = User::find($request->user_id);
+
+            /*
+        |--------------------------------------------------------------------------
+        | ADMIN ACTIVITY LOG: CASH IN PROCESSED
+        |--------------------------------------------------------------------------
+        */
             AdminLogs::create([
                 'admin_id' => auth()->id(),
-                'description' => 'Processed cash-in of ₱' . number_format($request->amount, 2) .
-                    ' for user #' . $request->user_id .
-                    ($interest > 0 ? ' (interest earned: ₱' . number_format($interest, 2) . ')' : ' (no interest, first deposit)') .
+
+                'description' =>
+                'Processed cash-in of ₱' .
+                    number_format($request->amount, 2) .
+                    ' for ' .
+                    ($user->name ?? 'Unknown User') .
+                    ($interest > 0
+                        ? ' (interest earned: ₱' . number_format($interest, 2) . ')'
+                        : ' (no interest, first deposit)') .
                     '.',
             ]);
 
             return response()->json([
                 'success' => true,
+
                 'message' => $hasPreviousCashIn
                     ? 'Cash in successful with interest!'
                     : 'Cash in successful (no interest for first deposit).',
+
                 'interest_earned' => number_format($interest, 2),
+
                 'new_balance' => number_format($balance, 2)
             ]);
         } catch (\Exception $e) {
@@ -841,6 +863,106 @@ class AdminController extends Controller
             'Loan payment of ₱' .
                 number_format($paymentAmount, 2) .
                 ' received successfully.'
+        );
+    }
+
+    public function viewSettings()
+    {
+        $accounts = auth()->user();
+        return view('Admin.settings.settings', compact('accounts'), [
+            'ActiveTabMenu' => 'View',
+            'SubActiveTab' => 'settings'
+        ]);
+    }
+
+    // Updating the pass of the admin
+    public function passwordUpdate(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required',
+            'new_password' => 'required|min:8|confirmed',
+        ]);
+
+        $user = auth()->user();
+
+        if (!Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'Current password is incorrect.']);
+        }
+
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        // Log the password change
+        AdminLogs::create([
+            'admin_id' => $user->id,
+            'description' => 'Admin updated their account password.',
+        ]);
+
+        return back()->with('success', 'Password updated successfully!');
+    }
+
+    public function ViewAllLoanInterest()
+    {
+        $accounts =  User::with([
+            'profile_information',
+            'loans'
+        ])->where('role', 'user')->paginate(10);
+
+        foreach ($accounts as $account) {
+
+            $loans = $account->loans
+                ->where('status', 'approved');
+
+            $account->total_amount = $loans->sum('total_amount');
+
+            $account->interest = $loans->sum('interest');
+
+            $account->paid_amount = $loans->sum('paid_amount');
+
+            $paidInterest = 0;
+            $paidPrincipal = 0;
+
+            foreach ($loans as $loan) {
+
+                $loanInterest = (float) $loan->interest;
+                $loanPrincipal = (float) $loan->amount;
+                $loanPaidAmount = (float) $loan->paid_amount;
+
+                $loanPaidInterest = min(
+                    $loanPaidAmount,
+                    $loanInterest
+                );
+
+                $loanPaidPrincipal = max(
+                    0,
+                    $loanPaidAmount - $loanPaidInterest
+                );
+
+                $paidInterest += $loanPaidInterest;
+
+                $paidPrincipal += min(
+                    $loanPaidPrincipal,
+                    $loanPrincipal
+                );
+            }
+
+            $account->paid_interest = $paidInterest;
+
+            $account->paid_principal = $paidPrincipal;
+
+            $account->remaining_interest = max(
+                0,
+                $account->interest - $account->paid_interest
+            );
+        }
+
+        return view(
+            'Admin.transactions.all-loan-interest',
+            compact('accounts'),
+            [
+                'ActiveTabMenu' => 'interest',
+                'SubActiveTab' => 'view'
+            ]
         );
     }
 }

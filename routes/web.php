@@ -134,6 +134,8 @@ Route::group(['middleware' => ['auth', 'IfIMSAdmin']], function () {
             ->name('adminViewInterest');
         Route::get('/all-loans', [AdminController::class, 'ViewAllLoans'])
             ->name('viewAllLoans');
+        Route::get('/loan-interest', [AdminController::class, 'ViewAllLoanInterest'])
+            ->name('viewAllLoanInterest');
     });
 
     Route::prefix('/accounts')->name('users.accounts.')->group(function () {
@@ -143,6 +145,10 @@ Route::group(['middleware' => ['auth', 'IfIMSAdmin']], function () {
             ->name('updateAccounts');
         Route::put('/updated-accounts', [AdminController::class, 'updatedAccounts'])
             ->name('updatedAccounts');
+        Route::get('/settings', [AdminController::class, 'viewSettings'])
+            ->name('viewSettings');
+        Route::put('/password-update', [AdminController::class, 'passwordUpdate'])
+            ->name('passwordUpdate');
     });
 
     Route::prefix('/admin-calendar')->name('admin.calendar.')->group(function () {

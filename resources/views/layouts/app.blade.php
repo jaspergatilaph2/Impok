@@ -171,6 +171,7 @@
     <script src="{{ asset('js/admin/user-loan-search.js') }}"></script>
     <script src="{{ asset('js/user-new-pass.js')}}"></script>
     <script src="{{ asset('js/user-date-countdown.js')}}"></script>
+    <script src="{{ asset('js/admin/admin-change-pass.js')}}"></script>
 </body>
 
 </html>

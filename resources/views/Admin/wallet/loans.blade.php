@@ -93,9 +93,11 @@
 
                         <li class="menu-item">
                             <a href="{{ route('users.wallet.viewInterest') }}" class="menu-link">
-                                <div data-i18n="Without navbar">View interest</div>
+                                <div data-i18n="Without navbar">View interest transactions</div>
                             </a>
                         </li>
+
+
 
                         <li class="menu-item {{ $SubActiveTab === 'view' ? 'active' : '' }}">
                             <a href="{{ route('users.wallet.viewLoans') }}" class="menu-link">
@@ -132,6 +134,12 @@
                         </li>
 
                         <li class="menu-item">
+                            <a href="{{ route('users.transactions.viewAllLoanInterest') }}" class="menu-link">
+                                <div data-i18n="Without navbar">All loans interest transactions</div>
+                            </a>
+                        </li>
+
+                        <li class="menu-item">
                             <a href="{{ route('admin.calendar.viewCalendar') }}" class="menu-link">
                                 <div data-i18n="Without navbar">Date Of Transactions</div>
                             </a>
@@ -158,6 +166,11 @@
                         <li class="menu-item">
                             <a href="{{ route('users.accounts.updateAccounts') }}" class="menu-link">
                                 <div data-i18n="Notifications">Update Account</div>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="{{ route('users.accounts.viewSettings') }}" class="menu-link">
+                                <div data-i18n="Notifications">Settings</div>
                             </a>
                         </li>
                     </ul>

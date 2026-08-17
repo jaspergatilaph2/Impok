@@ -139,6 +139,12 @@
                         </li>
 
                         <li class="menu-item">
+                            <a href="{{ route('users.transactions.viewAllLoanInterest') }}" class="menu-link">
+                                <div data-i18n="Without navbar">All loans interest transactions</div>
+                            </a>
+                        </li>
+
+                        <li class="menu-item">
                             <a href="{{ route('admin.calendar.viewCalendar') }}" class="menu-link">
                                 <div data-i18n="Without navbar">Date Of Transactions</div>
                             </a>
@@ -166,6 +172,12 @@
                         <li class="menu-item">
                             <a href="{{route('users.accounts.updateAccounts')}}" class="menu-link">
                                 <div data-i18n="Notifications">Update Account</div>
+                            </a>
+                        </li>
+
+                        <li class="menu-item">
+                            <a href="{{ route('users.accounts.viewSettings') }}" class="menu-link">
+                                <div data-i18n="Notifications">Settings</div>
                             </a>
                         </li>
                     </ul>
@@ -414,7 +426,7 @@
 
 
                             <!-- Loan Interest -->
-                             <div class="col-12 col-md-4 col-lg-3">
+                            <div class="col-12 col-md-4 col-lg-3">
                                 <div class="card shadow-sm border-0 h-100">
                                     <div class="card-body text-center">
                                         <div class="mb-3 text-dark">
