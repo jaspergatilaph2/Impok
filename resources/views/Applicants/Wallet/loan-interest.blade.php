@@ -122,7 +122,7 @@
 
                         <li class="menu-item">
                             <a href="{{ route('applicants.settings.viewSettings') }}" class="menu-link">
-                                <div data-i18n="Notifications">Update Account</div>
+                                <div data-i18n="Notifications">Settings</div>
                             </a>
                         </li>
                     </ul>
@@ -344,190 +344,392 @@
                 <!-- Content -->
 
                 <div class="container-xxl flex-grow-1 container-p-y">
-                    <h4 class="fw-bold py-3 mb-4">
-                        <span class="text-muted fw-light">Loan Management /</span>
-                        Loan Interest
-                    </h4>
+
+                    <!-- PAGE HEADER -->
+                    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4">
+                        <div>
+                            <h4 class="fw-bold mb-1">
+                                <span class="text-muted fw-light">Loan Management /</span>
+                                Loan Interest
+                            </h4>
+
+                            <p class="text-muted mb-0">
+                                Review your loan interest, payments, principal contributions, and transaction history.
+                            </p>
+                        </div>
+                    </div>
 
                     <div class="row">
-                        <div class="col-md-12">
 
-                            <ul class="nav nav-pills flex-column flex-md-row mb-3">
+                        <div class="col-12">
+
+                            <!-- PAGE NAVIGATION -->
+                            <ul class="nav nav-pills flex-column flex-md-row mb-4">
                                 <li class="nav-item">
-                                    <a class="nav-link active" href="#">
-                                        <i class="bx bx-wallet me-1"></i>Loan Interest
+                                    <a class="nav-link active" href="javascript:void(0);">
+                                        <i class="bx bx-line-chart me-1"></i>
+                                        Loan Interest Overview
                                     </a>
                                 </li>
                             </ul>
 
-                            <!-- BALANCE CARD -->
-                            <div class="card mb-4">
-                                <h5 class="card-header">Interest Balance</h5>
-                                <hr class="my-0" />
+
+                            <!-- ========================================= -->
+                            <!-- FINANCIAL SUMMARY -->
+                            <!-- ========================================= -->
+
+                            <div class="row g-4 mb-4">
+
+                                <!-- Current Interest -->
+                                <div class="col-12 col-sm-6 col-xl-3">
+                                    <div class="card h-100 border-0 shadow-sm">
+                                        <div class="card-body">
+
+                                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                                <div>
+                                                    <span class="text-muted small fw-semibold text-uppercase">
+                                                        Current Interest
+                                                    </span>
+                                                </div>
+
+                                                <div class="avatar">
+                                                    <span class="avatar-initial rounded bg-label-warning">
+                                                        <i class="bx bx-line-chart fs-4"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <h4 class="fw-bold mb-1 text-warning">
+                                                ₱ {{ number_format($interest ?? 0, 2) }}
+                                            </h4>
+
+                                            <small class="text-muted">
+                                                Outstanding interest balance
+                                            </small>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <!-- Paid Interest -->
+                                <div class="col-12 col-sm-6 col-xl-3">
+                                    <div class="card h-100 border-0 shadow-sm">
+                                        <div class="card-body">
+
+                                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                                <div>
+                                                    <span class="text-muted small fw-semibold text-uppercase">
+                                                        Paid Interest
+                                                    </span>
+                                                </div>
+
+                                                <div class="avatar">
+                                                    <span class="avatar-initial rounded bg-label-success">
+                                                        <i class="bx bx-check-circle fs-4"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <h4 class="fw-bold mb-1 text-success">
+                                                ₱ {{ number_format($paidInterest ?? 0, 2) }}
+                                            </h4>
+
+                                            <small class="text-muted">
+                                                Total interest payments made
+                                            </small>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <!-- Remaining Interest -->
+                                <div class="col-12 col-sm-6 col-xl-3">
+                                    <div class="card h-100 border-0 shadow-sm">
+                                        <div class="card-body">
+
+                                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                                <div>
+                                                    <span class="text-muted small fw-semibold text-uppercase">
+                                                        Remaining Interest
+                                                    </span>
+                                                </div>
+
+                                                <div class="avatar">
+                                                    <span class="avatar-initial rounded bg-label-danger">
+                                                        <i class="bx bx-time-five fs-4"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <h4 class="fw-bold mb-1 text-danger">
+                                                ₱ {{ number_format($remainingInterest ?? 0, 2) }}
+                                            </h4>
+
+                                            <small class="text-muted">
+                                                Interest still due
+                                            </small>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <!-- Paid Principal -->
+                                <div class="col-12 col-sm-6 col-xl-3">
+                                    <div class="card h-100 border-0 shadow-sm">
+                                        <div class="card-body">
+
+                                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                                <div>
+                                                    <span class="text-muted small fw-semibold text-uppercase">
+                                                        Paid Principal
+                                                    </span>
+                                                </div>
+
+                                                <div class="avatar">
+                                                    <span class="avatar-initial rounded bg-label-info">
+                                                        <i class="bx bx-money fs-4"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <h4 class="fw-bold mb-1 text-info">
+                                                ₱ {{ number_format($paidPrincipal ?? 0, 2) }}
+                                            </h4>
+
+                                            <small class="text-muted">
+                                                Principal amount paid
+                                            </small>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <!-- ========================================= -->
+                            <!-- TOTAL PAID -->
+                            <!-- ========================================= -->
+
+                            <div class="card border-0 shadow-sm mb-4">
 
                                 <div class="card-body">
 
-                                    <!-- BALANCE DISPLAY ONLY -->
-                                    <div class="text-center">
-                                        <h6 class="text-muted">Current Balance Interest</h6>
+                                    <div class="row align-items-center">
 
-                                        <h1 class="fw-bold text-success">
-                                            ₱ {{ number_format($interest, 2) }}
-                                        </h1>
+                                        <div class="col-md-8">
 
-                                        <hr>
-                                        <h6 class="text-muted">Paid Interest</h6>
+                                            <div class="d-flex align-items-center">
 
-                                        <h1 class="fw-bold text-success">
-                                            ₱ {{ number_format($paidInterest, 2) }}
-                                        </h1>
+                                                <div class="avatar me-3">
+                                                    <span class="avatar-initial rounded bg-label-primary">
+                                                        <i class="bx bx-wallet fs-4"></i>
+                                                    </span>
+                                                </div>
 
-                                        <hr>
-                                        <h6 class="text-muted">Remaining Interest</h6>
+                                                <div>
+                                                    <h5 class="mb-1 fw-bold">
+                                                        Total Payments
+                                                    </h5>
 
-                                        <h1 class="fw-bold text-success">
-                                            ₱ {{ number_format($remainingInterest, 2) }}
-                                        </h1>
+                                                    <p class="text-muted mb-0">
+                                                        Total amount paid toward your loan obligations.
+                                                    </p>
+                                                </div>
 
-                                        <hr>
-                                        <h6 class="text-muted">Paid Amount</h6>
+                                            </div>
 
-                                        <h1 class="fw-bold text-success">
-                                            ₱ {{ number_format($paidAmount, 2) }}
-                                        </h1>
+                                        </div>
 
-                                        <hr>
-                                        <h6 class="text-muted">Paid Principal</h6>
+                                        <div class="col-md-4 text-md-end mt-3 mt-md-0">
 
-                                        <h1 class="fw-bold text-success">
-                                            ₱ {{ number_format($paidPrincipal, 2) }}
-                                        </h1>
-                                        <small class="text-muted">Available funds in your account</small>
+                                            <h3 class="fw-bold text-primary mb-0">
+                                                ₱ {{ number_format($paidAmount ?? 0, 2) }}
+                                            </h3>
+
+                                            <small class="text-muted">
+                                                Total Paid
+                                            </small>
+
+                                        </div>
+
                                     </div>
 
                                 </div>
 
                             </div>
 
-                            <!-- <div class="card mb-4">
-                                <h5 class="card-header">Paid Interest</h5>
-                                <hr class="my-0" />
 
-                                <div class="card-body">
-
-                                   
-                                    <div class="text-center">
-                                        <h6 class="text-muted">Current Balance Interest</h6>
-
-                                        <h1 class="fw-bold text-success">
-                                            ₱ {{ number_format($paidInterest, 2) }}
-                                        </h1>
-
-                                        <small class="text-muted">Available funds in your account</small>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                            <div class="card mb-4">
-                                <h5 class="card-header">Remaining Interest</h5>
-                                <hr class="my-0" />
-
-                                <div class="card-body">
-
-                                  
-                                    <div class="text-center">
-                                        <h6 class="text-muted">Current Balance Interest</h6>
-
-                                        <h1 class="fw-bold text-success">
-                                            ₱ {{ number_format($remainingInterest, 2) }}
-                                        </h1>
-
-                                        <small class="text-muted">Available funds in your account</small>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                            <div class="card mb-4">
-                                <h5 class="card-header">Paid Amount</h5>
-                                <hr class="my-0" />
-
-                                <div class="card-body">
-
-                                   
-                                    <div class="text-center">
-                                        <h6 class="text-muted">Current Balance Interest</h6>
-
-                                        <h1 class="fw-bold text-success">
-                                            ₱ {{ number_format($paidAmount, 2) }}
-                                        </h1>
-
-                                        <small class="text-muted">Available funds in your account</small>
-                                    </div>
-
-                                </div>
-
-                            </div> -->
-
-
+                            <!-- ========================================= -->
                             <!-- TRANSACTION HISTORY -->
-                            <div class="card mb-4">
-                                <h5 class="card-header">Transaction History</h5>
-                                <hr class="my-0" />
+                            <!-- ========================================= -->
 
-                                <div class="card-body">
+                            <div class="card border-0 shadow-sm mb-4">
 
-                                    <!-- PRINT BUTTON -->
-                                    <div class="mb-3 text-end no-print">
-                                        <button onclick="printTable()" class="btn btn-primary btn-sm me-2">
-                                            <i class="bx bx-printer"></i> Print Report
-                                        </button>
+                                <div class="card-header bg-transparent border-0 pt-4 px-4">
 
-                                        <button onclick="downloadPDF()" class="btn btn-danger btn-sm">
-                                            <i class="bx bx-download"></i> Save as PDF
-                                        </button>
+                                    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between">
+
+                                        <div>
+                                            <h5 class="fw-bold mb-1">
+                                                <i class="bx bx-history me-1"></i>
+                                                Transaction History
+                                            </h5>
+
+                                            <p class="text-muted small mb-0">
+                                                Review your recorded loan interest transactions.
+                                            </p>
+                                        </div>
+
+                                        <!-- REPORT ACTIONS -->
+                                        <div class="mt-3 mt-md-0 no-print">
+
+                                            <button
+                                                type="button"
+                                                onclick="printTable()"
+                                                class="btn btn-outline-primary btn-sm me-2">
+
+                                                <i class="bx bx-printer me-1"></i>
+                                                Print Report
+
+                                            </button>
+
+                                            <button
+                                                type="button"
+                                                onclick="downloadPDF()"
+                                                class="btn btn-primary btn-sm">
+
+                                                <i class="bx bx-file me-1"></i>
+                                                Download PDF
+
+                                            </button>
+
+                                        </div>
+
                                     </div>
 
-                                    <input type="hidden" id="userId" value="{{ str_pad(auth()->user()->id, 3, '0', STR_PAD_LEFT) }}">
+                                </div>
 
-                                    <!-- REPORT AREA -->
+
+                                <hr class="my-0">
+
+
+                                <div class="card-body p-4">
+
+                                    <!-- USER IDENTIFICATION -->
+                                    <input
+                                        type="hidden"
+                                        id="userId"
+                                        value="{{ str_pad(auth()->user()->id, 3, '0', STR_PAD_LEFT) }}">
+
+
+                                    <!-- ========================================= -->
+                                    <!-- PRINT / PDF REPORT -->
+                                    <!-- ========================================= -->
+
                                     <div id="printArea" class="report-container">
 
+                                        <!-- REPORT HEADER -->
+                                        <div class="text-center mb-4">
 
+                                            <h4 class="fw-bold mb-1 report-title">
+                                                Loan Interest Transaction Report
+                                            </h4>
 
-                                        <!-- HEADER -->
-                                        <div class="text-center mb-2">
-                                            <h4 class="fw-bold mb-0 report-title">Wallet Transaction Report</h4>
-                                            <small class="text-muted">Generated on {{ now()->format('F d, Y h:i A') }}</small>
+                                            <p class="text-muted small mb-0">
+                                                Generated on {{ now()->format('F d, Y h:i A') }}
+                                            </p>
+
                                         </div>
 
-                                        <!-- USER INFO -->
-                                        <div class="row mb-3">
-                                            <div class="col-12 col-md-6">
-                                                <strong>Name:</strong> {{ auth()->user()->name ?? 'N/A' }}
-                                            </div>
-                                            <div class="col-12 col-md-6 text-md-end">
-                                                <strong>ID:</strong> ID-{{ str_pad(auth()->user()->id, 3, '0', STR_PAD_LEFT) }}
-                                            </div>
+
+                                        <!-- CUSTOMER INFORMATION -->
+                                        <div class="row g-3 mb-4">
 
                                             <div class="col-12 col-md-6">
-                                                <strong>Email:</strong> {{ auth()->user()->email ?? 'N/A' }}
+
+                                                <div class="border rounded p-3 h-100">
+
+                                                    <small class="text-muted d-block mb-1">
+                                                        Account Name
+                                                    </small>
+
+                                                    <span class="fw-semibold">
+                                                        {{ auth()->user()->name ?? 'N/A' }}
+                                                    </span>
+
+                                                </div>
+
                                             </div>
+
+
+                                            <div class="col-12 col-md-6">
+
+                                                <div class="border rounded p-3 h-100">
+
+                                                    <small class="text-muted d-block mb-1">
+                                                        Account ID
+                                                    </small>
+
+                                                    <span class="fw-semibold">
+                                                        ID-{{ str_pad(auth()->user()->id, 3, '0', STR_PAD_LEFT) }}
+                                                    </span>
+
+                                                </div>
+
+                                            </div>
+
+
+                                            <div class="col-12">
+
+                                                <div class="border rounded p-3">
+
+                                                    <small class="text-muted d-block mb-1">
+                                                        Email Address
+                                                    </small>
+
+                                                    <span class="fw-semibold">
+                                                        {{ auth()->user()->email ?? 'N/A' }}
+                                                    </span>
+
+                                                </div>
+
+                                            </div>
+
                                         </div>
 
-                                        <!-- TABLE -->
+
+                                        <!-- ========================================= -->
+                                        <!-- TRANSACTION TABLE -->
+                                        <!-- ========================================= -->
+
                                         <div class="table-responsive">
-                                            <table class="table table-bordered table-sm">
-                                                <thead class="table-light text-center">
+
+                                            <table class="table table-bordered table-hover align-middle mb-0">
+
+                                                <thead class="table-light">
+
                                                     <tr>
-                                                        <th>Date</th>
-                                                        <th>Type</th>
-                                                        <th>Total Amount</th>
+
+                                                        <th class="text-center">
+                                                            Date
+                                                        </th>
+
+                                                        <th class="text-center">
+                                                            Transaction Type
+                                                        </th>
+
+                                                        <th class="text-end">
+                                                            Amount
+                                                        </th>
+
                                                     </tr>
+
                                                 </thead>
+
 
                                                 <tbody>
 
@@ -536,17 +738,25 @@
                                                     @foreach($transactions as $tx)
 
                                                     <tr>
-                                                        <td>
-                                                            {{ \Carbon\Carbon::parse($tx->transaction_date)->format('M d, Y') }}
-                                                        </td>
 
                                                         <td class="text-center">
-                                                            {{ $tx->type }}
+
+                                                            {{ \Carbon\Carbon::parse($tx->transaction_date)->format('M d, Y') }}
+
                                                         </td>
 
-                                                        <td class="text-end">
-                                                            ₱ {{ number_format($tx->total_amount, 2) }}
+
+                                                        <td class="text-center">
+                                                            {{ ucwords(str_replace('_', ' ', $tx->type)) }}
                                                         </td>
+
+
+                                                        <td class="text-end fw-semibold">
+
+                                                            ₱ {{ number_format($tx->total_amount, 2) }}
+
+                                                        </td>
+
                                                     </tr>
 
                                                     @endforeach
@@ -554,48 +764,108 @@
                                                     @else
 
                                                     <tr>
-                                                        <td colspan="3" class="text-center text-muted">
-                                                            No interest records found
+
+                                                        <td
+                                                            colspan="3"
+                                                            class="text-center text-muted py-5">
+
+                                                            <div class="mb-2">
+                                                                <i class="bx bx-receipt fs-1"></i>
+                                                            </div>
+
+                                                            <strong class="d-block mb-1">
+                                                                No Transactions Found
+                                                            </strong>
+
+                                                            <small>
+                                                                No loan interest transactions are currently available.
+                                                            </small>
+
                                                         </td>
+
                                                     </tr>
 
                                                     @endif
 
                                                 </tbody>
+
                                             </table>
+
                                         </div>
 
-                                        <!-- TOTAL -->
-                                        <div class="text-end mt-3">
-                                            <h6 class="fw-bold">
-                                                Total Balance: ₱ {{ number_format($total_amount ?? 0, 2) }}
-                                            </h6>
+
+                                        <!-- ========================================= -->
+                                        <!-- REPORT TOTAL -->
+                                        <!-- ========================================= -->
+
+                                        <div class="d-flex justify-content-end mt-4">
+
+                                            <div class="text-end">
+
+                                                <small class="text-muted d-block">
+                                                    Total Transaction Amount
+                                                </small>
+
+                                                <h5 class="fw-bold mb-0">
+                                                    ₱ {{ number_format($total_amount ?? 0, 2) }}
+                                                </h5>
+
+                                            </div>
+
                                         </div>
 
-                                        <!-- SIGNATURE -->
-                                        <div class="row mt-5">
-                                            <div class="col-6 text-center">
-                                                ___________________________<br>
-                                                <small>Prepared By</small>
-                                            </div>
+
+                                        <!-- ========================================= -->
+                                        <!-- SIGNATURES -->
+                                        <!-- ========================================= -->
+
+                                        <div class="row mt-5 pt-4">
 
                                             <div class="col-6 text-center">
-                                                ___________________________<br>
-                                                <small>Approved By</small>
+
+                                                <div class="px-3">
+
+                                                    <div class="border-bottom mb-2"
+                                                        style="height: 30px;">
+                                                    </div>
+
+                                                    <small class="text-muted">
+                                                        Prepared By
+                                                    </small>
+
+                                                </div>
+
                                             </div>
+
+
+                                            <div class="col-6 text-center">
+
+                                                <div class="px-3">
+
+                                                    <div class="border-bottom mb-2"
+                                                        style="height: 30px;">
+                                                    </div>
+
+                                                    <small class="text-muted">
+                                                        Approved By
+                                                    </small>
+
+                                                </div>
+
+                                            </div>
+
                                         </div>
 
                                     </div>
 
                                 </div>
 
-
-
-
                             </div>
+
                         </div>
 
                     </div>
+
                 </div>
             </div>
 

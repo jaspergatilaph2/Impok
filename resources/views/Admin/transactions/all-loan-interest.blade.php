@@ -537,6 +537,7 @@
 
 
                                                                 <!-- PAID AMOUNT -->
+                                                                @if(($user->paid_amount ?? 0) > 0)
                                                                 <div class="col-12 col-md-4">
 
                                                                     <div class="card bg-light border-0 h-100">
@@ -548,11 +549,7 @@
                                                                             </small>
 
                                                                             <h5 class="fw-bold text-success mb-0">
-
-                                                                                ₱ {{ number_format(
-                                            $user->paid_amount ?? 0
-                                        ) }}
-
+                                                                                ₱ {{ number_format($user->paid_amount ?? 0) }}
                                                                             </h5>
 
                                                                         </div>
@@ -560,9 +557,11 @@
                                                                     </div>
 
                                                                 </div>
+                                                                @endif
 
 
                                                                 <!-- REMAINING BALANCE -->
+                                                                <!-- @if($user->remaining_balance ?? 0 > 0)
                                                                 <div class="col-12 col-md-4">
 
                                                                     <div class="card bg-light border-0 h-100">
@@ -591,8 +590,40 @@
                                                                     </div>
 
                                                                 </div>
+                                                                @endif -->
+
+                                                                @if(($user->remaining_balance ?? 0) > 0)
+                                                                <div class="col-12 col-md-4">
+
+                                                                    <div class="card bg-light border-0 h-100">
+
+                                                                        <div class="card-body">
+
+                                                                            <small class="text-muted">
+                                                                                Remaining Balance
+                                                                            </small>
+
+                                                                            <h5 class="fw-bold text-danger mb-0">
+                                                                                ₱{{ number_format(
+                                            max(
+                                                0,
+                                                ($user->interest ?? 0)
+                                                -
+                                                ($user->paid_amount ?? 0)
+                                            )
+                                        ) }}
+
+                                                                            </h5>
+
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                </div>
+                                                                @endif
 
                                                                 <!-- Paid Principal -->
+                                                                @if(($user->paid_principal ?? 0) > 0)
                                                                 <div class="col-12 col-md-4">
 
                                                                     <div class="card bg-light border-0 h-100">
@@ -604,10 +635,7 @@
                                                                             </small>
 
                                                                             <h5 class="fw-bold text-info mb-0">
-
-                                                                                ₱ {{ number_format($user->paid_principal ?? 0
-                                        ) }}
-
+                                                                                ₱ {{ number_format($user->paid_principal ?? 0, 2) }}
                                                                             </h5>
 
                                                                         </div>
@@ -615,6 +643,7 @@
                                                                     </div>
 
                                                                 </div>
+                                                                @endif
 
                                                             </div>
 

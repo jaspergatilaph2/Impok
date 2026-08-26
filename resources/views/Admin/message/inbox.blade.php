@@ -139,6 +139,12 @@
                         </li>
 
                         <li class="menu-item">
+                            <a href="{{ route('users.transactions.viewAllLoanInterests') }}" class="menu-link">
+                                <div data-i18n="Without navbar">All loans interest transactions</div>
+                            </a>
+                        </li>
+
+                        <li class="menu-item">
                             <a href="{{ route('admin.calendar.viewCalendar') }}" class="menu-link">
                                 <div data-i18n="Without navbar">Date Of Transactions</div>
                             </a>

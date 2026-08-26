@@ -80,6 +80,12 @@
               </a>
             </li>
 
+            <li class="menu-item">
+              <a href="{{ route('applicants.wallet.cardView') }}" class="menu-link">
+                <div data-i18n="Without navbar">Card</div>
+              </a>
+            </li>
+
           </ul>
         </li>
 
@@ -491,7 +497,7 @@
                   <h6 class="text-muted">Remaining Interest</h6>
 
                   <h2 class="fw-bold text-warning">
-                    ₱ {{ number_format($remainingInterest, 2) }}
+                    ₱ {{ number_format($remainingInterest) }}
                   </h2>
 
                   <small class="text-muted">
@@ -531,7 +537,7 @@
                   <h6 class="text-muted">Loan Paid Principal</h6>
 
                   <h2 class="fw-bold">
-                    ₱ {{ number_format($paidPrincipal, 2) }}
+                    ₱ {{ number_format($paidPrincipal) }}
                   </h2>
 
                   <small class="text-muted">

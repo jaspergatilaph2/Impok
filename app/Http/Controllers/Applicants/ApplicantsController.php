@@ -75,7 +75,7 @@ class ApplicantsController extends Controller
         $remainingInterest = DB::table('loans')
             ->where('user_id', $accounts->id)
             ->sum('remaining_interest');
-        
+
         $paidPrincipal = DB::table('loans')
             ->where('user_id', $accounts->id)
             ->sum('paid_principal');
@@ -364,13 +364,18 @@ class ApplicantsController extends Controller
             }
         }
 
+        $loans = Loan::where('user_id', $user->id)
+            ->orderBy('transaction_date', 'desc')
+            ->get();
+
         return view(
             'Applicants.Transaction.history',
             compact(
                 'transactions',
                 'balance',
                 'unreadCount',
-                'messages'
+                'messages',
+                'loans'
             ),
             [
                 'ActiveTabMenu' => 'transactions',
@@ -614,5 +619,98 @@ class ApplicantsController extends Controller
             'total_amount' => $total_amount,
             'interest' => $interest
         ]);
+    }
+
+    public function CardView()
+    {
+        $accounts = auth()->user();
+        $userId = $accounts->id;
+
+        // Get profile information from profile_information table
+        $profile = DB::table('profile_information')
+            ->where('user_id', $userId)
+            ->first();
+
+        // Account number
+        $accountNumber = $accounts->account_number;
+
+        // Card validity - 5 years from account creation
+        $cardValidThru = $accounts->created_at
+            ->copy()
+            ->addYears(5)
+            ->format('m/y');
+
+        // Get all loans belonging to the authenticated user
+        $loanTransactions = DB::table('loans')
+            ->where('user_id', $userId)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        // Total loan interest
+        $loanInterest = $loanTransactions->sum('interest');
+
+        // Total paid interest
+        $paidInterest = $loanTransactions->sum('paid_interest');
+
+        // Remaining interest
+        $remainingInterest = max(
+            0,
+            $loanTransactions->sum('remaining_interest')
+        );
+
+        // Total amount paid
+        $paidAmount = $loanTransactions->sum('paid_amount');
+
+        // Total principal paid
+        $paidPrincipal = $loanTransactions->sum('paid_principal');
+
+        // Total loan amount
+        $total_amount = $loanTransactions->sum('total_amount');
+
+        // Remaining interest
+        $interest = max(
+            0,
+            $loanInterest - $paidInterest
+        );
+
+        // Unread messages
+        $unreadCount = Messages::where(function ($query) use ($userId) {
+            $query->where('receiver_id', $userId)
+                ->orWhereNull('receiver_id');
+        })
+            ->where('is_read', false)
+            ->count();
+
+        // Recent messages
+        $messages = Messages::where(function ($query) use ($userId) {
+            $query->where('receiver_id', $userId)
+                ->orWhereNull('receiver_id');
+        })
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get();
+
+        return view(
+            'Applicants.Wallet.card',
+            compact(
+                'accounts',
+                'profile',
+                'accountNumber',
+                'cardValidThru',
+                'loanInterest',
+                'paidInterest',
+                'remainingInterest',
+                'paidAmount',
+                'paidPrincipal',
+                'total_amount',
+                'interest',
+                'unreadCount',
+                'messages'
+            ),
+            [
+                'ActiveTabMenu' => 'Card',
+                'SubActiveTab' => 'View'
+            ]
+        );
     }
 }

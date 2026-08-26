@@ -77,6 +77,7 @@
     <link rel="stylesheet" href="{{ asset('css/menu.css') }}">
     <link rel="stylesheet" href="{{ asset('sneat/vendor/css/pages/page-misc.css') }}">
     <link rel="stylesheet" href="{{ asset('sneat/vendor/css/pages/page-auth.css')}}">
+    <link rel="stylesheet" href="{{ asset('css/card.css') }}">
 </head>
 
 <body>
@@ -172,6 +173,8 @@
     <script src="{{ asset('js/user-new-pass.js')}}"></script>
     <script src="{{ asset('js/user-date-countdown.js')}}"></script>
     <script src="{{ asset('js/admin/admin-change-pass.js')}}"></script>
+    <script src="{{ asset('js/user-pass-checker.js')}}"></script>
+    <script src="{{ asset('js/flipcard.js') }}"></script>
 </body>
 
 </html>

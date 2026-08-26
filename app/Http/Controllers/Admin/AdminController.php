@@ -707,25 +707,49 @@ class AdminController extends Controller
 
         $paymentAmount = (float) $request->amount;
 
-        // Get approved loans that still have a balance
+        /*
+    |--------------------------------------------------------------------------
+    | Get approved loans with outstanding balances
+    |--------------------------------------------------------------------------
+    */
         $loans = Loan::where('user_id', $request->user_id)
             ->where('status', 'approved')
-            ->whereColumn('paid_amount', '<', 'total_amount')
+            ->where(function ($query) {
+                $query->whereColumn('paid_amount', '<', 'total_amount')
+                    ->orWhereNull('paid_amount');
+            })
             ->orderBy('transaction_date', 'asc')
             ->get();
 
+        /*
+    |--------------------------------------------------------------------------
+    | Check outstanding loans
+    |--------------------------------------------------------------------------
+    */
         if ($loans->isEmpty()) {
             return back()->withErrors([
                 'amount' => 'This user has no outstanding loans.'
             ]);
         }
 
-        // Calculate total outstanding balance
+        /*
+    |--------------------------------------------------------------------------
+    | Calculate total outstanding balance
+    |--------------------------------------------------------------------------
+    */
         $totalOutstanding = $loans->sum(function ($loan) {
-            return $loan->total_amount - $loan->paid_amount;
+
+            $totalAmount = (float) ($loan->total_amount ?? 0);
+            $paidAmount = (float) ($loan->paid_amount ?? 0);
+
+            return max(0, $totalAmount - $paidAmount);
         });
 
-        // Prevent overpayment
+        /*
+    |--------------------------------------------------------------------------
+    | Prevent overpayment
+    |--------------------------------------------------------------------------
+    */
         if ($paymentAmount > $totalOutstanding) {
             return back()->withErrors([
                 'amount' => 'Payment cannot exceed the outstanding loan balance of ₱' .
@@ -735,6 +759,11 @@ class AdminController extends Controller
 
         $remainingPayment = $paymentAmount;
 
+        /*
+    |--------------------------------------------------------------------------
+    | Apply payment to loans
+    |--------------------------------------------------------------------------
+    */
         foreach ($loans as $loan) {
 
             if ($remainingPayment <= 0) {
@@ -743,49 +772,52 @@ class AdminController extends Controller
 
             /*
         |--------------------------------------------------------------------------
-        | 1. Calculate remaining interest
+        | Convert NULL values to 0
         |--------------------------------------------------------------------------
         */
+            $loanAmount = (float) ($loan->amount ?? 0);
+            $interest = (float) ($loan->interest ?? 0);
 
-            $loan->remaining_interest = max(
+            $paidInterest = (float) ($loan->paid_interest ?? 0);
+            $paidPrincipal = (float) ($loan->paid_principal ?? 0);
+
+            /*
+        |--------------------------------------------------------------------------
+        | Calculate remaining interest
+        |--------------------------------------------------------------------------
+        */
+            $remainingInterest = max(
                 0,
-                $loan->interest - $loan->paid_interest
+                $interest - $paidInterest
             );
 
             /*
         |--------------------------------------------------------------------------
-        | 2. Pay interest first
+        | 1. PAY INTEREST FIRST
         |--------------------------------------------------------------------------
         */
-
-            if ($loan->remaining_interest > 0) {
+            if ($remainingInterest > 0 && $remainingPayment > 0) {
 
                 $interestPayment = min(
                     $remainingPayment,
-                    $loan->remaining_interest
+                    $remainingInterest
                 );
 
-                $loan->paid_interest += $interestPayment;
-
-                $loan->remaining_interest =
-                    $loan->interest - $loan->paid_interest;
-
-                $loan->paid_amount += $interestPayment;
+                $paidInterest += $interestPayment;
 
                 $remainingPayment -= $interestPayment;
             }
 
             /*
         |--------------------------------------------------------------------------
-        | 3. Pay principal after interest
+        | 2. PAY PRINCIPAL AFTER INTEREST
         |--------------------------------------------------------------------------
         */
-
             if ($remainingPayment > 0) {
 
                 $remainingPrincipal = max(
                     0,
-                    $loan->amount - $loan->paid_principal
+                    $loanAmount - $paidPrincipal
                 );
 
                 if ($remainingPrincipal > 0) {
@@ -795,9 +827,7 @@ class AdminController extends Controller
                         $remainingPrincipal
                     );
 
-                    $loan->paid_principal += $principalPayment;
-
-                    $loan->paid_amount += $principalPayment;
+                    $paidPrincipal += $principalPayment;
 
                     $remainingPayment -= $principalPayment;
                 }
@@ -805,59 +835,77 @@ class AdminController extends Controller
 
             /*
         |--------------------------------------------------------------------------
-        | 4. Update remaining interest
+        | 3. Update loan values
         |--------------------------------------------------------------------------
         */
+            $loan->paid_interest = $paidInterest;
+            $loan->paid_principal = $paidPrincipal;
 
             $loan->remaining_interest = max(
                 0,
-                $loan->interest - $loan->paid_interest
+                $interest - $paidInterest
             );
 
             /*
         |--------------------------------------------------------------------------
-        | 5. Update total paid
+        | 4. Calculate total paid
         |--------------------------------------------------------------------------
         */
-
             $loan->paid_amount =
-                $loan->paid_interest +
-                $loan->paid_principal;
+                $paidInterest +
+                $paidPrincipal;
 
             /*
         |--------------------------------------------------------------------------
-        | 6. Check if loan is fully paid
+        | 5. Check if loan is fully paid
         |--------------------------------------------------------------------------
         */
-
             if (
-                $loan->paid_interest >= $loan->interest &&
-                $loan->paid_principal >= $loan->amount
+                $paidInterest >= $interest &&
+                $paidPrincipal >= $loanAmount
             ) {
 
-                $loan->paid_interest = $loan->interest;
+                $loan->paid_interest = $interest;
                 $loan->remaining_interest = 0;
-                $loan->paid_principal = $loan->amount;
-                $loan->paid_amount = $loan->total_amount;
+                $loan->paid_principal = $loanAmount;
+
+                $loan->paid_amount =
+                    $loan->total_amount;
+
                 $loan->status = 'paid';
             }
 
             $loan->save();
         }
 
-        // Get borrower
+        /*
+    |--------------------------------------------------------------------------
+    | Get borrower
+    |--------------------------------------------------------------------------
+    */
         $borrower = User::find($request->user_id);
 
-        // Admin activity log
+        /*
+    |--------------------------------------------------------------------------
+    | Admin activity log
+    |--------------------------------------------------------------------------
+    */
         AdminLogs::create([
             'admin_id' => auth()->id(),
-            'description' => 'Received loan payment of ₱' .
+
+            'description' =>
+            'Received loan payment of ₱' .
                 number_format($paymentAmount, 2) .
                 ' from ' .
                 ($borrower->name ?? 'Unknown User') .
                 '.',
         ]);
 
+        /*
+    |--------------------------------------------------------------------------
+    | Success response
+    |--------------------------------------------------------------------------
+    */
         return back()->with(
             'success',
             'Loan payment of ₱' .

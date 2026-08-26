@@ -139,6 +139,12 @@
                         </li>
 
                         <li class="menu-item">
+                            <a href="{{ route('users.transactions.viewAllLoanInterest') }}" class="menu-link">
+                                <div data-i18n="Without navbar">All loans interest transactions</div>
+                            </a>
+                        </li>
+
+                        <li class="menu-item">
                             <a href="{{ route('admin.calendar.viewCalendar') }}" class="menu-link">
                                 <div data-i18n="Without navbar">Date Of Transactions</div>
                             </a>
@@ -819,6 +825,51 @@
                                     </div>
                                 </div>
                             </div> -->
+
+                            <!-- DARK MODE SETTINGS -->
+                            <div class="col-12 col-lg-6">
+                                <div class="card shadow-sm border-0 h-100">
+                                    <div class="card-body">
+
+                                        <h5 class="fw-bold mb-3">
+                                            <i class="fa-solid fa-moon text-dark me-2"></i>
+                                            Appearance Settings
+                                        </h5>
+
+                                        <p class="text-muted small">
+                                            Customize the appearance of the system.
+                                        </p>
+
+                                        <div class="d-flex justify-content-between align-items-center">
+
+                                            <div>
+                                                <h6 class="fw-semibold mb-1">
+                                                    Dark Mode
+                                                </h6>
+
+                                                <small class="text-muted">
+                                                    Use a darker theme to reduce eye strain.
+                                                </small>
+                                            </div>
+
+                                            <div class="form-check form-switch">
+
+                                                <input class="form-check-input"
+                                                    type="checkbox"
+                                                    role="switch"
+                                                    id="darkModeToggle">
+
+                                                <label class="form-check-label"
+                                                    for="darkModeToggle">
+                                                </label>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
 
                         </div>
 

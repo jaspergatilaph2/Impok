@@ -1,0 +1,1627 @@
+/* =========================================================
+   LOAN CARD PAGE
+   ========================================================= */
+
+.loan-card-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 30px;
+}
+
+
+/* =========================================================
+   PAGE TITLE
+   ========================================================= */
+
+.loan-card-title {
+    flex: 1;
+    min-width: 0;
+}
+
+.loan-card-title h4 {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    margin: 0;
+
+    font-size: clamp(1.15rem, 2.5vw, 1.5rem);
+    line-height: 1.3;
+
+    word-break: break-word;
+}
+
+.loan-card-title h4 i {
+    flex-shrink: 0;
+}
+
+.loan-card-title p {
+    margin-top: 6px;
+    margin-bottom: 0;
+
+    max-width: 600px;
+
+    font-size: clamp(0.78rem, 1.5vw, 0.9rem);
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   ACCOUNT STATUS
+   ========================================================= */
+
+.account-status {
+    flex-shrink: 0;
+
+    text-align: right;
+
+    white-space: nowrap;
+}
+
+.account-status small {
+    font-size: 0.72rem;
+}
+
+.account-status span {
+    display: inline-flex;
+    align-items: center;
+
+    margin-top: 3px;
+
+    font-size: 0.9rem;
+}
+
+
+/* =========================================================
+   CARD WRAPPER
+   ========================================================= */
+
+.loan-card-wrapper {
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+
+    padding: 10px 0 30px;
+}
+
+
+/* =========================================================
+   CREDIT CARD FLIP CONTAINER
+   ========================================================= */
+
+.credit-card-container {
+    width: 100%;
+    max-width: 560px;
+
+    height: 330px;
+
+    position: relative;
+
+    perspective: 1200px;
+
+    cursor: pointer;
+
+    outline: none;
+
+    -webkit-tap-highlight-color: transparent;
+}
+
+
+/* =========================================================
+   FRONT AND BACK
+   ========================================================= */
+
+.credit-card-front,
+.credit-card-back {
+    width: 100%;
+    height: 100%;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    overflow: hidden;
+
+    border-radius: 18px;
+
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+
+    transform-style: preserve-3d;
+
+    transition:
+        transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+/* =========================================================
+   FRONT CARD
+   ========================================================= */
+
+.credit-card-front {
+    transform: rotateY(0deg);
+
+    z-index: 2;
+}
+
+
+/* =========================================================
+   BACK CARD
+   ========================================================= */
+
+.credit-card-back {
+    transform: rotateY(180deg);
+
+    z-index: 1;
+
+    background:
+        radial-gradient(
+            circle at 85% 15%,
+            rgba(255, 255, 255, 0.15),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 10% 90%,
+            rgba(75, 145, 255, 0.22),
+            transparent 40%
+        ),
+        linear-gradient(
+            135deg,
+            #061633 0%,
+            #0a2558 30%,
+            #104a96 65%,
+            #246bc1 100%
+        );
+}
+
+
+/* =========================================================
+   FLIPPED STATE
+   ========================================================= */
+
+.credit-card-container.flipped .credit-card-front {
+    transform: rotateY(-180deg);
+}
+
+.credit-card-container.flipped .credit-card-back {
+    transform: rotateY(0deg);
+}
+
+
+/* =========================================================
+   CARD FRONT GRADIENT
+   ========================================================= */
+
+.credit-card-front {
+    color: #ffffff;
+
+    background:
+        radial-gradient(
+            circle at 85% 15%,
+            rgba(255, 255, 255, 0.20) 0%,
+            rgba(255, 255, 255, 0) 35%
+        ),
+        radial-gradient(
+            circle at 10% 90%,
+            rgba(75, 145, 255, 0.25) 0%,
+            rgba(75, 145, 255, 0) 40%
+        ),
+        linear-gradient(
+            135deg,
+            #071b41 0%,
+            #0d2d68 25%,
+            #1552a5 55%,
+            #2875d1 78%,
+            #5b91e5 100%
+        );
+
+    box-shadow:
+        0 18px 40px rgba(10, 35, 85, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+
+/* =========================================================
+   CARD HOVER
+   ========================================================= */
+
+@media (hover: hover) {
+
+    .credit-card-container:hover .credit-card-front,
+    .credit-card-container:hover .credit-card-back {
+        box-shadow:
+            0 25px 50px rgba(10, 35, 85, 0.45),
+            inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    }
+
+}
+
+
+/* =========================================================
+   CARD DECORATIVE EFFECTS
+   ========================================================= */
+
+.credit-card-front::before,
+.credit-card-back::before {
+    content: "";
+
+    position: absolute;
+
+    width: 300px;
+    height: 300px;
+
+    top: -160px;
+    right: -100px;
+
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.10);
+
+    filter: blur(5px);
+
+    pointer-events: none;
+}
+
+.credit-card-front::after,
+.credit-card-back::after {
+    content: "";
+
+    position: absolute;
+
+    width: 250px;
+    height: 250px;
+
+    bottom: -170px;
+    left: -100px;
+
+    border-radius: 50%;
+
+    background: rgba(76, 160, 255, 0.18);
+
+    filter: blur(15px);
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   CARD BODY
+   ========================================================= */
+
+.card-body-custom {
+    width: 100%;
+    height: 100%;
+
+    padding: 30px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    position: relative;
+    z-index: 2;
+}
+
+
+/* =========================================================
+   CARD HEADER
+   ========================================================= */
+
+.card-header-custom {
+    width: 100%;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    gap: 20px;
+}
+
+.card-holder {
+    min-width: 0;
+    flex: 1;
+}
+
+.account-name {
+    max-width: 100%;
+
+    margin-top: 6px;
+    margin-bottom: 0;
+
+    font-size: 1rem;
+    font-weight: 600;
+
+    color: #ffffff;
+
+    text-transform: uppercase;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    text-shadow:
+        0 2px 5px rgba(0, 0, 0, 0.20);
+}
+
+
+/* =========================================================
+   CARD LABEL
+   ========================================================= */
+
+.credit-card .label {
+    display: block;
+
+    font-size: 0.65rem;
+
+    font-weight: 600;
+
+    letter-spacing: 1.2px;
+
+    color: rgba(255, 255, 255, 0.75);
+}
+
+
+/* =========================================================
+   ACCOUNT NUMBER
+   ========================================================= */
+
+.account-number-section {
+    width: 100%;
+
+    margin-top: 30px;
+}
+
+.account-number {
+    margin-top: 8px;
+
+    font-size: clamp(1.15rem, 4vw, 1.65rem);
+
+    font-weight: 600;
+
+    letter-spacing: 3px;
+
+    color: #ffffff;
+
+    white-space: nowrap;
+
+    text-shadow:
+        0 2px 5px rgba(0, 0, 0, 0.25);
+}
+
+.account-number span {
+    display: inline-block;
+
+    margin: 0 2px;
+}
+
+
+/* =========================================================
+   BOTTOM DETAILS
+   ========================================================= */
+
+.bottom-details {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        minmax(0, 1fr)
+        auto
+        auto;
+
+    align-items: end;
+
+    gap: 20px;
+
+    margin-top: 35px;
+}
+
+.card-detail {
+    min-width: 0;
+}
+
+.card-name,
+.card-validity {
+    max-width: 100%;
+
+    margin-top: 5px;
+
+    font-size: 0.85rem;
+
+    font-weight: 600;
+
+    letter-spacing: 0.7px;
+
+    color: #ffffff;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+/* =========================================================
+   BRAND
+   ========================================================= */
+
+.brand {
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    font-size: 1rem;
+
+    font-weight: 700;
+
+    color: #ffffff;
+
+    white-space: nowrap;
+
+    text-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.20);
+}
+
+.brand i {
+    font-size: 1.3rem;
+}
+
+
+/* =========================================================
+   EMV CHIP
+   ========================================================= */
+
+.emv-chip {
+    width: 58px;
+    height: 43px;
+
+    position: relative;
+
+    flex-shrink: 0;
+
+    border-radius: 8px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f1f5fa 0%,
+            #b8c8dc 45%,
+            #eef3f9 100%
+        );
+
+    box-shadow:
+        inset 0 1px 2px rgba(255, 255, 255, 0.90),
+        0 4px 10px rgba(0, 0, 0, 0.20);
+
+    overflow: hidden;
+}
+
+.chip-line-horizontal {
+    position: absolute;
+
+    width: 100%;
+    height: 1px;
+
+    top: 50%;
+    left: 0;
+
+    background: rgba(55, 75, 105, 0.55);
+}
+
+.chip-line-vertical {
+    position: absolute;
+
+    width: 1px;
+    height: 100%;
+
+    top: 0;
+    left: 50%;
+
+    background: rgba(55, 75, 105, 0.55);
+}
+
+.chip-inner {
+    position: absolute;
+
+    width: 24px;
+    height: 18px;
+
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    border: 1px solid rgba(55, 75, 105, 0.60);
+
+    border-radius: 4px;
+}
+
+
+/* =========================================================
+   BACK CARD
+   ========================================================= */
+
+.card-back-content {
+    width: 100%;
+    height: 100%;
+
+    padding: 25px 30px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: space-between;
+
+    position: relative;
+
+    z-index: 2;
+}
+
+
+/* =========================================================
+   MAGNETIC STRIPE
+   ========================================================= */
+
+.magnetic-stripe {
+    width: calc(100% + 60px);
+
+    height: 55px;
+
+    margin-left: -30px;
+    margin-top: 5px;
+
+    flex-shrink: 0;
+
+    background:
+        linear-gradient(
+            to bottom,
+            #111111 0%,
+            #050505 50%,
+            #181818 100%
+        );
+
+    box-shadow:
+        inset 0 1px 2px rgba(255, 255, 255, 0.08);
+}
+
+
+/* =========================================================
+   SIGNATURE SECTION
+   ========================================================= */
+
+.signature-section {
+    width: 100%;
+
+    margin-top: 18px;
+}
+
+.signature-box {
+    width: 100%;
+    height: 45px;
+
+    margin-top: 6px;
+
+    padding: 5px 10px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+
+    background: #ffffff;
+
+    border-radius: 4px;
+
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   USER SIGNATURE
+   ========================================================= */
+
+.user-signature {
+    max-width: 180px;
+    max-height: 38px;
+
+    object-fit: contain;
+
+    display: block;
+}
+
+
+/* =========================================================
+   SIGNATURE PLACEHOLDER
+   ========================================================= */
+
+.signature-placeholder {
+    color: #777777;
+
+    font-size: 0.72rem;
+
+    font-style: italic;
+}
+
+
+/* =========================================================
+   SIGNATURE INFORMATION
+   ========================================================= */
+
+.signature-info {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 20px;
+
+    margin-top: 12px;
+}
+
+.signature-name,
+.signature-account {
+    margin-top: 4px;
+
+    color: #ffffff;
+
+    font-size: 0.78rem;
+
+    font-weight: 600;
+
+    letter-spacing: 0.7px;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+/* =========================================================
+   BACK CARD NOTE
+   ========================================================= */
+
+.card-back-note {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 8px;
+
+    margin-top: 10px;
+
+    color: rgba(255, 255, 255, 0.70);
+
+    font-size: 0.62rem;
+
+    line-height: 1.4;
+}
+
+.card-back-note i {
+    flex-shrink: 0;
+
+    font-size: 1rem;
+}
+
+
+/* =========================================================
+   TABLET
+   577px - 768px
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    .loan-card-header {
+        align-items: flex-start;
+
+        gap: 18px;
+
+        margin-bottom: 25px;
+    }
+
+    .loan-card-title h4 {
+        font-size: 1.3rem;
+    }
+
+    .loan-card-title p {
+        font-size: 0.85rem;
+    }
+
+    .credit-card-container {
+        max-width: 520px;
+
+        height: 310px;
+    }
+
+    .card-body-custom {
+        padding: 25px;
+    }
+
+    .card-back-content {
+        padding: 25px;
+    }
+
+    .bottom-details {
+        grid-template-columns:
+            minmax(0, 1fr)
+            minmax(0, 1fr);
+
+        gap: 18px 25px;
+    }
+
+    .brand {
+        justify-self: end;
+
+        align-self: end;
+    }
+
+    .magnetic-stripe {
+        width: calc(100% + 50px);
+
+        margin-left: -25px;
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+   381px - 576px
+   ========================================================= */
+
+@media (max-width: 576px) {
+
+    .container-p-y {
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+    }
+
+
+    /* Header */
+
+    .loan-card-header {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 12px;
+
+        margin-bottom: 20px;
+    }
+
+    .loan-card-title {
+        width: 100%;
+    }
+
+    .loan-card-title h4 {
+        font-size: 1.2rem;
+    }
+
+    .loan-card-title p {
+        max-width: 100%;
+
+        font-size: 0.82rem;
+
+        line-height: 1.5;
+    }
+
+
+    /* Account Status */
+
+    .account-status {
+        width: 100%;
+
+        text-align: left;
+    }
+
+    .account-status small {
+        font-size: 0.65rem;
+    }
+
+    .account-status span {
+        font-size: 0.82rem;
+    }
+
+
+    /* Card */
+
+    .loan-card-wrapper {
+        padding: 0 0 20px;
+    }
+
+    .credit-card-container {
+        width: 100%;
+
+        height: 280px;
+
+        max-width: 100%;
+    }
+
+    .credit-card-front,
+    .credit-card-back {
+        border-radius: 15px;
+    }
+
+
+    /* Card Body */
+
+    .card-body-custom {
+        padding: 20px;
+    }
+
+    .card-back-content {
+        padding: 20px;
+    }
+
+
+    /* Card Header */
+
+    .card-header-custom {
+        gap: 12px;
+    }
+
+    .account-name {
+        max-width: 190px;
+
+        font-size: 0.85rem;
+    }
+
+
+    /* Chip */
+
+    .emv-chip {
+        width: 50px;
+        height: 37px;
+
+        border-radius: 7px;
+    }
+
+    .chip-inner {
+        width: 21px;
+        height: 16px;
+    }
+
+
+    /* Account Number */
+
+    .account-number-section {
+        margin-top: 22px;
+    }
+
+    .account-number {
+        font-size: clamp(0.95rem, 5vw, 1.25rem);
+
+        letter-spacing: 2px;
+    }
+
+
+    /* Bottom Details */
+
+    .bottom-details {
+        grid-template-columns:
+            minmax(0, 1fr)
+            minmax(0, 1fr);
+
+        gap: 15px;
+
+        margin-top: 25px;
+    }
+
+    .card-name,
+    .card-validity {
+        font-size: 0.72rem;
+    }
+
+
+    /* Labels */
+
+    .credit-card .label {
+        font-size: 0.55rem;
+
+        letter-spacing: 0.8px;
+    }
+
+
+    /* Brand */
+
+    .brand {
+        font-size: 0.85rem;
+    }
+
+    .brand i {
+        font-size: 1.1rem;
+    }
+
+
+    /* Back */
+
+    .magnetic-stripe {
+        width: calc(100% + 40px);
+
+        margin-left: -20px;
+
+        height: 45px;
+    }
+
+    .signature-section {
+        margin-top: 12px;
+    }
+
+    .signature-box {
+        height: 38px;
+    }
+
+    .user-signature {
+        max-width: 140px;
+
+        max-height: 32px;
+    }
+
+    .signature-info {
+        gap: 12px;
+    }
+
+    .signature-name,
+    .signature-account {
+        font-size: 0.65rem;
+    }
+
+    .card-back-note {
+        font-size: 0.55rem;
+    }
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
+   320px - 380px
+   ========================================================= */
+
+@media (max-width: 380px) {
+
+    .container-p-y {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+
+
+    .loan-card-title h4 {
+        font-size: 1.05rem;
+    }
+
+    .loan-card-title p {
+        font-size: 0.75rem;
+    }
+
+
+    .credit-card-container {
+        height: 260px;
+    }
+
+    .credit-card-front,
+    .credit-card-back {
+        border-radius: 13px;
+    }
+
+
+    .card-body-custom,
+    .card-back-content {
+        padding: 17px;
+    }
+
+
+    .account-name {
+        max-width: 150px;
+
+        font-size: 0.75rem;
+    }
+
+
+    .emv-chip {
+        width: 45px;
+        height: 33px;
+
+        border-radius: 6px;
+    }
+
+    .chip-inner {
+        width: 19px;
+        height: 14px;
+    }
+
+
+    .account-number {
+        font-size: 0.9rem;
+
+        letter-spacing: 1.5px;
+    }
+
+
+    .bottom-details {
+        gap: 12px;
+
+        margin-top: 20px;
+    }
+
+
+    .card-name,
+    .card-validity {
+        font-size: 0.65rem;
+    }
+
+
+    .credit-card .label {
+        font-size: 0.5rem;
+
+        letter-spacing: 0.6px;
+    }
+
+
+    .brand {
+        font-size: 0.75rem;
+    }
+
+    .brand i {
+        font-size: 1rem;
+    }
+
+
+    /* Back */
+
+    .magnetic-stripe {
+        width: calc(100% + 34px);
+
+        margin-left: -17px;
+
+        height: 40px;
+    }
+
+    .signature-box {
+        height: 34px;
+    }
+
+    .user-signature {
+        max-width: 120px;
+
+        max-height: 28px;
+    }
+
+    .signature-info {
+        gap: 8px;
+    }
+}
+
+
+/* =========================================================
+   EXTRA SMALL DEVICES
+   BELOW 320px
+   ========================================================= */
+
+@media (max-width: 319px) {
+
+    .credit-card-container {
+        height: 245px;
+    }
+
+    .card-body-custom,
+    .card-back-content {
+        padding: 14px;
+    }
+
+
+    .account-number {
+        font-size: 0.78rem;
+
+        letter-spacing: 1px;
+    }
+
+
+    .account-name {
+        max-width: 125px;
+    }
+
+
+    .bottom-details {
+        gap: 9px;
+    }
+
+
+    .card-name,
+    .card-validity {
+        font-size: 0.58rem;
+    }
+
+
+    .brand {
+        font-size: 0.68rem;
+    }
+
+
+    .emv-chip {
+        width: 40px;
+        height: 30px;
+    }
+
+
+    .magnetic-stripe {
+        width: calc(100% + 28px);
+
+        margin-left: -14px;
+
+        height: 36px;
+    }
+
+    .signature-box {
+        height: 31px;
+    }
+
+    .user-signature {
+        max-width: 100px;
+
+        max-height: 25px;
+    }
+}
+
+
+/* =========================================================
+   REDUCE MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .credit-card-front,
+    .credit-card-back {
+        transition: none;
+    }
+}
+
+
+/* =========================================================
+   PRINT CARD AREA
+   ========================================================= */
+
+.print-card-area {
+    display: none;
+}
+
+
+/* =========================================================
+   PRINT CARD
+   STANDARD ID-1 / CR80
+   85.60mm × 53.98mm
+   ========================================================= */
+
+.print-card {
+    width: 85.60mm;
+    height: 53.98mm;
+
+    position: relative;
+
+    overflow: hidden;
+
+    box-sizing: border-box;
+
+    border-radius: 3.18mm;
+
+    color: #ffffff;
+
+    background:
+        radial-gradient(
+            circle at 85% 15%,
+            rgba(255, 255, 255, 0.20),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 10% 90%,
+            rgba(75, 145, 255, 0.25),
+            transparent 40%
+        ),
+        linear-gradient(
+            135deg,
+            #071b41 0%,
+            #0d2d68 25%,
+            #1552a5 55%,
+            #2875d1 78%,
+            #5b91e5 100%
+        );
+
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+}
+
+
+/* =========================================================
+   PRINT FRONT
+   ========================================================= */
+
+.print-card-front {
+    position: relative;
+}
+
+
+/* =========================================================
+   PRINT CARD BODY
+   ========================================================= */
+
+.print-card-body {
+    width: 100%;
+    height: 100%;
+
+    padding: 5.5mm;
+
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: space-between;
+}
+
+
+/* =========================================================
+   PRINT HEADER
+   ========================================================= */
+
+.print-card-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+}
+
+.print-label {
+    display: block;
+
+    font-size: 1.65mm;
+
+    font-weight: 600;
+
+    letter-spacing: 0.35mm;
+
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.print-card-title {
+    margin-top: 1mm;
+
+    font-size: 3.1mm;
+
+    font-weight: 700;
+
+    letter-spacing: 0.25mm;
+}
+
+
+/* =========================================================
+   PRINT CHIP
+   ========================================================= */
+
+.print-chip {
+    width: 10mm;
+    height: 7.5mm;
+
+    position: relative;
+
+    border-radius: 1.2mm;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f1f5fa,
+            #b8c8dc 45%,
+            #eef3f9
+        );
+
+    overflow: hidden;
+}
+
+.print-chip::before {
+    content: "";
+
+    position: absolute;
+
+    width: 100%;
+    height: 0.2mm;
+
+    top: 50%;
+    left: 0;
+
+    background: rgba(55, 75, 105, 0.6);
+}
+
+.print-chip::after {
+    content: "";
+
+    position: absolute;
+
+    width: 0.2mm;
+    height: 100%;
+
+    top: 0;
+    left: 50%;
+
+    background: rgba(55, 75, 105, 0.6);
+}
+
+
+/* =========================================================
+   PRINT ACCOUNT
+   ========================================================= */
+
+.print-account-section {
+    margin-top: 3mm;
+}
+
+.print-account-number {
+    margin-top: 1.2mm;
+
+    font-size: 4.3mm;
+
+    font-weight: 600;
+
+    letter-spacing: 0.8mm;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   PRINT BOTTOM
+   ========================================================= */
+
+.print-bottom {
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        1fr
+        auto
+        auto;
+
+    align-items: end;
+
+    gap: 3mm;
+}
+
+.print-value {
+    margin-top: 0.8mm;
+
+    font-size: 2.3mm;
+
+    font-weight: 600;
+
+    letter-spacing: 0.2mm;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+.print-brand {
+    font-size: 3mm;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   PRINT BACK
+   ========================================================= */
+
+.print-card-back {
+    background:
+        radial-gradient(
+            circle at 85% 15%,
+            rgba(255, 255, 255, 0.15),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 10% 90%,
+            rgba(75, 145, 255, 0.22),
+            transparent 40%
+        ),
+        linear-gradient(
+            135deg,
+            #061633 0%,
+            #0a2558 30%,
+            #104a96 65%,
+            #246bc1 100%
+        );
+}
+
+.print-back-body {
+    width: 100%;
+    height: 100%;
+
+    padding: 4mm 5.5mm;
+
+    box-sizing: border-box;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: space-between;
+}
+
+
+/* =========================================================
+   PRINT MAGNETIC STRIPE
+   ========================================================= */
+
+.print-magnetic-stripe {
+    width: calc(100% + 11mm);
+
+    height: 9mm;
+
+    margin-left: -5.5mm;
+
+    margin-top: 1mm;
+
+    background:
+        linear-gradient(
+            to bottom,
+            #111111,
+            #050505 50%,
+            #181818
+        );
+}
+
+
+/* =========================================================
+   PRINT SIGNATURE
+   ========================================================= */
+
+.print-signature-section {
+    margin-top: 2.5mm;
+}
+
+.print-signature-box {
+    width: 100%;
+    height: 7mm;
+
+    margin-top: 1mm;
+
+    padding: 0.8mm 1.5mm;
+
+    box-sizing: border-box;
+
+    display: flex;
+
+    align-items: center;
+
+    background: #ffffff;
+
+    color: #777777;
+
+    border-radius: 0.7mm;
+
+    font-size: 1.8mm;
+}
+
+.print-signature {
+    max-width: 30mm;
+    max-height: 6mm;
+
+    object-fit: contain;
+}
+
+
+/* =========================================================
+   PRINT BACK INFORMATION
+   ========================================================= */
+
+.print-back-info {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 5mm;
+}
+
+.print-back-note {
+    font-size: 1.6mm;
+
+    line-height: 1.4;
+
+    color: rgba(255, 255, 255, 0.75);
+}
+
+
+/* =========================================================
+   PRINT SETTINGS
+   ========================================================= */
+
+@media print {
+
+    @page {
+        size: A4 portrait;
+
+        margin: 10mm;
+    }
+
+
+    /* Hide normal page */
+    body * {
+        visibility: hidden;
+    }
+
+
+    /* Show printable card */
+    #printCardArea,
+    #printCardArea * {
+        visibility: visible;
+    }
+
+
+    #printCardArea {
+        display: flex !important;
+
+        flex-direction: column;
+
+        align-items: center;
+
+        gap: 10mm;
+
+        position: absolute;
+
+        top: 0;
+        left: 0;
+
+        width: 100%;
+    }
+
+
+    /* Exact physical card size */
+    .print-card {
+        width: 85.60mm !important;
+        height: 53.98mm !important;
+
+        min-width: 85.60mm !important;
+        min-height: 53.98mm !important;
+
+        max-width: 85.60mm !important;
+        max-height: 53.98mm !important;
+
+        page-break-inside: avoid;
+
+        break-inside: avoid;
+
+        box-shadow: none !important;
+    }
+
+
+    /* Preserve gradients */
+    .print-card,
+    .print-card * {
+        -webkit-print-color-adjust: exact !important;
+
+        print-color-adjust: exact !important;
+    }
+
+
+    /* Don't print buttons */
+    .no-print {
+        display: none !important;
+    }
+}

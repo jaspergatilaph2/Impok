@@ -486,13 +486,29 @@
                                                                 name="password"
                                                                 id="password"
                                                                 class="form-control"
-                                                                required>
+                                                                required
+                                                                oninput="checkPasswordStrength(this.value)">
 
                                                             <button type="button"
                                                                 class="btn btn-outline-secondary"
                                                                 onclick="togglePassword('password', this)">
                                                                 <i class="fa-solid fa-eye"></i>
                                                             </button>
+                                                        </div>
+
+                                                        <!-- Password Strength -->
+                                                        <div class="mt-2">
+                                                            <div class="progress" style="height: 6px;">
+                                                                <div id="passwordStrengthBar"
+                                                                    class="progress-bar"
+                                                                    role="progressbar"
+                                                                    style="width: 0%;">
+                                                                </div>
+                                                            </div>
+
+                                                            <small id="passwordStrengthText" class="text-muted">
+                                                                Enter a password
+                                                            </small>
                                                         </div>
                                                     </div>
 

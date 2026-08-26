@@ -82,4 +82,20 @@ class User extends Authenticatable
     {
         return $this->hasMany(AdminLogs::class, 'admin_id');
     }
+
+    public static function booted(){
+        static::creating(function ($user){
+            do{
+                $accountNumber = '';
+                for($i = 0; $i < 16; $i++){
+                    $accountNumber .= random_int(0,9);
+                };
+                
+            }while(
+                static::where('account_number', $accountNumber)->exists()
+            );
+
+            $user->account_number = $accountNumber;
+        });
+    }
 }

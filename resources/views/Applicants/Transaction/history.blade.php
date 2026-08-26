@@ -414,20 +414,24 @@
 
                                                 <tbody>
 
-                                                    @php $hasCashIn = false; @endphp
+                                                    @php
+                                                    $hasTransaction = false;
+                                                    @endphp
 
+                                                    {{-- DEPOSITS --}}
                                                     @foreach($transactions as $tx)
 
                                                     @if($tx->type === 'cash_in')
-                                                    @php $hasCashIn = true; @endphp
+
+                                                    @php
+                                                    $hasTransaction = true;
+                                                    @endphp
 
                                                     <tr>
-                                                        <!-- DATE -->
                                                         <td>
                                                             {{ \Carbon\Carbon::parse($tx->transaction_date)->format('M d, Y') }}
                                                         </td>
 
-                                                        <!-- TYPE -->
                                                         <td class="text-center">
                                                             <span class="fw-semibold text-success">
                                                                 Deposit
@@ -439,12 +443,38 @@
 
                                                     @endforeach
 
-                                                    @if(!$hasCashIn)
+
+                                                    {{-- LOANS --}}
+                                                    @foreach($loans as $loan)
+
+                                                    @php
+                                                    $hasTransaction = true;
+                                                    @endphp
+
                                                     <tr>
-                                                        <td colspan="2" class="text-center text-muted">
-                                                            No deposit history found
+                                                        <td>
+                                                            {{ \Carbon\Carbon::parse($loan->transaction_date)->format('M d, Y') }}
+                                                        </td>
+
+                                                        <td class="text-center">
+                                                            <span class="fw-semibold text-primary">
+                                                                Loan
+                                                            </span>
                                                         </td>
                                                     </tr>
+
+                                                    @endforeach
+
+
+                                                    {{-- NO RECORDS --}}
+                                                    @if(!$hasTransaction)
+
+                                                    <tr>
+                                                        <td colspan="2" class="text-center text-muted">
+                                                            No transaction history found
+                                                        </td>
+                                                    </tr>
+
                                                     @endif
 
                                                 </tbody>
