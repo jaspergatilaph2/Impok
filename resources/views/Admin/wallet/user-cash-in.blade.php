@@ -132,7 +132,7 @@
                         </li>
 
                         <li class="menu-item">
-                            <a href="{{ route('users.transactions.viewAllLoanInterests') }}" class="menu-link">
+                            <a href="{{ route('users.transactions.viewAllLoanInterest') }}" class="menu-link">
                                 <div data-i18n="Without navbar">All loans interest transactions</div>
                             </a>
                         </li>

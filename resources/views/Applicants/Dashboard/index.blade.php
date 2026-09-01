@@ -408,7 +408,7 @@
 
                     <h2 class="fw-bold">
                       @if(!empty($nextdate))
-                      {{ \Carbon\Carbon::parse($nextdate)->format('F d, Y') }}
+                      {{ \Carbon\Carbon::parse($nextdate)->format('M d, Y') }}
                       @else
                       No date has been updated
                       @endif

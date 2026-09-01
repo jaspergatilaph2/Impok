@@ -175,6 +175,7 @@
     <script src="{{ asset('js/admin/admin-change-pass.js')}}"></script>
     <script src="{{ asset('js/user-pass-checker.js')}}"></script>
     <script src="{{ asset('js/flipcard.js') }}"></script>
+    <script src="{{ asset('js/admin/open-date.js')}}"></script>
 </body>
 
 </html>

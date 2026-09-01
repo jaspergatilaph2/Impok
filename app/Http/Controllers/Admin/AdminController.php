@@ -99,9 +99,17 @@ class AdminController extends Controller
             ->orderBy('name', 'ASC')
             ->take(10)
             ->get();
+
+        $openTransactionDates = DB::table('open_transaction_dates')
+            ->orderBy('date', 'asc')
+            ->pluck('date')
+            ->map(function ($date) {
+                return Carbon::parse($date)->format('Y-m-d');
+            });
+
         return view(
             'Admin.wallet.cash-in',
-            compact('accounts', 'users'),
+            compact('accounts', 'users', 'openTransactionDates'),
             [
                 'ActiveTabMenu' => 'View',
                 'SubActiveTab' => 'wallet'
@@ -115,14 +123,35 @@ class AdminController extends Controller
     {
         try {
 
-            $date = Carbon::parse($request->transaction_date);
+            // Validate request
+            $request->validate([
+                'user_id' => 'required|exists:users,id',
+                'amount' => 'required|numeric|min:100',
+                'transaction_date' => 'required|date',
+            ]);
 
-            if ($date->dayOfWeek !== 0) {
+            /*
+        |--------------------------------------------------------------------------
+        | Check if Transaction Date is Open
+        |--------------------------------------------------------------------------
+        */
+
+            $isOpenDate = \DB::table('open_transaction_dates')
+                ->whereDate('date', $request->transaction_date)
+                ->exists();
+
+            if (!$isOpenDate) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Only Sunday transactions are allowed.'
+                    'message' => 'The selected transaction date is not open.'
                 ]);
             }
+
+            /*
+        |--------------------------------------------------------------------------
+        | Check Minimum Amount
+        |--------------------------------------------------------------------------
+        */
 
             if ($request->amount < 100) {
                 return response()->json([
@@ -131,9 +160,21 @@ class AdminController extends Controller
                 ]);
             }
 
+            /*
+        |--------------------------------------------------------------------------
+        | Check Previous Cash In
+        |--------------------------------------------------------------------------
+        */
+
             $hasPreviousCashIn = Wallet::where('user_id', $request->user_id)
                 ->where('type', 'cash_in')
                 ->exists();
+
+            /*
+        |--------------------------------------------------------------------------
+        | Interest
+        |--------------------------------------------------------------------------
+        */
 
             $interestRate = 0.5;
 
@@ -143,6 +184,12 @@ class AdminController extends Controller
                 $interest = $request->amount * $interestRate;
             }
 
+            /*
+        |--------------------------------------------------------------------------
+        | Save Cash In
+        |--------------------------------------------------------------------------
+        */
+
             Wallet::create([
                 'user_id' => $request->user_id,
                 'type' => 'cash_in',
@@ -150,6 +197,12 @@ class AdminController extends Controller
                 'transaction_date' => $request->transaction_date,
                 'note' => $request->note
             ]);
+
+            /*
+        |--------------------------------------------------------------------------
+        | Save Interest
+        |--------------------------------------------------------------------------
+        */
 
             if ($interest > 0) {
                 Wallet::create([
@@ -161,6 +214,12 @@ class AdminController extends Controller
                 ]);
             }
 
+            /*
+        |--------------------------------------------------------------------------
+        | Get Balance
+        |--------------------------------------------------------------------------
+        */
+
             $balance = Wallet::where('user_id', $request->user_id)
                 ->sum('amount');
 
@@ -169,13 +228,15 @@ class AdminController extends Controller
         | Get User
         |--------------------------------------------------------------------------
         */
+
             $user = User::find($request->user_id);
 
             /*
         |--------------------------------------------------------------------------
-        | ADMIN ACTIVITY LOG: CASH IN PROCESSED
+        | Admin Activity Log
         |--------------------------------------------------------------------------
         */
+
             AdminLogs::create([
                 'admin_id' => auth()->id(),
 
@@ -189,6 +250,12 @@ class AdminController extends Controller
                         : ' (no interest, first deposit)') .
                     '.',
             ]);
+
+            /*
+        |--------------------------------------------------------------------------
+        | Response
+        |--------------------------------------------------------------------------
+        */
 
             return response()->json([
                 'success' => true,

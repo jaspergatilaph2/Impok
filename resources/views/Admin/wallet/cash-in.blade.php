@@ -132,7 +132,7 @@
                         </li>
 
                         <li class="menu-item">
-                            <a href="{{ route('users.transactions.viewAllLoanInterests') }}" class="menu-link">
+                            <a href="{{ route('users.transactions.viewAllLoanInterest') }}" class="menu-link">
                                 <div data-i18n="Without navbar">All loans interest transactions</div>
                             </a>
                         </li>
@@ -323,158 +323,171 @@
                             </ul>
 
                             <!-- CARD -->
-                            <div class="card-body">
+                            <div class="card mb-4">
+                                <h5 class="card-header">User List</h5>
+                                <hr class="my-0" />
+                                
+                                <div class="card-body">
 
-                                <h5 class="mb-3 fw-bold">Users Wallet Balance</h5>
+                                    <h5 class="mb-3 fw-bold">Users Wallet Balance</h5>
 
-                                <!-- SEARCH -->
-                                <div class="mb-3">
-                                    <div class="input-group">
-                                        <span class="input-group-text">
-                                            <i class="bx bx-search"></i>
-                                        </span>
-                                        <input type="text" id="userSearch" class="form-control"
-                                            placeholder="Search user by name or email...">
+                                    <!-- SEARCH -->
+                                    <div class="mb-3">
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <i class="bx bx-search"></i>
+                                            </span>
+                                            <input type="text" id="userSearch" class="form-control"
+                                                placeholder="Search user by name or email...">
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="table-responsive">
-                                    <table class="table table-hover align-middle">
-                                        <thead>
-                                            <tr>
-                                                <th>Profile</th>
-                                                <th>Name</th>
-                                                <th>Email</th>
-                                                <th>Role</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover align-middle">
+                                            <thead>
+                                                <tr>
+                                                    <th>Profile</th>
+                                                    <th>Name</th>
+                                                    <th>Email</th>
+                                                    <th>Role</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
 
-                                        <tbody>
-                                            @forelse($users as $user)
-                                            <tr>
+                                            <tbody>
+                                                @forelse($users as $user)
+                                                <tr>
 
-                                                <!-- PROFILE -->
-                                                <td>
-                                                    <img src="{{ $user->profile_information && $user->profile_information->profile_picture
+                                                    <!-- PROFILE -->
+                                                    <td>
+                                                        <img src="{{ $user->profile_information && $user->profile_information->profile_picture
                             ? asset('storage/' . $user->profile_information->profile_picture)
                             : ($user->avatar
                                 ? asset('storage/' . $user->avatar)
                                 : asset('sneat/img/avatars/1.png')) }}"
-                                                        width="45"
-                                                        height="45"
-                                                        class="rounded-circle">
-                                                </td>
+                                                            width="45"
+                                                            height="45"
+                                                            class="rounded-circle">
+                                                    </td>
 
-                                                <!--UPDATED WITH CLASSES -->
-                                                <td class="user-name">{{ $user->name }}</td>
-                                                <td class="user-email">{{ $user->email }}</td>
-                                                <td>{{ $user->role }}</td>
+                                                    <!--UPDATED WITH CLASSES -->
+                                                    <td class="user-name">{{ $user->name }}</td>
+                                                    <td class="user-email">{{ $user->email }}</td>
+                                                    <td>{{ $user->role }}</td>
 
-                                                <!-- ACTION -->
-                                                <td>
-                                                    <button class="btn btn-sm btn-success"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#cashInModal{{ $user->id }}">
-                                                        Cash In
-                                                    </button>
-                                                </td>
+                                                    <!-- ACTION -->
+                                                    <td>
+                                                        <button class="btn btn-sm btn-success"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#cashInModal{{ $user->id }}">
+                                                            Cash In
+                                                        </button>
+                                                    </td>
 
-                                            </tr>
+                                                </tr>
 
-                                            <!-- MODAL (UNCHANGED) -->
-                                            <div class="modal fade" id="cashInModal{{ $user->id }}" tabindex="-1">
-                                                <div class="modal-dialog modal-dialog-centered">
-                                                    <div class="modal-content shadow border-0">
+                                                <!-- MODAL (UNCHANGED) -->
+                                                <div class="modal fade" id="cashInModal{{ $user->id }}" tabindex="-1">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content shadow border-0">
 
-                                                        <div class="modal-header bg-success text-white">
-                                                            <h5 class="modal-title">
-                                                                <i class="bx bx-wallet me-2"></i> Loans Transaction
-                                                            </h5>
-                                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                                                        </div>
+                                                            <div class="modal-header bg-success text-white">
+                                                                <h5 class="modal-title">
+                                                                    <i class="bx bx-wallet me-2"></i> Cash In Transaction
+                                                                </h5>
+                                                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                                            </div>
 
-                                                        <form id="transactionForm{{ $user->id }}" action="{{ route('users.wallet.cashIn') }}" method="POST">
-                                                            @csrf
+                                                            <form id="transactionForm{{ $user->id }}" action="{{ route('users.wallet.cashIn') }}" method="POST">
+                                                                @csrf
 
-                                                            <div class="modal-body">
+                                                                <div class="modal-body">
 
-                                                                <div id="alertBox{{ $user->id }}"></div>
+                                                                    <div id="alertBox{{ $user->id }}"></div>
 
-                                                                <input type="hidden" name="user_id" value="{{ $user->id }}">
+                                                                    <input type="hidden" name="user_id" value="{{ $user->id }}">
 
-                                                                <div class="text-center mb-3">
-                                                                    <img src="{{ $user->profile_information && $user->profile_information->profile_picture
+                                                                    <div class="text-center mb-3">
+                                                                        <img src="{{ $user->profile_information && $user->profile_information->profile_picture
                                                 ? asset('storage/' . $user->profile_information->profile_picture)
                                                 : ($user->avatar
                                                     ? asset('storage/' . $user->avatar)
                                                     : asset('sneat/img/avatars/1.png')) }}"
-                                                                        class="rounded-circle mb-2"
-                                                                        width="70"
-                                                                        height="70">
+                                                                            class="rounded-circle mb-2"
+                                                                            width="70"
+                                                                            height="70">
 
-                                                                    <h6 class="mb-0">{{ $user->name }}</h6>
-                                                                    <small class="text-muted">{{ $user->email }}</small>
-                                                                </div>
-
-                                                                <hr>
-
-                                                                <div class="mb-3">
-                                                                    <label class="form-label">Transaction Type</label>
-                                                                    <select name="type" class="form-select" required>
-                                                                        <option value="">Select Type</option>
-                                                                        <option value="cash_in">Cash In</option>
-                                                                    </select>
-                                                                </div>
-
-                                                                <div class="mb-3">
-                                                                    <label class="form-label">Amount</label>
-                                                                    <div class="input-group">
-                                                                        <span class="input-group-text">₱</span>
-                                                                        <input type="number" name="amount" step="0.01" class="form-control" required>
+                                                                        <h6 class="mb-0">{{ $user->name }}</h6>
+                                                                        <small class="text-muted">{{ $user->email }}</small>
                                                                     </div>
+
+                                                                    <hr>
+
+                                                                    <div class="mb-3">
+                                                                        <label class="form-label">Transaction Type</label>
+                                                                        <select name="type" class="form-select" required>
+                                                                            <option value="">Select Type</option>
+                                                                            <option value="cash_in">Cash In</option>
+                                                                        </select>
+                                                                    </div>
+
+                                                                    <div class="mb-3">
+                                                                        <label class="form-label">Amount</label>
+                                                                        <div class="input-group">
+                                                                            <span class="input-group-text">₱</span>
+                                                                            <input type="number" name="amount" step="0.01" class="form-control" required>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="mb-3">
+                                                                        <label class="form-label">Transaction Date</label>
+
+                                                                        <input type="date"
+                                                                            name="transaction_date"
+                                                                            id="transaction_date_{{ $user->id }}"
+                                                                            class="form-control"
+                                                                            disabled
+                                                                            required>
+
+                                                                        <small id="transaction_status_{{ $user->id }}" class="text-muted">
+                                                                            Transaction date is not yet available.
+                                                                        </small>
+                                                                    </div>
+
+                                                                    <div class="mb-2">
+                                                                        <label class="form-label">Note</label>
+                                                                        <input type="text" name="note" class="form-control" placeholder="Optional">
+                                                                    </div>
+
                                                                 </div>
 
-                                                                <div class="mb-3">
-                                                                    <label class="form-label">Transaction Date</label>
-                                                                    <input type="date" name="transaction_date"
-                                                                        id="transaction_date_{{ $user->id }}"
-                                                                        class="form-control" required>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal">Cancel</button>
+
+                                                                    <button type="submit" class="btn btn-success">
+                                                                        Submit Transaction
+                                                                    </button>
                                                                 </div>
 
-                                                                <div class="mb-2">
-                                                                    <label class="form-label">Note</label>
-                                                                    <input type="text" name="note" class="form-control" placeholder="Optional">
-                                                                </div>
+                                                            </form>
 
-                                                            </div>
-
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary"
-                                                                    data-bs-dismiss="modal">Cancel</button>
-
-                                                                <button type="submit" class="btn btn-success">
-                                                                    Submit Transaction
-                                                                </button>
-                                                            </div>
-
-                                                        </form>
-
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                            @empty
-                                            <tr>
-                                                <td colspan="5" class="text-center text-muted">
-                                                    No users found
-                                                </td>
-                                            </tr>
-                                            @endforelse
-                                        </tbody>
-                                    </table>
+                                                @empty
+                                                <tr>
+                                                    <td colspan="5" class="text-center text-muted">
+                                                        No users found
+                                                    </td>
+                                                </tr>
+                                                @endforelse
+                                            </tbody>
+                                        </table>
+                                    </div>
+
                                 </div>
-
                             </div>
 
                         </div>

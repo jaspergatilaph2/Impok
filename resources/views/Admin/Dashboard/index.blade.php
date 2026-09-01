@@ -94,7 +94,7 @@
 
                         <li class="menu-item">
                             <a href="{{ route('users.wallet.viewAmount') }}" class="menu-link">
-                                <div data-i18n="Without navbar">View cash in transactions</div>
+                                <div data-i18n="Without navbar">View cash-in transactions</div>
                             </a>
                         </li>
 
@@ -396,7 +396,7 @@
                                         <h6 class="text-muted">Next Impok Date</h6>
                                         <h2 class="fw-bold">
                                             @if(!empty($nextDate))
-                                            {{ \Carbon\Carbon::parse($nextDate->date)->format('F d, Y') }}
+                                            {{ \Carbon\Carbon::parse($nextDate->date)->format('M d, Y') }}
                                             @else
                                             No date has been updated
                                             @endif

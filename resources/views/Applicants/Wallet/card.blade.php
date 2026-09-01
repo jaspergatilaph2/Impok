@@ -643,6 +643,10 @@
                                 View your IMPOKS loan account card and account details.
                             </p>
 
+                            <p class="text-dark bg-warning px-3 py-2 rounded mb-0 fw-bold">
+                                [ THIS IS FOR THE FUTURE UPDATE ]
+                            </p>
+
                         </div>
 
 
