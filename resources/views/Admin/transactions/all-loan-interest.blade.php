@@ -123,7 +123,7 @@
 
                         <li class="menu-item">
                             <a href="{{ route('users.transactions.adminViewInterest') }}" class="menu-link">
-                                <div data-i18n="Without navbar">All interest transactions</div>
+                                <div data-i18n="Without navbar">All cash in interest transactions</div>
                             </a>
                         </li>
 
@@ -425,7 +425,7 @@
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#loanDetailsModal{{ $user->id }}">
 
-                                                                ₱ {{ number_format($user->total_amount ?? 0) }}
+                                                                ₱ {{ number_format($user->total_amount) }}
 
                                                             </button>
 
@@ -523,9 +523,7 @@
 
                                                                             <h5 class="fw-bold mb-0">
 
-                                                                                ₱ {{ number_format(
-                                            $user->total_amount ?? 0
-                                        ) }}
+                                                                                ₱ {{ number_format($user->total_amount ?? 0) }}
 
                                                                             </h5>
 
@@ -662,7 +660,7 @@
                                                                             <th>Interest</th>
                                                                             <th>Total Amount</th>
                                                                             <th>Paid Amount</th>
-                                                                            <th>Remaining</th>
+                                                                            <th>Remaining Int</th>
                                                                             <th>Paid Principal</th>
                                                                             <th>Status</th>
                                                                             <th>Date</th>

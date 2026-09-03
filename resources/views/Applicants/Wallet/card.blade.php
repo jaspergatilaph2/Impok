@@ -636,7 +636,7 @@
 
                             <h4 class="fw-bold mb-1">
                                 <i class="bx bx-credit-card text-primary me-2"></i>
-                                My Loan Card
+                                My Credit Card
                             </h4>
 
                             <p class="text-muted mb-0">

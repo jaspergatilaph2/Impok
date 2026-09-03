@@ -78,6 +78,306 @@
     <link rel="stylesheet" href="{{ asset('sneat/vendor/css/pages/page-misc.css') }}">
     <link rel="stylesheet" href="{{ asset('sneat/vendor/css/pages/page-auth.css')}}">
     <link rel="stylesheet" href="{{ asset('css/card.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/user-darkmode.css') }}">
+
+    <style>
+        /* =========================================================
+   USER DARK MODE
+   Only applied when body has .dark-mode
+========================================================= */
+
+        body.dark-mode {
+            background-color: #1e1e2d !important;
+            color: #e4e6ef !important;
+        }
+
+        /* =========================
+   PAGE
+========================= */
+
+        body.dark-mode .layout-wrapper,
+        body.dark-mode .layout-container,
+        body.dark-mode .layout-page,
+        body.dark-mode .content-wrapper {
+            background-color: #1e1e2d !important;
+        }
+
+        /* =========================
+   SIDEBAR
+========================= */
+
+        body.dark-mode .layout-menu {
+            background-color: #2b2b40 !important;
+        }
+
+        body.dark-mode .layout-menu .menu-inner {
+            background-color: #2b2b40 !important;
+        }
+
+        body.dark-mode .layout-menu .menu-link {
+            color: #e4e6ef !important;
+        }
+
+        body.dark-mode .layout-menu .menu-link:hover {
+            background-color: #3a3a50 !important;
+        }
+
+        body.dark-mode .layout-menu .menu-header-text {
+            color: #a1a5b7 !important;
+        }
+
+        body.dark-mode .layout-menu .menu-icon {
+            color: #e4e6ef !important;
+        }
+
+        /* Active menu */
+        body.dark-mode .layout-menu .menu-item.active>.menu-link {
+            background-color: #696cff !important;
+            color: #ffffff !important;
+        }
+
+        /* Submenu */
+        body.dark-mode .menu-sub {
+            background-color: #2b2b40 !important;
+        }
+
+        /* =========================
+   NAVBAR
+========================= */
+
+        body.dark-mode .layout-navbar {
+            background-color: #2b2b40 !important;
+            color: #e4e6ef !important;
+        }
+
+        body.dark-mode .layout-navbar .nav-link {
+            color: #e4e6ef !important;
+        }
+
+        body.dark-mode .layout-navbar .bx {
+            color: #e4e6ef !important;
+        }
+
+        /* =========================
+   CARDS
+========================= */
+
+        body.dark-mode .card {
+            background-color: #2b2b40 !important;
+            color: #e4e6ef !important;
+            border-color: #3d3d55 !important;
+        }
+
+        body.dark-mode .card-header,
+        body.dark-mode .card-body,
+        body.dark-mode .card-footer {
+            background-color: #2b2b40 !important;
+            color: #e4e6ef !important;
+        }
+
+        /* Card headings */
+        body.dark-mode .card h1,
+        body.dark-mode .card h2,
+        body.dark-mode .card h3,
+        body.dark-mode .card h4,
+        body.dark-mode .card h5,
+        body.dark-mode .card h6 {
+            color: #ffffff !important;
+        }
+
+        /* =========================
+   TEXT
+========================= */
+
+        body.dark-mode {
+            --bs-body-color: #e4e6ef;
+            --bs-body-bg: #1e1e2d;
+        }
+
+        body.dark-mode .text-dark {
+            color: #ffffff !important;
+        }
+
+        body.dark-mode .text-muted {
+            color: #a1a5b7 !important;
+        }
+
+        body.dark-mode .text-secondary {
+            color: #b5b5c3 !important;
+        }
+
+        /* =========================
+   TABLES
+========================= */
+
+        body.dark-mode .table {
+            color: #e4e6ef !important;
+            --bs-table-color: #e4e6ef;
+            --bs-table-bg: #2b2b40;
+        }
+
+        body.dark-mode .table thead {
+            background-color: #34344a !important;
+        }
+
+        body.dark-mode .table tbody tr {
+            background-color: #2b2b40 !important;
+            color: #e4e6ef !important;
+        }
+
+        body.dark-mode .table tbody tr:hover {
+            background-color: #3a3a50 !important;
+        }
+
+        body.dark-mode .table td,
+        body.dark-mode .table th {
+            border-color: #44445a !important;
+        }
+
+        /* =========================
+   FORMS
+========================= */
+
+        body.dark-mode .form-control,
+        body.dark-mode .form-select {
+            background-color: #34344a !important;
+            color: #ffffff !important;
+            border-color: #4a4a60 !important;
+        }
+
+        body.dark-mode .form-control:focus,
+        body.dark-mode .form-select:focus {
+            background-color: #34344a !important;
+            color: #ffffff !important;
+            border-color: #696cff !important;
+        }
+
+        body.dark-mode .form-control::placeholder {
+            color: #a1a5b7 !important;
+        }
+
+        body.dark-mode .form-label {
+            color: #e4e6ef !important;
+        }
+
+        /* =========================
+   DROPDOWNS
+========================= */
+
+        body.dark-mode .dropdown-menu {
+            background-color: #2b2b40 !important;
+            border-color: #3d3d55 !important;
+        }
+
+        body.dark-mode .dropdown-item {
+            color: #e4e6ef !important;
+        }
+
+        body.dark-mode .dropdown-item:hover {
+            background-color: #3a3a50 !important;
+        }
+
+        body.dark-mode .dropdown-header {
+            color: #ffffff !important;
+        }
+
+        /* =========================
+   MODALS
+========================= */
+
+        body.dark-mode .modal-content {
+            background-color: #2b2b40 !important;
+            color: #e4e6ef !important;
+        }
+
+        body.dark-mode .modal-header,
+        body.dark-mode .modal-footer {
+            border-color: #44445a !important;
+        }
+
+        body.dark-mode .modal-title {
+            color: #ffffff !important;
+        }
+
+        body.dark-mode .btn-close {
+            filter: invert(1);
+        }
+
+        /* =========================
+   ALERTS
+========================= */
+
+        body.dark-mode .alert {
+            color: #ffffff;
+        }
+
+        /* =========================
+   PAGINATION
+========================= */
+
+        body.dark-mode .page-link {
+            background-color: #2b2b40 !important;
+            color: #e4e6ef !important;
+            border-color: #44445a !important;
+        }
+
+        body.dark-mode .page-item.active .page-link {
+            background-color: #696cff !important;
+            border-color: #696cff !important;
+        }
+
+        /* =========================
+   LIST GROUP
+========================= */
+
+        body.dark-mode .list-group-item {
+            background-color: #2b2b40 !important;
+            color: #e4e6ef !important;
+            border-color: #44445a !important;
+        }
+
+        /* =========================
+   HR
+========================= */
+
+        body.dark-mode hr {
+            border-color: #44445a !important;
+        }
+
+        /* =========================
+   FOOTER
+========================= */
+
+        body.dark-mode .footer {
+            background-color: #2b2b40 !important;
+            color: #e4e6ef !important;
+        }
+
+        body.dark-mode .footer-link {
+            color: #a1a5b7 !important;
+        }
+
+        /* =========================
+   BUTTONS
+========================= */
+
+        body.dark-mode .btn-outline-secondary {
+            color: #e4e6ef !important;
+            border-color: #6c6c80 !important;
+        }
+
+        body.dark-mode .btn-outline-secondary:hover {
+            background-color: #44445a !important;
+        }
+
+        /* =========================
+   NAVIGATION LINKS
+========================= */
+
+        body.dark-mode a {
+            color: #8ea7ff;
+        }
+    </style>
 </head>
 
 <body>
@@ -176,6 +476,64 @@
     <script src="{{ asset('js/user-pass-checker.js')}}"></script>
     <script src="{{ asset('js/flipcard.js') }}"></script>
     <script src="{{ asset('js/admin/open-date.js')}}"></script>
+    <script src="{{ asset('js/user-darkmode.js')}}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const isUser = @json(
+                Auth::check() && strtolower(Auth::user() -> role) === 'user'
+            );
+
+            // ============================================
+            // ONLY USER/APPLICANT CAN USE DARK MODE
+            // ============================================
+
+            if (!isUser) {
+                return;
+            }
+
+            const darkMode = localStorage.getItem('darkMode');
+
+            // Apply saved theme
+            if (darkMode === 'enabled') {
+                document.body.classList.add('dark-mode');
+            }
+
+            // Find toggle if it exists
+            const darkModeToggle = document.getElementById('darkModeToggle');
+
+            if (darkModeToggle) {
+
+                // Set switch according to saved preference
+                darkModeToggle.checked = darkMode === 'enabled';
+
+                darkModeToggle.addEventListener('change', function() {
+
+                    if (this.checked) {
+
+                        document.body.classList.add('dark-mode');
+
+                        localStorage.setItem(
+                            'darkMode',
+                            'enabled'
+                        );
+
+                    } else {
+
+                        document.body.classList.remove('dark-mode');
+
+                        localStorage.setItem(
+                            'darkMode',
+                            'disabled'
+                        );
+
+                    }
+
+                });
+            }
+
+        });
+    </script>
 </body>
 
 </html>

@@ -79,8 +79,15 @@
                             </a>
                         </li>
 
+                        <li class="menu-item">
+                            <a href="{{ route('applicants.wallet.cardView') }}" class="menu-link">
+                                <div data-i18n="Without navbar">Card</div>
+                            </a>
+                        </li>
                     </ul>
                 </li>
+
+                <!-- Transactions -->
                 <li class="menu-item">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon fa-solid fa-file"></i>
@@ -372,7 +379,7 @@
                                         <h6 class="text-muted">Current Balance</h6>
 
                                         <h1 class="fw-bold text-success">
-                                            ₱ {{ number_format($balance, 2) }}
+                                            ₱ {{ number_format($balance) }}
                                         </h1>
 
                                         <small class="text-muted">Available funds in your account</small>
@@ -455,7 +462,7 @@
                                                         </td>
 
                                                         <td class="text-end">
-                                                            ₱ {{ number_format($tx->amount, 2) }}
+                                                            ₱ {{ number_format($tx->amount) }}
                                                         </td>
                                                     </tr>
 
@@ -478,7 +485,7 @@
                                         <!-- TOTAL -->
                                         <div class="text-end mt-3">
                                             <h6 class="fw-bold">
-                                                Total Balance: ₱ {{ number_format($balance ?? 0, 2) }}
+                                                Total Balance: ₱ {{ number_format($balance ?? 0) }}
                                             </h6>
                                         </div>
 

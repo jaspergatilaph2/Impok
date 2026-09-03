@@ -1,0 +1,22 @@
+.account-number-hover {
+    position: relative;
+    cursor: pointer;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+.full-number {
+    display: none;
+}
+
+.account-number-hover:hover .masked-number {
+    display: none;
+}
+
+.account-number-hover:hover .full-number {
+    display: inline-block;
+}
+
+.account-number-hover:hover {
+    letter-spacing: 1px;
+}

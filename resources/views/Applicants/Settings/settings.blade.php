@@ -80,6 +80,12 @@
                             </a>
                         </li>
 
+                        <li class="menu-item">
+                            <a href="{{ route('applicants.wallet.cardView') }}" class="menu-link">
+                                <div data-i18n="Without navbar">Card</div>
+                            </a>
+                        </li>
+
                     </ul>
                 </li>
 
@@ -629,7 +635,7 @@
 
                                 <h5 class="fw-bold mb-3">Dark Mode Settings</h5>
                                 <!-- Dark Mode -->
-                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                <!-- <div class="d-flex justify-content-between align-items-center mb-3">
                                     <div>
                                         <h6 class="mb-0">Dark Mode</h6>
                                         <small class="text-muted">Switch to dark theme</small>
@@ -638,7 +644,22 @@
                                     <div class="form-check form-switch">
                                         <input class="form-check-input" type="checkbox" id="darkModeToggle">
                                     </div>
+                                </div> -->
+
+                                @if (Auth::check() && Auth::user()->role === 'user')
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div>
+                                        <h6 class="mb-0">Dark Mode</h6>
+                                        <small class="text-muted">Switch to dark theme</small>
+                                    </div>
+
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input"
+                                            type="checkbox"
+                                            id="darkModeToggle">
+                                    </div>
                                 </div>
+                                @endif
 
                                 <hr>
 

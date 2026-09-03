@@ -99,11 +99,6 @@
                             </a>
                         </li>
 
-                        <li class="menu-item">
-                            <a href="{{ route('users.transactions.viewAllLoanInterests') }}" class="menu-link">
-                                <div data-i18n="Without navbar">All loans interest transactions</div>
-                            </a>
-                        </li>
 
                         <li class="menu-item">
                             <a href="{{ route('users.wallet.viewLoans') }}" class="menu-link">
@@ -129,13 +124,19 @@
 
                         <li class="menu-item">
                             <a href="{{ route('users.transactions.adminViewInterest') }}" class="menu-link">
-                                <div data-i18n="Without navbar">All interest transactions</div>
+                                <div data-i18n="Without navbar">All cash in interest transactions</div>
                             </a>
                         </li>
 
                         <li class="menu-item {{ $SubActiveTab === 'loans' ? 'active' : '' }}">
                             <a href="{{ route('users.transactions.viewAllLoans') }}" class="menu-link">
                                 <div data-i18n="Without navbar">All loans transactions</div>
+                            </a>
+                        </li>
+
+                        <li class="menu-item">
+                            <a href="{{ route('users.transactions.viewAllLoanInterest') }}" class="menu-link">
+                                <div data-i18n="Without navbar">All loans interest transactions</div>
                             </a>
                         </li>
 

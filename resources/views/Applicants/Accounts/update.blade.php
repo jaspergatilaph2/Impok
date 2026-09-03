@@ -80,6 +80,12 @@
                             </a>
                         </li>
 
+                        <li class="menu-item">
+                            <a href="{{ route('applicants.wallet.cardView') }}" class="menu-link">
+                                <div data-i18n="Without navbar">Card</div>
+                            </a>
+                        </li>
+
                     </ul>
                 </li>
 
@@ -391,7 +397,7 @@
                                                 src="{{ Auth::user()->avatar 
             ? asset('storage/' . Auth::user()->avatar) 
             : asset('sneat/img/avatars/1.png') }}"
-                                                class="d-block rounded mt-2 mx-auto"
+                                                class="d-block rounded-circle mt-2 mx-auto"
                                                 width="100"
                                                 height="100"
                                                 style="cursor: pointer;"
@@ -417,7 +423,7 @@
                                                 &times;
                                             </span>
 
-                                            <img id="previewImg" style="max-width:90%; max-height:90%; border-radius:10px;">
+                                            <img id="previewImg" style="max-width:90%; max-height:90%; border-radius:150px;">
                                         </div>
 
                                         <!-- USER INFO -->

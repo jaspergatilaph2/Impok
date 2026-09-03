@@ -79,8 +79,14 @@
                             </a>
                         </li>
 
+                        <li class="menu-item">
+                            <a href="{{ route('applicants.wallet.cardView') }}" class="menu-link">
+                                <div data-i18n="Without navbar">Card</div>
+                            </a>
+                        </li>
                     </ul>
                 </li>
+                
                 <li class="menu-item {{ $ActiveTabMenu === 'transactions' ? 'active' : '' }}">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon fa-solid fa-file"></i>

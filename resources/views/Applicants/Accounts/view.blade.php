@@ -79,6 +79,11 @@
                             </a>
                         </li>
 
+                        <li class="menu-item">
+                            <a href="{{ route('applicants.wallet.cardView') }}" class="menu-link">
+                                <div data-i18n="Without navbar">Card</div>
+                            </a>
+                        </li>
                     </ul>
                 </li>
 
@@ -370,7 +375,7 @@
                     : ($accounts->avatar 
                         ? asset('storage/' . $accounts->avatar) 
                         : asset('sneat/img/avatars/1.png')) }}"
-                                            class="rounded mt-2"
+                                            class="rounded-circle mt-2"
                                             width="100"
                                             height="100"
                                             alt="Profile Picture">

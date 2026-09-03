@@ -123,12 +123,56 @@ class AdminController extends Controller
     {
         try {
 
-            // Validate request
-            $request->validate([
+            /*
+        |--------------------------------------------------------------------------
+        | Validate Request
+        |--------------------------------------------------------------------------
+        */
+
+            $validator = Validator::make($request->all(), [
                 'user_id' => 'required|exists:users,id',
                 'amount' => 'required|numeric|min:100',
                 'transaction_date' => 'required|date',
             ]);
+
+            if ($validator->fails()) {
+
+                // If transaction date is missing
+                if ($validator->errors()->has('transaction_date')) {
+
+                    $nextOpenDate = DB::table('open_transaction_dates')
+                        ->whereDate('date', '>=', now()->toDateString())
+                        ->orderBy('date', 'asc')
+                        ->value('date');
+
+                    if ($nextOpenDate) {
+
+                        $formattedNextDate = Carbon::parse($nextOpenDate)
+                            ->format('F d, Y');
+
+                        $message = 'The transaction date is currently locked. '
+                            . 'Please wait until the date is opened.';
+
+                        $message .= ' The next available transaction date is '
+                            . $formattedNextDate . '.';
+
+                        return response()->json([
+                            'success' => false,
+                            'message' => $message
+                        ]);
+                    }
+
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'The transaction date is currently locked. Please wait until a transaction date is opened.'
+                    ]);
+                }
+
+                return response()->json([
+                    'success' => false,
+                    'message' => $validator->errors()->first()
+                ]);
+            }
 
             /*
         |--------------------------------------------------------------------------
@@ -136,14 +180,32 @@ class AdminController extends Controller
         |--------------------------------------------------------------------------
         */
 
-            $isOpenDate = \DB::table('open_transaction_dates')
+            $isOpenDate = DB::table('open_transaction_dates')
                 ->whereDate('date', $request->transaction_date)
                 ->exists();
 
             if (!$isOpenDate) {
+
+                $nextOpenDate = DB::table('open_transaction_dates')
+                    ->whereDate('date', '>=', now()->toDateString())
+                    ->orderBy('date', 'asc')
+                    ->value('date');
+
+                $message = 'The selected transaction date is currently locked. '
+                    . 'Please wait until the date is opened.';
+
+                if ($nextOpenDate) {
+
+                    $formattedNextDate = Carbon::parse($nextOpenDate)
+                        ->format('F d, Y');
+
+                    $message .= ' The next available transaction date is '
+                        . $formattedNextDate . '.';
+                }
+
                 return response()->json([
                     'success' => false,
-                    'message' => 'The selected transaction date is not open.'
+                    'message' => $message
                 ]);
             }
 
@@ -154,6 +216,7 @@ class AdminController extends Controller
         */
 
             if ($request->amount < 100) {
+
                 return response()->json([
                     'success' => false,
                     'message' => 'Minimum amount is ₱100.'
@@ -176,7 +239,7 @@ class AdminController extends Controller
         |--------------------------------------------------------------------------
         */
 
-            $interestRate = 0.5;
+            $interestRate = 0.05;
 
             $interest = 0;
 
@@ -205,6 +268,7 @@ class AdminController extends Controller
         */
 
             if ($interest > 0) {
+
                 Wallet::create([
                     'user_id' => $request->user_id,
                     'type' => 'interest',
@@ -253,7 +317,7 @@ class AdminController extends Controller
 
             /*
         |--------------------------------------------------------------------------
-        | Response
+        | Success Response
         |--------------------------------------------------------------------------
         */
 
@@ -261,10 +325,10 @@ class AdminController extends Controller
                 'success' => true,
 
                 'message' => $hasPreviousCashIn
-                    ? 'Cash in successful with interest!'
+                    ? 'Cash in successful with 5% interest!'
                     : 'Cash in successful (no interest for first deposit).',
 
-                'interest_earned' => number_format($interest, 2),
+                'interest_earned' => number_format($interest),
 
                 'new_balance' => number_format($balance, 2)
             ]);

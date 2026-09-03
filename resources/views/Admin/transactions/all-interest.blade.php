@@ -123,7 +123,7 @@
 
                         <li class="menu-item {{ $SubActiveTab === 'interest' ? 'active' : '' }}">
                             <a href="{{ route('users.transactions.adminViewInterest') }}" class="menu-link">
-                                <div data-i18n="Without navbar">All interest transactions</div>
+                                <div data-i18n="Without navbar">All cash in interest transactions</div>
                             </a>
                         </li>
 
@@ -134,7 +134,7 @@
                         </li>
 
                         <li class="menu-item">
-                            <a href="{{ route('users.transactions.viewAllLoanInterests') }}" class="menu-link">
+                            <a href="{{ route('users.transactions.viewAllLoanInterest') }}" class="menu-link">
                                 <div data-i18n="Without navbar">All loans interest transactions</div>
                             </a>
                         </li>
@@ -359,7 +359,7 @@
                                     <div id="printArea">
 
                                         <!-- OPTIONAL TITLE FOR PRINT -->
-                                        <h5 class="text-center mb-3">Users Interest Balance Report</h5>
+                                        <h5 class="text-center mb-3">Users Cash In Interest Balance Report</h5>
 
                                         <div class="table-responsive">
                                             <table class="table table-hover align-middle">

@@ -79,8 +79,15 @@
                             </a>
                         </li>
 
+                        <li class="menu-item">
+                            <a href="{{ route('applicants.wallet.cardView') }}" class="menu-link">
+                                <div data-i18n="Without navbar">Card</div>
+                            </a>
+                        </li>
                     </ul>
                 </li>
+
+                <!-- Transactions -->
                 <li class="menu-item">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon fa-solid fa-file"></i>
@@ -400,7 +407,7 @@
                                             </div>
 
                                             <h4 class="fw-bold mb-1 text-warning">
-                                                ₱ {{ number_format($interest ?? 0, 2) }}
+                                                ₱ {{ number_format($interest ?? 0) }}
                                             </h4>
 
                                             <small class="text-muted">
@@ -432,7 +439,7 @@
                                             </div>
 
                                             <h4 class="fw-bold mb-1 text-success">
-                                                ₱ {{ number_format($paidInterest ?? 0, 2) }}
+                                                ₱ {{ number_format($paidInterest ?? 0) }}
                                             </h4>
 
                                             <small class="text-muted">
@@ -464,7 +471,7 @@
                                             </div>
 
                                             <h4 class="fw-bold mb-1 text-danger">
-                                                ₱ {{ number_format($remainingInterest ?? 0, 2) }}
+                                                ₱ {{ number_format($remainingInterest ?? 0) }}
                                             </h4>
 
                                             <small class="text-muted">
@@ -496,7 +503,7 @@
                                             </div>
 
                                             <h4 class="fw-bold mb-1 text-info">
-                                                ₱ {{ number_format($paidPrincipal ?? 0, 2) }}
+                                                ₱ {{ number_format($paidPrincipal ?? 0) }}
                                             </h4>
 
                                             <small class="text-muted">
@@ -547,7 +554,7 @@
                                         <div class="col-md-4 text-md-end mt-3 mt-md-0">
 
                                             <h3 class="fw-bold text-primary mb-0">
-                                                ₱ {{ number_format($paidAmount ?? 0, 2) }}
+                                                ₱ {{ number_format($paidAmount ?? 0) }}
                                             </h3>
 
                                             <small class="text-muted">
@@ -753,7 +760,7 @@
 
                                                         <td class="text-end fw-semibold">
 
-                                                            ₱ {{ number_format($tx->total_amount, 2) }}
+                                                            ₱ {{ number_format($tx->total_amount, 0) }}
 
                                                         </td>
 
@@ -807,7 +814,7 @@
                                                 </small>
 
                                                 <h5 class="fw-bold mb-0">
-                                                    ₱ {{ number_format($total_amount ?? 0, 2) }}
+                                                    ₱ {{ number_format($total_amount ?? 0) }}
                                                 </h5>
 
                                             </div>
